@@ -34,7 +34,7 @@ with open(local_file("src/justbytes/version.py")) as o:
 setuptools.setup(
     name='justbytes',
     version=__version__,
-    url='http://justbytes.readthedocs.org/',
+    url='http://pythonhosted.org/justbytes/',
     author='Anne Mulhern',
     author_email='amulhern@redhat.com',
     description='computing with and displaying bytes',
