@@ -1,0 +1,16 @@
+*.pyc
+*.swp
+*.egg-info
+build
+dist
+.cache
+
+doc/_build
+doc/bytesize
+doc/tests
+
+htmlcov
+_pyreverse
+.coverage
+.hypothesis
+.tox
