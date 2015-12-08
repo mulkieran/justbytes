@@ -7,6 +7,7 @@ lint:
 .PHONY: coverage
 coverage:
 	$(TOX) -c tox.ini -e coverage
+	coveralls
 
 .PHONY: test
 test:
