@@ -512,19 +512,26 @@ class Size(object):
         # pylint: disable=undefined-loop-variable
         return (value, unit)
 
-    def roundTo(self, unit, rounding):
+    def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
         """ Rounds to unit specified as a named constant or a Size.
 
             :param unit: a unit specifier
             :type unit: any non-negative :class:`Size` or element in :func:`._constants.UNITS`
-            :keyword rounding: rounding mode to use
+            :param rounding: rounding mode to use
             :type rounding: a field of :class:`._constants.RoundingMethods`
+            :param bounds: lower and upper bounds on the value
+            :type bounds: tuple of (Size or NoneType) * (Size or NoneType)
             :returns: appropriately rounded Size
             :rtype: :class:`Size`
             :raises SizeValueError: on unusable arguments
 
             If unit is Size(0), returns Size(0).
+
+            Note that rounding may be in the opposite direction of the rounding
+            method, e.g., when the rounding method is ROUND_DOWN but the current
+            value is below the lower bound the ultimate direction of the
+            rounding will be up.
         """
         factor = self._get_unit_value(unit)
         if factor is None:
@@ -534,8 +541,19 @@ class Size(object):
             raise SizeValueError(factor, "factor")
 
         if factor == 0:
-            return Size(0)
+            res = Size(0)
+        else:
+            magnitude = self._magnitude / factor
+            rounded = round_fraction(magnitude, rounding)
+            res = Size(rounded * factor)
 
-        magnitude = self._magnitude / factor
-        rounded = round_fraction(magnitude, rounding)
-        return Size(rounded * factor)
+        (lower, upper) = bounds
+        if lower is not None and upper is not None:
+            if lower > upper:
+                raise SizeValueError(bounds, 'bounds')
+
+        if lower is not None and res < lower:
+            return lower
+        if upper is not None and res > upper:
+            return upper
+        return res
