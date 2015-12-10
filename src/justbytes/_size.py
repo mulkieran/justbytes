@@ -41,6 +41,7 @@ from ._constants import B
 from ._constants import BinaryUnits
 from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
+from ._constants import UNIT_TYPES
 
 from ._util.math_util import round_fraction
 
@@ -63,6 +64,23 @@ class Size(object):
        "%(bytes)s"
     ])
 
+    @classmethod
+    def _get_unit_value(cls, unit):
+        """
+        Returns numeric value for unit.
+
+        :param unit: the unit
+        :type unit: object
+        :returns: None if not convertable, else numeric value
+        :rtype: Fraction or NoneType
+        """
+        if not isinstance(unit, UNIT_TYPES) and  not isinstance(unit, Size):
+            return None
+        factor = getattr(unit, 'factor', getattr(unit, 'magnitude', None))
+        try:
+            return Fraction(factor if factor is not None else unit)
+        except (ValueError, TypeError):
+            return None
 
     def __init__(self, value=0, units=None):
         """ Initialize a new Size object.
@@ -81,7 +99,9 @@ class Size(object):
            isinstance(value, PRECISE_NUMERIC_TYPES):
             try:
                 units = B if units is None else units
-                factor = getattr(units, 'magnitude', None) or int(units)
+                factor = self._get_unit_value(units)
+                if factor is None:
+                    raise SizeValueError(units, "units")
                 magnitude = Fraction(value) * factor
             except (ValueError, TypeError):
                 raise SizeValueError(value, "value")
@@ -427,7 +447,9 @@ class Size(object):
             :raises SizeValueError: if unit specifier is non-positive
         """
         spec = B if spec is None else spec
-        factor = getattr(spec, 'magnitude', None) or int(spec)
+        factor = self._get_unit_value(spec)
+        if factor is None:
+            raise SizeValueError(spec, "spec")
 
         if factor <= 0:
             raise SizeValueError(
@@ -504,7 +526,9 @@ class Size(object):
 
             If unit is Size(0), returns Size(0).
         """
-        factor = getattr(unit, 'magnitude', None) or int(unit)
+        factor = self._get_unit_value(unit)
+        if factor is None:
+            raise SizeValueError(unit, "unit")
 
         if factor < 0:
             raise SizeValueError(factor, "factor")

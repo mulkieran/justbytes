@@ -54,6 +54,8 @@ class ConversionTestCase(unittest.TestCase):
             Size(0).convertTo(-2)
         with self.assertRaises(SizeValueError):
             Size(0).convertTo(0)
+        with self.assertRaises(SizeValueError):
+            Size(512).convertTo(1.4)
 
     @given(
        strategies.builds(Size, strategies.integers()),
@@ -165,6 +167,8 @@ class RoundingTestCase(unittest.TestCase):
         """ Test raising exceptions when rounding. """
         with self.assertRaises(SizeValueError):
             Size(0).roundTo(Size(-1, B), rounding=ROUND_HALF_UP)
+        with self.assertRaises(SizeValueError):
+            Size(512).roundTo(1.4, rounding=ROUND_HALF_UP)
 
 
 class DecimalInfoTestCase(unittest.TestCase):

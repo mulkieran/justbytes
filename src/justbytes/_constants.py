@@ -28,6 +28,7 @@ from numbers import Rational
 
 import six
 
+
 class _RoundingMethod(object):
     """ Class to generate rounding method enumeration. """
     # pylint: disable=too-few-public-methods
@@ -140,4 +141,6 @@ def UNITS():
 
 ROUNDING_METHODS = RoundingMethods.METHODS
 
-PRECISE_NUMERIC_TYPES = (six.integer_types, Decimal, Rational)
+PRECISE_NUMERIC_TYPES = tuple(list(six.integer_types) + [Decimal, Rational])
+
+UNIT_TYPES = tuple(list(PRECISE_NUMERIC_TYPES) + [Unit])
