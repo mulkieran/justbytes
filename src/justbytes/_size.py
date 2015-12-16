@@ -138,11 +138,11 @@ class Size(object):
         :rtype: tuple of int * int * list of int * list of int
 
         Components:
-        1. sign, -1 if negative else 1
-        2. portion on the left of the decimal point
-        3. non-repeating portion to the right of the decimal point
-        4. repeating portion to the right of the decimal point
-        5. units specifier
+          1. sign, -1 if negative else 1
+          2. portion on the left of the decimal point
+          3. non-repeating portion to the right of the decimal point
+          4. repeating portion to the right of the decimal point
+          5. units specifier
         """
         (magnitude, units) = self.components(config)
         radix_num = get_decimal_info(magnitude)
@@ -158,16 +158,16 @@ class Size(object):
         """
         Return a representation of the size.
 
-        :param :class:`StrConfig` config: representation configuration
+        :param `StrConfig` config: representation configuration
         :returns: a tuple representing the string to display
         :rtype: tuple of bool * int * str * str * unit
 
         Components are:
-        1. If true, the value is approximate
-        2. -1 for a negative number, 1 for a positive
-        3. a string with the decimal digits to the left of the decimal point
-        4. a string with the decimal digits to the right of the decimal point
-        5. a unit specifier
+          1. If true, the value is approximate
+          2. -1 for a negative number, 1 for a positive
+          3. a string with the decimal digits to the left of the decimal point
+          4. a string with the decimal digits to the right of the decimal point
+          5. a unit specifier
 
         """
         (magnitude, units) = self.components(config)
@@ -179,12 +179,13 @@ class Size(object):
         return (not exact, sign, left, right, units)
 
     def getString(self, config, display):
-        """ Return a string representation of the size.
+        """
+        Return a string representation of the size.
 
-            :param :class:`StrConfig` config: representation configuration
-            :param DisplayConfig display: configuration for display
-            :returns: a string representation
-            :rtype: str
+        :param StrConfig config: representation configuration
+        :param DisplayConfig display: configuration for display
+        :returns: a string representation
+        :rtype: str
         """
         (approx, sign, left, right, units) = self.getStringInfo(config)
         approx_str = display.approx_symbol \
