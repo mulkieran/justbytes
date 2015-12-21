@@ -23,6 +23,9 @@ rather than a physical, quantity. That is, unlike, e.g., mass or length,
 which are quantities which must be measured with a measuring instrument
 which has some built-in imprecision, the number of bytes of memory in RAM,
 or on a disk, is a quantity that is not measured, but is known precisely.
+This precision arises because the number represents not as much an amount of
+memory as a number of addressable, byte-size, locations in memory.
+
 Consequently, computations such as addition of two Sizes, and conversion
 between different magnitudes of bytes, i.e., from MiB to GiB, must be done
 precisely. The underlying implementation must therefore use a precise
@@ -42,6 +45,12 @@ can accomodate multi-dimensionality of bytes.
 Numerous computations with bytes are nonsensical. For example, 2 raised to a
 power which is some number of bytes, is a meaningless computation. All such
 operations cause an error to be raised.
+
+Some computations with precise, finite, values may yield irrational results.
+For example, while 2 is rational, its square root is an irrational number.
+There is no allowed operation on Size objects which can result in an
+irrational Size value. It turns out that all such operations are either
+nonsensical or would result in a value with an unrepresentable type.
 
 The result type of operations is a Size, where appropriate, or a subtype of
 Rational, where a numeric value is appropriate.
