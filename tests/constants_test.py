@@ -25,16 +25,17 @@ from justbytes._constants import DecimalUnits
 from justbytes._constants import RoundingMethods
 from justbytes._constants import UNITS
 
+
 class ConstantsTestCase(unittest.TestCase):
     """ Exercise methods of constants classes. """
 
     def testRoundingObjects(self):
         """ Miscellaneous tests for rounding constants. """
-        self.assertIsNotNone(str(RoundingMethods.ROUND_DOWN))
+        self.assertIsInstance(str(RoundingMethods.ROUND_DOWN), str)
 
     def testUnitsObjects(self):
         """ Miscellaneous tests for units constants. """
-        self.assertIsNotNone(str(DecimalUnits.KB))
+        self.assertIsInstance(str(DecimalUnits.KB), str)
         self.assertIsNotNone(DecimalUnits.KB.prefix)
 
     def testUnitsMethod(self):

@@ -33,13 +33,14 @@ from justbytes._constants import UNITS
 
 from justbytes._errors import SizeValueError
 
+
 class ConfigTestCase(unittest.TestCase):
     """ Exercise methods of output configuration classes. """
     # pylint: disable=too-few-public-methods
 
     def testStrConfigObject(self):
         """ Miscellaneous tests for string configuration. """
-        self.assertIsNotNone(str(SizeConfig.STR_CONFIG))
+        self.assertIsInstance(str(SizeConfig.STR_CONFIG), str)
 
     def testException(self):
         """ Test exceptions. """
@@ -56,7 +57,7 @@ class InputTestCase(unittest.TestCase):
 
     def testInputConfigObject(self):
         """ Miscellaneous tests for input configuration. """
-        self.assertIsNotNone(str(SizeConfig.INPUT_CONFIG))
+        self.assertIsInstance(str(SizeConfig.INPUT_CONFIG), str)
 
 class SizeTestCase(unittest.TestCase):
     """ Test Size configuration. """
