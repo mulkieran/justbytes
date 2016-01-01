@@ -16,30 +16,15 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for constants classes. """
+""" Test for version information. """
 import unittest
 
-from justbytes._constants import B
-from justbytes._constants import BinaryUnits
-from justbytes._constants import DecimalUnits
-from justbytes._constants import RoundingMethods
-from justbytes._constants import UNITS
+import justbytes
 
 
-class ConstantsTestCase(unittest.TestCase):
-    """ Exercise methods of constants classes. """
+class VersionTestCase(unittest.TestCase):
+    """ Test version. """
 
-    def testRoundingObjects(self):
-        """ Miscellaneous tests for rounding constants. """
-        self.assertIsInstance(str(RoundingMethods.ROUND_DOWN), str)
-
-    def testUnitsObjects(self):
-        """ Miscellaneous tests for units constants. """
-        self.assertIsInstance(str(DecimalUnits.KB), str)
-        self.assertIsNotNone(DecimalUnits.KB.prefix)
-
-    def testUnitsMethod(self):
-        """ Test that all units constansts are in UNITS(). """
-        self.assertTrue(set(DecimalUnits.UNITS()).issubset(set(UNITS())))
-        self.assertTrue(set(BinaryUnits.UNITS()).issubset(set(UNITS())))
-        self.assertTrue(B in UNITS())
+    def testValue(self):
+        """ That value is reasonable. """
+        self.assertEqual(justbytes.__version__, '0.04')

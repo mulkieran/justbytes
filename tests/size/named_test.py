@@ -22,6 +22,7 @@ from fractions import Fraction
 
 import unittest
 
+from hypothesis import assume
 from hypothesis import example
 from hypothesis import given
 from hypothesis import strategies
@@ -54,6 +55,8 @@ class ConversionTestCase(unittest.TestCase):
             Size(0).convertTo(-2)
         with self.assertRaises(SizeValueError):
             Size(0).convertTo(0)
+        with self.assertRaises(SizeValueError):
+            Size(512).convertTo(1.4)
 
     @given(
        strategies.builds(Size, strategies.integers()),
@@ -120,6 +123,29 @@ class RoundingTestCase(unittest.TestCase):
           SIZE_STRATEGY.filter(lambda x: x.magnitude >= 0),
           strategies.sampled_from(UNITS())
        ),
+       strategies.sampled_from(ROUNDING_METHODS()),
+       strategies.tuples(
+          strategies.one_of(strategies.none(), SIZE_STRATEGY),
+          strategies.one_of(strategies.none(), SIZE_STRATEGY)
+       )
+    )
+    def testBounds(self, s, unit, rounding, bounds):
+        """
+        Test that result is between the specified bounds,
+        assuming that the bounds are legal.
+        """
+        (lower, upper) = bounds
+        assume(lower is None or upper is None or lower <= upper)
+        rounded = s.roundTo(unit, rounding, bounds)
+        self.assertTrue(lower is None or lower <= rounded)
+        self.assertTrue(upper is None or upper >= rounded)
+
+    @given(
+       SIZE_STRATEGY,
+       strategies.one_of(
+          SIZE_STRATEGY.filter(lambda x: x.magnitude >= 0),
+          strategies.sampled_from(UNITS())
+       ),
        strategies.sampled_from(ROUNDING_METHODS())
     )
     @example(Size(32), Size(0), ROUND_DOWN)
@@ -165,6 +191,11 @@ class RoundingTestCase(unittest.TestCase):
         """ Test raising exceptions when rounding. """
         with self.assertRaises(SizeValueError):
             Size(0).roundTo(Size(-1, B), rounding=ROUND_HALF_UP)
+        with self.assertRaises(SizeValueError):
+            Size(512).roundTo(1.4, rounding=ROUND_HALF_UP)
+        with self.assertRaises(SizeValueError):
+            s = Size(512)
+            s.roundTo(512, rounding=ROUND_HALF_UP, bounds=(Size(0), Size(-1)))
 
 
 class DecimalInfoTestCase(unittest.TestCase):

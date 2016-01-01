@@ -41,6 +41,7 @@ from ._constants import B
 from ._constants import BinaryUnits
 from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
+from ._constants import UNIT_TYPES
 
 from ._util.math_util import round_fraction
 
@@ -63,6 +64,23 @@ class Size(object):
        "%(bytes)s"
     ])
 
+    @classmethod
+    def _get_unit_value(cls, unit):
+        """
+        Returns numeric value for unit.
+
+        :param unit: the unit
+        :type unit: object
+        :returns: None if not convertable, else numeric value
+        :rtype: Fraction or NoneType
+        """
+        if not isinstance(unit, UNIT_TYPES) and  not isinstance(unit, Size):
+            return None
+        factor = getattr(unit, 'factor', getattr(unit, 'magnitude', None))
+        try:
+            return Fraction(factor if factor is not None else unit)
+        except (ValueError, TypeError):
+            return None
 
     def __init__(self, value=0, units=None):
         """ Initialize a new Size object.
@@ -81,7 +99,9 @@ class Size(object):
            isinstance(value, PRECISE_NUMERIC_TYPES):
             try:
                 units = B if units is None else units
-                factor = getattr(units, 'magnitude', None) or int(units)
+                factor = self._get_unit_value(units)
+                if factor is None:
+                    raise SizeValueError(units, "units")
                 magnitude = Fraction(value) * factor
             except (ValueError, TypeError):
                 raise SizeValueError(value, "value")
@@ -118,11 +138,11 @@ class Size(object):
         :rtype: tuple of int * int * list of int * list of int
 
         Components:
-        1. sign, -1 if negative else 1
-        2. portion on the left of the decimal point
-        3. non-repeating portion to the right of the decimal point
-        4. repeating portion to the right of the decimal point
-        5. units specifier
+          1. sign, -1 if negative else 1
+          2. portion on the left of the decimal point
+          3. non-repeating portion to the right of the decimal point
+          4. repeating portion to the right of the decimal point
+          5. units specifier
         """
         (magnitude, units) = self.components(config)
         radix_num = get_decimal_info(magnitude)
@@ -138,16 +158,16 @@ class Size(object):
         """
         Return a representation of the size.
 
-        :param :class:`StrConfig` config: representation configuration
+        :param `StrConfig` config: representation configuration
         :returns: a tuple representing the string to display
         :rtype: tuple of bool * int * str * str * unit
 
         Components are:
-        1. If true, the value is approximate
-        2. -1 for a negative number, 1 for a positive
-        3. a string with the decimal digits to the left of the decimal point
-        4. a string with the decimal digits to the right of the decimal point
-        5. a unit specifier
+          1. If true, the value is approximate
+          2. -1 for a negative number, 1 for a positive
+          3. a string with the decimal digits to the left of the decimal point
+          4. a string with the decimal digits to the right of the decimal point
+          5. a unit specifier
 
         """
         (magnitude, units) = self.components(config)
@@ -159,12 +179,13 @@ class Size(object):
         return (not exact, sign, left, right, units)
 
     def getString(self, config, display):
-        """ Return a string representation of the size.
+        """
+        Return a string representation of the size.
 
-            :param :class:`StrConfig` config: representation configuration
-            :param DisplayConfig display: configuration for display
-            :returns: a string representation
-            :rtype: str
+        :param StrConfig config: representation configuration
+        :param DisplayConfig display: configuration for display
+        :returns: a string representation
+        :rtype: str
         """
         (approx, sign, left, right, units) = self.getStringInfo(config)
         approx_str = display.approx_symbol \
@@ -427,7 +448,9 @@ class Size(object):
             :raises SizeValueError: if unit specifier is non-positive
         """
         spec = B if spec is None else spec
-        factor = getattr(spec, 'magnitude', None) or int(spec)
+        factor = self._get_unit_value(spec)
+        if factor is None:
+            raise SizeValueError(spec, "spec")
 
         if factor <= 0:
             raise SizeValueError(
@@ -490,28 +513,48 @@ class Size(object):
         # pylint: disable=undefined-loop-variable
         return (value, unit)
 
-    def roundTo(self, unit, rounding):
+    def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
         """ Rounds to unit specified as a named constant or a Size.
 
             :param unit: a unit specifier
             :type unit: any non-negative :class:`Size` or element in :func:`._constants.UNITS`
-            :keyword rounding: rounding mode to use
+            :param rounding: rounding mode to use
             :type rounding: a field of :class:`._constants.RoundingMethods`
+            :param bounds: lower and upper bounds on the value
+            :type bounds: tuple of (Size or NoneType) * (Size or NoneType)
             :returns: appropriately rounded Size
             :rtype: :class:`Size`
             :raises SizeValueError: on unusable arguments
 
             If unit is Size(0), returns Size(0).
+
+            Note that rounding may be in the opposite direction of the rounding
+            method, e.g., when the rounding method is ROUND_DOWN but the current
+            value is below the lower bound the ultimate direction of the
+            rounding will be up.
         """
-        factor = getattr(unit, 'magnitude', None) or int(unit)
+        factor = self._get_unit_value(unit)
+        if factor is None:
+            raise SizeValueError(unit, "unit")
 
         if factor < 0:
             raise SizeValueError(factor, "factor")
 
         if factor == 0:
-            return Size(0)
+            res = Size(0)
+        else:
+            magnitude = self._magnitude / factor
+            rounded = round_fraction(magnitude, rounding)
+            res = Size(rounded * factor)
 
-        magnitude = self._magnitude / factor
-        rounded = round_fraction(magnitude, rounding)
-        return Size(rounded * factor)
+        (lower, upper) = bounds
+        if lower is not None and upper is not None:
+            if lower > upper:
+                raise SizeValueError(bounds, 'bounds')
+
+        if lower is not None and res < lower:
+            return lower
+        if upper is not None and res > upper:
+            return upper
+        return res

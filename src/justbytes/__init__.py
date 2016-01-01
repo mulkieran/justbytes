@@ -127,3 +127,6 @@ from ._errors import SizeError
 from ._size import Size
 from ._sizes import getSizeFromInput
 from ._sizes import AI
+
+# VERSION
+from .version import __version__
