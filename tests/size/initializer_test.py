@@ -24,8 +24,8 @@ from fractions import Fraction
 import unittest
 
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
 from justbytes import B
 from justbytes import Size
@@ -71,9 +71,9 @@ class InitializerTestCase(unittest.TestCase):
           strategies.builds(Size, strategies.fractions()),
           strategies.fractions(),
           strategies.decimals().filter(lambda x: x.is_finite())
-       ),
-       settings=Settings(max_examples=50)
+       )
     )
+    @settings(max_examples=50)
     def testInitialization(self, s, u):
         """ Test the initializer. """
         factor = getattr(u, "factor", getattr(u, "magnitude", None))

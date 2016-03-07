@@ -25,8 +25,8 @@ import unittest
 from hypothesis import assume
 from hypothesis import example
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
 from justbytes import Size
 from justbytes import B
@@ -83,9 +83,9 @@ class ComponentsTestCase(unittest.TestCase):
           exact_value=strategies.booleans(),
           max_places=strategies.integers().filter(lambda x: x >= 0 and x < 64),
           unit=strategies.sampled_from(UNITS() + [None])
-       ),
-       settings=Settings(max_examples=100)
+       )
     )
+    @settings(max_examples=100)
     def testResults(self, s, config):
         """ Test component results. """
         (m, u) = s.components(config)
@@ -203,10 +203,8 @@ class DecimalInfoTestCase(unittest.TestCase):
     Test calculation of decimal info.
     """
 
-    @given(
-       SIZE_STRATEGY,
-       settings=Settings(max_examples=30)
-    )
+    @given(SIZE_STRATEGY)
+    @settings(max_examples=30)
     def testEquivalence(self, s):
         """
         Verify that decimal info and corresponding string are same.
