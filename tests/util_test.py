@@ -23,8 +23,8 @@ from fractions import Fraction
 import unittest
 
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
 from justbytes._constants import RoundingMethods
 from justbytes._errors import SizeValueError
@@ -50,9 +50,9 @@ class FormatTestCase(unittest.TestCase):
        strategies.integers(min_value=1),
        strategies.integers(),
        strategies.integers(min_value=0, max_value=5),
-       strategies.integers(min_value=0, max_value=5),
-       settings=Settings(max_examples=10)
+       strategies.integers(min_value=0, max_value=5)
     )
+    @settings(max_examples=10)
     def testExactness(self, p, q, n, m):
         """ When max_places is not specified and the denominator of
             the value is 2^n * 5^m the result is exact.
@@ -74,10 +74,8 @@ class RoundingTestCase(unittest.TestCase):
         with self.assertRaises(SizeValueError):
             round_fraction(Fraction(16, 32), "a string")
 
-    @given(
-       strategies.integers(min_value=1, max_value=9),
-       settings=Settings(max_examples=20)
-    )
+    @given(strategies.integers(min_value=1, max_value=9))
+    @settings(max_examples=20)
     def testRounding(self, i):
         """ Rounding various values according to various methods. """
         f = Fraction(i, 10)
@@ -114,9 +112,9 @@ class LongDecimalDivisionTestCase(unittest.TestCase):
 
     @given(
        NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
+       strategies.integers().filter(lambda x: x > 0)
     )
+    @settings(max_examples=20)
     def testExact(self, divisor, multiplier):
         """
         A divisor that divides the dividend has no decimal part.
@@ -130,9 +128,9 @@ class LongDecimalDivisionTestCase(unittest.TestCase):
 
     @given(
        NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
+       strategies.integers().filter(lambda x: x > 0)
     )
+    @settings(max_examples=20)
     def testNonRepeatingDecimal(self, divisor, multiplier):
         """
         Should always end in .5.
@@ -146,9 +144,9 @@ class LongDecimalDivisionTestCase(unittest.TestCase):
 
     @given(
        NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
+       strategies.integers().filter(lambda x: x > 0)
     )
+    @settings(max_examples=20)
     def testRepeatingDecimal(self, divisor, multiplier):
         """
         Should always end in .33333.....
@@ -162,9 +160,9 @@ class LongDecimalDivisionTestCase(unittest.TestCase):
 
     @given(
        NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
+       strategies.integers().filter(lambda x: x > 0)
     )
+    @settings(max_examples=20)
     def testComplexRepeatingDecimal(self, divisor, multiplier):
         """
         Should always end in .16666.....
@@ -178,9 +176,9 @@ class LongDecimalDivisionTestCase(unittest.TestCase):
 
     @given(
        NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
+       strategies.integers().filter(lambda x: x > 0)
     )
+    @settings(max_examples=20)
     def testMoreComplexRepeatingDecimal(self, divisor, multiplier):
         """
         Should always end in .142857142857....

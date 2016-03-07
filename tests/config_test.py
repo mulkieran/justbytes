@@ -20,8 +20,8 @@
 import unittest
 
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
 from justbytes._config import DisplayConfig
 from justbytes._config import InputConfig
@@ -79,9 +79,9 @@ class SizeTestCase(unittest.TestCase):
           approx_symbol=strategies.just('=~='),
           show_approx_str=strategies.booleans(),
           strip=strategies.booleans()
-       ),
-       settings=Settings(max_examples=30)
+       )
     )
+    @settings(max_examples=30)
     def testSettingDisplayConfig(self, config):
         """ Test that new str config is the correct one. """
         SizeConfig.set_display_config(config)
@@ -95,9 +95,9 @@ class SizeTestCase(unittest.TestCase):
           min_value=strategies.fractions().filter(lambda x: x >= 0),
           exact_value=strategies.booleans(),
           unit=strategies.sampled_from(UNITS())
-       ),
-       settings=Settings(max_examples=30)
+       )
     )
+    @settings(max_examples=30)
     def testSettingStrConfig(self, config):
         """ Test that new str config is the correct one. """
         SizeConfig.set_str_config(config)
@@ -108,9 +108,9 @@ class SizeTestCase(unittest.TestCase):
           InputConfig,
           method=strategies.sampled_from(RoundingMethods.METHODS()),
           unit=strategies.sampled_from(UNITS())
-       ),
-       settings=Settings(max_examples=10)
+       )
     )
+    @settings(max_examples=10)
     def testSettingInputConfig(self, config):
         """ That that new input config is the correct one. """
         SizeConfig.set_input_config(config)

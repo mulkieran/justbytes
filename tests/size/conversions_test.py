@@ -24,8 +24,8 @@ import re
 import unittest
 
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
 from justbytes import Size
 from justbytes import UNITS
@@ -46,9 +46,9 @@ class ConversionTestCase(unittest.TestCase):
 
     @given(
        strategies.integers(),
-       strategies.sampled_from(UNITS()),
-       settings=Settings(max_examples=5)
+       strategies.sampled_from(UNITS())
     )
+    @settings(max_examples=5)
     def testInt(self, s, u):
         """ Test integer conversions. """
         self.assertEqual(int(Size(s, u)), s * int(u))
@@ -63,9 +63,9 @@ class ConversionTestCase(unittest.TestCase):
 
     @given(
        strategies.integers(),
-       strategies.sampled_from(UNITS()),
-       settings=Settings(max_examples=5)
+       strategies.sampled_from(UNITS())
     )
+    @settings(max_examples=5)
     def testStr(self, s, u):
         """ Test that str result has a standard format. """
         regex = re.compile(r'@?[-+]?[0-9]*(\.[0-9])?[0-9]* (?P<units>.*)B')
@@ -78,9 +78,9 @@ class ConversionTestCase(unittest.TestCase):
           Size,
           strategies.integers(),
           strategies.sampled_from(UNITS())
-       ),
-       settings=Settings(max_examples=5)
+       )
     )
+    @settings(max_examples=5)
     def testRepr(self, s):
         """ Test that repr looks right. """
         regex = re.compile(r"Size\((?P<val>-?[0-9]+)\)")

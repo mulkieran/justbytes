@@ -22,7 +22,7 @@ from fractions import Fraction
 import unittest
 
 from hypothesis import given
-from hypothesis import Settings
+from hypothesis import settings
 
 from justbytes import getSizeFromInput
 from justbytes import B
@@ -44,7 +44,8 @@ class GetSizeFromInputTestCase(unittest.TestCase):
     def tearDown(self):
         SizeConfig.set_input_config(self._input_config)
 
-    @given(NUMBERS_STRATEGY, settings=Settings(max_examples=5))
+    @given(NUMBERS_STRATEGY)
+    @settings(max_examples=5)
     def testRoundingToBytes(self, n):
         """
         Test that it does the proper thing rounding down to bytes.
