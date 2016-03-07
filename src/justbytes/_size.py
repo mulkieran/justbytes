@@ -29,6 +29,8 @@ from fractions import Fraction
 
 import six
 
+from justbases import Fractions
+
 from ._config import SizeConfig
 
 from ._errors import SizeFractionalResultError
@@ -42,8 +44,6 @@ from ._constants import BinaryUnits
 from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import UNIT_TYPES
-
-from ._util.math_util import round_fraction
 
 from ._util.misc import get_decimal_info
 from ._util.misc import get_string_info
@@ -545,7 +545,7 @@ class Size(object):
             res = Size(0)
         else:
             magnitude = self._magnitude / factor
-            rounded = round_fraction(magnitude, rounding)
+            rounded = Fractions.convert_to_int(magnitude, rounding)
             res = Size(rounded * factor)
 
         (lower, upper) = bounds

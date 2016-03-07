@@ -127,7 +127,8 @@ class RoundingTestCase(unittest.TestCase):
        strategies.tuples(
           strategies.one_of(strategies.none(), SIZE_STRATEGY),
           strategies.one_of(strategies.none(), SIZE_STRATEGY)
-       )
+       ),
+       settings=Settings(max_examples=100)
     )
     def testBounds(self, s, unit, rounding, bounds):
         """
