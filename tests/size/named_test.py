@@ -109,6 +109,7 @@ class ComponentsTestCase(unittest.TestCase):
            m,
            places=config.max_places
         )
+        left = left or '0'
         value = sign * Fraction("%s.%s" % (left, right))
         if config.exact_value and config.unit is None:
             self.assertTrue(exact)
@@ -211,34 +212,3 @@ class RoundingTestCase(unittest.TestCase):
         with self.assertRaises(SizeValueError):
             s = Size(512)
             s.roundTo(512, rounding=ROUND_HALF_UP, bounds=(Size(0), Size(-1)))
-
-
-class DecimalInfoTestCase(unittest.TestCase):
-    """
-    Test calculation of decimal info.
-    """
-
-    @given(SIZE_STRATEGY)
-    @settings(max_examples=30)
-    def testEquivalence(self, s):
-        """
-        Verify that decimal info and corresponding string are same.
-        """
-        config = StrConfig(max_places=None)
-        (sign, left, non_repeating, repeating, units) = s.getDecimalInfo(config)
-        (approx, new_sign, new_left, right, new_units) = s.getStringInfo(config)
-
-        self.assertEqual(sign, new_sign)
-        self.assertEqual(str(left), new_left)
-        self.assertEqual(units, new_units)
-        if not approx:
-            self.assertEqual(repeating, [])
-            self.assertEqual(
-               s,
-               Size(new_sign * Fraction("%s.%s" % (new_left, right)), units)
-            )
-            non_repeating = "".join(str(x) for x in non_repeating)
-            self.assertEqual(
-               s,
-               Size(sign * Fraction("%s.%s" % (left, non_repeating)), units)
-            )

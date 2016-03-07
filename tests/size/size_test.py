@@ -79,12 +79,6 @@ class DisplayTestCase(unittest.TestCase):
 
     def testStr(self):
         """ Test construction of display components. """
-        s = Size(58929971)
-        self.assertEqual(str(s), "@56.20 MiB")
-
-        s = Size(478360371)
-        self.assertEqual(str(s), "@456.20 MiB")
-
         s = Size("12.68", TiB)
         self.assertEqual(str(s), "12.68 TiB")
 
