@@ -83,7 +83,7 @@ class ComponentsTestCase(unittest.TestCase):
           min_value=strategies.fractions().filter(lambda x: x >= 0),
           binary_units=strategies.booleans(),
           exact_value=strategies.booleans(),
-          max_places=strategies.integers().filter(lambda x: x >= 0 and x < 64),
+          max_places=strategies.integers(min_value=0, max_value=5),
           unit=strategies.sampled_from(UNITS() + [None])
        )
     )
