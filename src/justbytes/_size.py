@@ -29,6 +29,8 @@ from fractions import Fraction
 
 import six
 
+import justbases
+
 from ._config import SizeConfig
 
 from ._errors import SizeFractionalResultError
@@ -43,9 +45,6 @@ from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import UNIT_TYPES
 
-from ._util.math_util import round_fraction
-
-from ._util.misc import get_decimal_info
 from ._util.misc import get_string_info
 
 _BYTES_SYMBOL = "B"
@@ -145,12 +144,12 @@ class Size(object):
           5. units specifier
         """
         (magnitude, units) = self.components(config)
-        radix_num = get_decimal_info(magnitude)
+        (radix, _) = justbases.Radices.from_rational(magnitude, 10)
         return (
-           radix_num.sign,
-           radix_num.left,
-           radix_num.non_repeating,
-           radix_num.repeating,
+           1 if radix.positive else -1,
+           justbases.Nats.convert_to_int(radix.integer_part, 10),
+           radix.non_repeating_part,
+           radix.repeating_part,
            units
         )
 
@@ -197,7 +196,7 @@ class Size(object):
         result = {
            'approx' : approx_str,
            'sign': "-" if sign == -1 else "",
-           'left': left,
+           'left': left or '0',
            'radix': '.' if right else "",
            'right' : right,
            'units' : units.abbr,
@@ -210,20 +209,21 @@ class Size(object):
         return self.getString(SizeConfig.STR_CONFIG, SizeConfig.DISPLAY_CONFIG)
 
     def __repr__(self):
-        radix_num = get_decimal_info(self._magnitude)
+        (radix_num, _) = justbases.Radices.from_rational(self._magnitude, 10)
+        integer_part = justbases.Nats.convert_to_int(radix_num.integer_part, 10)
 
-        sign = "-" if radix_num.sign == -1 else ""
+        sign = "" if radix_num.positive else "-"
 
-        if radix_num.non_repeating == [] and radix_num.repeating == []:
-            return "Size(%s%s)" % (sign, radix_num.left)
+        if radix_num.non_repeating_part == [] and radix_num.repeating_part == []:
+            return "Size(%s%s)" % (sign, integer_part)
 
-        non_repeating = "".join(str(x) for x in radix_num.non_repeating)
-        if radix_num.repeating == []:
-            return "Size(%s%s.%s)" % (sign, radix_num.left, non_repeating)
+        non_repeating = "".join(str(x) for x in radix_num.non_repeating_part)
+        if radix_num.repeating_part == []:
+            return "Size(%s%s.%s)" % (sign, integer_part, non_repeating)
 
-        repeating = "".join(str(x) for x in radix_num.repeating)
+        repeating = "".join(str(x) for x in radix_num.repeating_part)
         return "Size(%s%s.%s(%s))" % \
-           (sign, radix_num.left, non_repeating, repeating)
+           (sign, integer_part, non_repeating, repeating)
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument
@@ -545,7 +545,7 @@ class Size(object):
             res = Size(0)
         else:
             magnitude = self._magnitude / factor
-            rounded = round_fraction(magnitude, rounding)
+            (rounded, _) = justbases.Rationals.round_to_int(magnitude, rounding)
             res = Size(rounded * factor)
 
         (lower, upper) = bounds

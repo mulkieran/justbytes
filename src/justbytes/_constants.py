@@ -28,40 +28,10 @@ from numbers import Rational
 
 import six
 
+import justbases
 
-class _RoundingMethod(object):
-    """ Class to generate rounding method enumeration. """
-    # pylint: disable=too-few-public-methods
+RoundingMethods = justbases.RoundingMethods
 
-    def __init__(self, doc):
-        """ Initializer.
-
-            :param str doc: explanation of the rounding method
-        """
-        self._doc = doc
-
-    def __str__(self):
-        return self.doc
-    __repr__ = __str__
-
-    # pylint: disable=protected-access
-    doc = property(lambda s: s._doc, doc="explanation of rounding method")
-
-class RoundingMethods(object):
-    """ Static class for accessing rounding methods. """
-    # pylint: disable=too-few-public-methods
-
-    ROUND_DOWN = _RoundingMethod("Round down.")
-    ROUND_HALF_DOWN = _RoundingMethod("Round to nearest, down on a tie.")
-    ROUND_HALF_UP = _RoundingMethod("Round to nearest, up on a tie.")
-    ROUND_UP = _RoundingMethod("Round up.")
-
-    _METHODS = [ROUND_DOWN, ROUND_HALF_DOWN, ROUND_HALF_UP, ROUND_UP]
-
-    @classmethod
-    def METHODS(cls):
-        """ Methods of this class. """
-        return cls._METHODS[:]
 
 class Unit(object):
     """ Class to encapsulate unit information. """

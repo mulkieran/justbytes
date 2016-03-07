@@ -81,12 +81,12 @@ class ConversionTestCase(unittest.TestCase):
        )
     )
     @settings(max_examples=5)
-    def testRepr(self, s):
+    def testRepr(self, value):
         """ Test that repr looks right. """
         regex = re.compile(r"Size\((?P<val>-?[0-9]+)\)")
-        match = re.match(regex, "%r" % s)
+        match = re.match(regex, "%r" % value)
         self.assertIsNotNone(match)
-        self.assertEqual(int(match.group('val')), int(s))
+        self.assertEqual(int(match.group('val')), int(value))
 
     def testDeepCopy(self):
         """ Test that deepcopy is different but equal. """
