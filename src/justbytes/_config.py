@@ -92,6 +92,7 @@ class StrConfig(object):
     # pylint: disable=too-few-public-methods
 
     _FMT_STR = ", ".join([
+       "base=%(base)s",
        "binary_units=%(binary_units)s",
        "exact_value=%(exact_value)s",
        "max_places=%(max_places)s",
@@ -105,7 +106,8 @@ class StrConfig(object):
        min_value=1,
        binary_units=True,
        exact_value=False,
-       unit=None
+       unit=None,
+       base=10
     ):
         """ Initializer.
 
@@ -116,6 +118,7 @@ class StrConfig(object):
             :param bool binary_units: binary units if True, else SI
             :param bool exact_value: uses largest units that allow exact value
             :param unit: use the specified unit, overrides other options
+            :param int base: the numeric base for the number, default 10
         """
         # pylint: disable=too-many-arguments
         if min_value < 0 or \
@@ -133,14 +136,19 @@ class StrConfig(object):
                "must be one of %s" % ", ".join(str(x) for x in UNITS())
             )
 
-        self._max_places = max_places
-        self._min_value = min_value
-        self._binary_units = binary_units
-        self._exact_value = exact_value
-        self._unit = unit
+        if base < 2:
+            raise SizeValueError(base, "base", "must be at least two")
+
+        self.max_places = max_places
+        self.min_value = min_value
+        self.binary_units = binary_units
+        self.exact_value = exact_value
+        self.unit = unit
+        self.base = base
 
     def __str__(self):
         values = {
+           'base': self.base,
            'binary_units' : self.binary_units,
            'exact_value' : self.exact_value,
            'max_places' : self.max_places,
@@ -150,12 +158,6 @@ class StrConfig(object):
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
-    # pylint: disable=protected-access
-    exact_value = property(lambda s: s._exact_value)
-    max_places = property(lambda s: s._max_places)
-    min_value = property(lambda s: s._min_value)
-    binary_units = property(lambda s: s._binary_units)
-    unit = property(lambda s: s._unit)
 
 class InputConfig(object):
     """ Configuration for input of Sizes.
@@ -193,7 +195,7 @@ class SizeConfig(object):
 
     DISPLAY_CONFIG = DisplayConfig(False, True, '@')
 
-    STR_CONFIG = StrConfig(2, 1, True, False, None)
+    STR_CONFIG = StrConfig(2, 1, True, False, None, 10)
     """ Default configuration for string display. """
 
     INPUT_CONFIG = InputConfig(B, RoundingMethods.ROUND_DOWN)

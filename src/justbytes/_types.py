@@ -18,6 +18,47 @@
 
 """ Tiny classes used by some methods to pack up their results. """
 
+import justbases
+
+
+Radix = justbases.Radix
+
+
+class Repr(object):
+    """
+    Representation of a Size object.
+    """
+    # pylint: disable=too-few-public-methods
+
+    def __init__( # pylint: disable=too-many-arguments
+       self,
+       approximate,
+       positive,
+       integer_part,
+       fractional_part,
+       unit,
+       base=10
+    ):
+        """
+        Initializer.
+
+        :param bool approximate: True if the value is approximate
+        :param bool positive: True if the value is positive (or 0)
+        :param integer_part: the integer part
+        :type integer_part: list of int
+        :param fractional_part: the fractional part
+        :type fractional_part: list of int
+        :param unit: the unit (of UNITS)
+        :param int base: the base of the representation (default 10)
+        """
+        self.approximate = approximate
+        self.positive = positive
+        self.integer_part = integer_part
+        self.fractional_part = fractional_part
+        self.unit = unit
+        self.base = base
+
+
 class RadixNumber(object):
     """ Represents a class with a radix and possibly repeating digits. """
     # pylint: disable=too-few-public-methods
