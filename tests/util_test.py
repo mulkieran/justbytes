@@ -26,10 +26,8 @@ from hypothesis import given
 from hypothesis import settings
 from hypothesis import strategies
 
-from justbytes._constants import RoundingMethods
 from justbytes._errors import SizeValueError
 from justbytes._util.math_util import get_repeating_fraction
-from justbytes._util.math_util import round_fraction
 from justbytes._util.misc import get_string_info
 from justbytes._util.misc import long_decimal_division
 
@@ -62,37 +60,6 @@ class FormatTestCase(unittest.TestCase):
         self.assertEqual(sign * Fraction("%s.%s" % (left, right)), x)
         self.assertTrue(exact)
 
-
-class RoundingTestCase(unittest.TestCase):
-    """ Test rounding of fraction. """
-    # pylint: disable=too-few-public-methods
-
-    def testExceptions(self):
-        """ Raises exception on bad input. """
-        with self.assertRaises(SizeValueError):
-            round_fraction(Fraction(13, 32), "a string")
-        with self.assertRaises(SizeValueError):
-            round_fraction(Fraction(16, 32), "a string")
-
-    @given(strategies.integers(min_value=1, max_value=9))
-    @settings(max_examples=20)
-    def testRounding(self, i):
-        """ Rounding various values according to various methods. """
-        f = Fraction(i, 10)
-        self.assertEqual(round_fraction(f, RoundingMethods.ROUND_DOWN), 0)
-        self.assertEqual(round_fraction(f, RoundingMethods.ROUND_UP), 1)
-
-        r = round_fraction(f, RoundingMethods.ROUND_HALF_UP)
-        if i < 5:
-            self.assertEqual(r, 0)
-        else:
-            self.assertEqual(r, 1)
-
-        r = round_fraction(f, RoundingMethods.ROUND_HALF_DOWN)
-        if i > 5:
-            self.assertEqual(r, 1)
-        else:
-            self.assertEqual(r, 0)
 
 class LongDecimalDivisionTestCase(unittest.TestCase):
     """

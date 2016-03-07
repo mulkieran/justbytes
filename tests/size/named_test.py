@@ -31,7 +31,9 @@ from hypothesis import strategies
 from justbytes import Size
 from justbytes import B
 from justbytes import ROUND_DOWN
+from justbytes import ROUND_HALF_DOWN
 from justbytes import ROUND_HALF_UP
+from justbytes import ROUND_TO_ZERO
 from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
 from justbytes import StrConfig
@@ -151,6 +153,7 @@ class RoundingTestCase(unittest.TestCase):
     @example(Size(32), Size(0), ROUND_DOWN)
     def testResults(self, s, unit, rounding):
         """ Test roundTo results. """
+        # pylint: disable=too-many-branches
         rounded = s.roundTo(unit, rounding)
 
         if (isinstance(unit, Size) and unit.magnitude == 0) or \
@@ -175,6 +178,13 @@ class RoundingTestCase(unittest.TestCase):
             self.assertEqual(rounded, floor)
             return
 
+        if rounding is ROUND_TO_ZERO:
+            if s > Size(0):
+                self.assertEqual(rounded, floor)
+            else:
+                self.assertEqual(rounded, ceiling)
+            return
+
         remainder = abs(Fraction(r, converted.denominator))
         half = Fraction(1, 2)
         if remainder > half:
@@ -184,8 +194,13 @@ class RoundingTestCase(unittest.TestCase):
         else:
             if rounding is ROUND_HALF_UP:
                 self.assertEqual(rounded, ceiling)
-            else:
+            elif rounding is ROUND_HALF_DOWN:
                 self.assertEqual(rounded, floor)
+            else:
+                if s > Size(0):
+                    self.assertEqual(rounded, floor)
+                else:
+                    self.assertEqual(rounded, ceiling)
 
     def testExceptions(self):
         """ Test raising exceptions when rounding. """
