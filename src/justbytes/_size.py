@@ -25,6 +25,7 @@
     will cause an exception to be raised.
 """
 
+
 from fractions import Fraction
 
 import six
@@ -46,6 +47,8 @@ from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import UNIT_TYPES
 
 from ._util.misc import get_string_info
+from ._util.misc import next_or_last
+from ._util.misc import take_until_satisfied
 
 _BYTES_SYMBOL = "B"
 
@@ -496,22 +499,17 @@ class Size(object):
         # If the number is so large that no prefix will satisfy this
         # requirement use the largest prefix.
         limit = units.FACTOR * Fraction(config.min_value)
-        tried = []
-        for (value, unit) in self.componentsList(
-           binary_units=config.binary_units
-        ):
-            tried.append((value, unit))
-            if abs(value) < limit:
-                break
+        components = self.componentsList(binary_units=config.binary_units)
+        candidates = \
+           list(take_until_satisfied(lambda x: abs(x[0]) < limit, components))
 
         if config.exact_value:
-            for (value, unit) in reversed(tried):
-                (exact, _, _, _) = get_string_info(value, config.max_places)
-                if exact is True:
-                    break
-
-        # pylint: disable=undefined-loop-variable
-        return (value, unit)
+            return next_or_last(
+               lambda x: get_string_info(x[0], config.max_places)[0],
+               reversed(candidates)
+            )
+        else:
+            return next(x for x in reversed(candidates))
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
