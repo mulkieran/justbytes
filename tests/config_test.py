@@ -50,6 +50,8 @@ class ConfigTestCase(unittest.TestCase):
             StrConfig(min_value=3.2)
         with self.assertRaises(SizeValueError):
             StrConfig(unit=2)
+        with self.assertRaises(SizeValueError):
+            StrConfig(base=1)
 
 class InputTestCase(unittest.TestCase):
     """ Exercise methods of input configuration classes. """
