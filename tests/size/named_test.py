@@ -87,7 +87,7 @@ class ComponentsTestCase(unittest.TestCase):
           unit=strategies.sampled_from(UNITS() + [None])
        )
     )
-    @settings(max_examples=100)
+    @settings(max_examples=200)
     def testResults(self, s, config):
         """ Test component results. """
         (m, u) = s.components(config)
