@@ -26,6 +26,8 @@ from hypothesis import settings
 from hypothesis import strategies
 
 from justbytes._util.misc import get_string_info
+from justbytes._util.misc import next_or_last
+from justbytes._util.misc import take_until_satisfied
 
 
 class FormatTestCase(unittest.TestCase):
@@ -47,3 +49,59 @@ class FormatTestCase(unittest.TestCase):
         if left != '' or right != '':
             self.assertEqual(sign * Fraction("%s.%s" % (left, right)), x)
         self.assertTrue(exact)
+
+
+class NextTestCase(unittest.TestCase):
+    """
+    Test next_or_last.
+    """
+
+    @given(strategies.lists(strategies.integers()), strategies.integers())
+    @settings(max_examples=10)
+    def testResultsTrue(self, value, default):
+        """
+        Test results when the predicate is always True.
+        """
+        self.assertEqual(
+           next_or_last(lambda x: True, value, default),
+           value[0] if value != [] else default
+        )
+
+    @given(strategies.lists(strategies.integers()), strategies.integers())
+    @settings(max_examples=10)
+    def testResultsFalse(self, value, default):
+        """
+        Test results when the predicate is always False.
+        """
+        self.assertEqual(
+           next_or_last(lambda x: False, value, default),
+           value[-1] if value != [] else default
+        )
+
+
+class TakeTestCase(unittest.TestCase):
+    """
+    Test take_until_satisfied.
+    """
+
+    @given(strategies.lists(strategies.integers()))
+    @settings(max_examples=10)
+    def testResultsFalse(self, value):
+        """
+        Test results when none are sastifactory.
+        """
+        self.assertEqual(
+           list(take_until_satisfied(lambda x: False, value)),
+           value
+        )
+
+    @given(strategies.lists(strategies.integers()))
+    @settings(max_examples=10)
+    def testResultsTrue(self, value):
+        """
+        Test results when all are satisfactory.
+        """
+        self.assertEqual(
+           list(take_until_satisfied(lambda x: True, value)),
+           value[:1]
+        )
