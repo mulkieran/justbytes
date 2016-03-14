@@ -88,9 +88,6 @@ class DisplayTestCase(unittest.TestCase):
         s = Size('12.687', TiB)
         self.assertEqual(str(s), "<12.69 TiB")
 
-    def testHumanReadableFractionalQuantities(self):
-        """ Test behavior when the displayed value is a fraction of units. """
-
     def testMinValue(self):
         """ Test behavior on min_value parameter. """
         s = Size(9, MiB)
