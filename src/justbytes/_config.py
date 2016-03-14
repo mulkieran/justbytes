@@ -34,32 +34,41 @@ class DisplayConfig(object):
     _FMT_STR = ", ".join([
        "show_approx_str=%(show_approx_str)s",
        "strip=%(strip)s",
+       "strip_exact=%(strip_exact)s"
     ])
 
     def __init__(
        self,
        strip=False,
-       show_approx_str=True
+       show_approx_str=True,
+       strip_exact=True
     ):
         """
         Initializer.
 
         :param bool strip: True if trailing zeros are to be stripped.
         :param bool show_approx_str: distinguish approximate str values
+        :param bool strip_exact: True if stripping exact quantities
 
         If strip is True and there is a fractional quantity, trailing
         zeros are removed up to (and including) the decimal point.
 
         The default for strip is False, so that precision is always shown
         to max_places.
+
+        strip_exact is like strip, but trailing zeros are only removed if
+        the number represented equals its representation. If strip is True,
+        strip_exact does nothing.
         """
         self._strip = strip
         self._show_approx_str = show_approx_str
+        self._strip_exact = strip_exact
 
     def __str__(self):
         values = {
            'show_approx_str' : self.show_approx_str,
            'strip' : self.strip,
+           'strip_exact' : self.strip_exact
         }
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
@@ -67,6 +76,7 @@ class DisplayConfig(object):
     # pylint: disable=protected-access
     strip = property(lambda s: s._strip)
     show_approx_str = property(lambda s: s._show_approx_str)
+    strip_exact = property(lambda s: s._strip_exact)
 
 class StrConfig(object):
     """ Configuration for __str__ method.
@@ -227,7 +237,8 @@ class SizeConfig(object):
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
             show_approx_str=config.show_approx_str,
-            strip=config.strip
+            strip=config.strip,
+            strip_exact=config.strip_exact
         )
 
     @classmethod
