@@ -44,8 +44,6 @@ from justbytes._constants import UNITS
 
 from justbytes._errors import SizeValueError
 
-from justbytes._util.misc import get_string_info
-
 from tests.utils import SIZE_STRATEGY
 
 class ConversionTestCase(unittest.TestCase):
@@ -104,18 +102,6 @@ class ComponentsTestCase(unittest.TestCase):
         else:
             self.assertEqual(u, config.unit)
 
-
-        (exact, sign, left, right) = get_string_info(
-           m,
-           places=config.max_places
-        )
-        left = left or '0'
-        value = sign * Fraction("%s.%s" % (left, right))
-        if config.exact_value and config.unit is None:
-            self.assertTrue(exact)
-            self.assertTrue(Fraction(value) * int(u) == s.magnitude)
-        if not exact:
-            self.assertFalse(Fraction(value) * int(u) == s.magnitude)
 
 class RoundingTestCase(unittest.TestCase):
     """ Test rounding methods. """

@@ -47,7 +47,6 @@ from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import UNIT_TYPES
 
 from ._util.misc import as_single_number
-from ._util.misc import get_string_info
 from ._util.misc import next_or_last
 from ._util.misc import take_until_satisfied
 
@@ -137,24 +136,12 @@ class Size(object):
         Return a representation of the size.
 
         :param `StrConfig` config: representation configuration
-        :returns: a tuple representing the string to display
-        :rtype: tuple of bool * int * str * str * unit
-
-        Components are:
-          1. If true, the value is approximate
-          2. -1 for a negative number, 1 for a positive
-          3. a string with the decimal digits to the left of the decimal point
-          4. a string with the decimal digits to the right of the decimal point
-          5. a unit specifier
-
+        :returns: a tuple representing the number to display
+        :rtype: tuple of Radix * int * unit
         """
         (magnitude, units) = self.components(config)
-        (exact, sign, left, right) = get_string_info(
-           magnitude,
-           places=config.max_places
-        )
-
-        return (not exact, sign, left, right, units)
+        (result, relation) = as_single_number(magnitude, config)
+        return (result, relation, units)
 
     def getString(self, config, display):
         """
@@ -165,16 +152,26 @@ class Size(object):
         :returns: a string representation
         :rtype: str
         """
-        (approx, sign, left, right, units) = self.getStringInfo(config)
+        (result, relation, units) = self.getStringInfo(config)
+
         approx_str = display.approx_symbol \
-           if approx and display.show_approx_str else ""
+           if relation != 0 and display.show_approx_str else ""
+
+        sign = '' if result.positive else '-'
+
+        right = result.non_repeating_part
+        left = result.integer_part
+
+        separator = '' if config.base == 10 else ','
+        right = separator.join(str(x) for x in right)
+        left = separator.join(str(x) for x in left)
 
         if display.strip:
             right = right.rstrip('0')
 
         result = {
            'approx' : approx_str,
-           'sign': "-" if sign == -1 else "",
+           'sign': sign,
            'left': left or '0',
            'radix': '.' if right else "",
            'right' : right,
