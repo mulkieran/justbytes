@@ -162,6 +162,9 @@ class Size(object):
         if display.strip:
             right = strip_trailing_zeros(right)
 
+        if display.strip_exact and relation == 0 and all(x == 0 for x in right):
+            right = []
+
         if display.show_approx_str:
             approx_str = relation_to_symbol(relation)
         else:
