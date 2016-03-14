@@ -68,7 +68,7 @@ class ConversionTestCase(unittest.TestCase):
     @settings(max_examples=5)
     def testStr(self, s, u):
         """ Test that str result has a standard format. """
-        regex = re.compile(r'@?[-+]?[0-9]*(\.[0-9])?[0-9]* (?P<units>.*)B')
+        regex = re.compile(r'(<|>)?[-+]?[0-9]*(\.[0-9])?[0-9]* (?P<units>.*)B')
         match = re.match(regex, str(Size(s, u)))
         self.assertIsNotNone(match)
         self.assertIn(match.group('units'), [u.abbr for u in UNITS()])

@@ -48,6 +48,7 @@ from ._constants import UNIT_TYPES
 
 from ._util.misc import as_single_number
 from ._util.misc import next_or_last
+from ._util.misc import relation_to_symbol
 from ._util.misc import take_until_satisfied
 
 _BYTES_SYMBOL = "B"
@@ -154,8 +155,10 @@ class Size(object):
         """
         (result, relation, units) = self.getStringInfo(config)
 
-        approx_str = display.approx_symbol \
-           if relation != 0 and display.show_approx_str else ""
+        if display.show_approx_str:
+            approx_str = relation_to_symbol(relation)
+        else:
+            approx_str = ''
 
         sign = '' if result.positive else '-'
 
