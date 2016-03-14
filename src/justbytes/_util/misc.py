@@ -83,3 +83,21 @@ def get_string_info(magnitude, places):
        ''.join(str(x) for x in radix_num.integer_part),
        ''.join(str(x) for x in radix_num.non_repeating_part)
     )
+
+def as_single_number(value, config):
+    """
+    Returns a rational value as a single number according to the
+    specified configuration.
+
+    :param Rational value: a numeric value
+    :param StrConfig config: how to calculate the value to display
+
+    :returns: the result and its relation to ``value``
+    :rtype: Radix * int
+    """
+    return justbases.Radices.from_rational(
+       value,
+       config.base,
+       config.max_places,
+       config.rounding_method
+    )
