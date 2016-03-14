@@ -159,7 +159,9 @@ class ConfigurationTestCase(unittest.TestCase):
     def testSettingConfiguration(self):
         """ Test that setting configuration to different values has effect. """
         s = Size(64, GiB)
-        SizeConfig.set_display_config(DisplayConfig(strip=False))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip=False, strip_exact=False)
+        )
         prev = str(s)
         SizeConfig.set_display_config(DisplayConfig(strip=True))
         subs = str(s)
