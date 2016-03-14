@@ -60,9 +60,9 @@ class DisplayConfig(object):
         the number represented equals its representation. If strip is True,
         strip_exact does nothing.
         """
-        self._strip = strip
-        self._show_approx_str = show_approx_str
-        self._strip_exact = strip_exact
+        self.strip = strip
+        self.show_approx_str = show_approx_str
+        self.strip_exact = strip_exact
 
     def __str__(self):
         values = {
@@ -73,10 +73,6 @@ class DisplayConfig(object):
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
-    # pylint: disable=protected-access
-    strip = property(lambda s: s._strip)
-    show_approx_str = property(lambda s: s._show_approx_str)
-    strip_exact = property(lambda s: s._strip_exact)
 
 class StrConfig(object):
     """ Configuration for __str__ method.
@@ -146,17 +142,17 @@ class StrConfig(object):
         if base < 2:
             raise SizeValueError(base, "base", "must be at least 2")
 
-        self._max_places = max_places
-        self._min_value = min_value
-        self._binary_units = binary_units
-        self._exact_value = exact_value
-        self._unit = unit
-        self._base = base
-        self._rounding_method = rounding_method
+        self.max_places = max_places
+        self.min_value = min_value
+        self.binary_units = binary_units
+        self.exact_value = exact_value
+        self.unit = unit
+        self.base = base
+        self.rounding_method = rounding_method
 
     def __str__(self):
         values = {
-           'base' : self._base,
+           'base' : self.base,
            'binary_units' : self.binary_units,
            'exact_value' : self.exact_value,
            'max_places' : self.max_places,
@@ -167,14 +163,6 @@ class StrConfig(object):
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
-    # pylint: disable=protected-access
-    exact_value = property(lambda s: s._exact_value)
-    max_places = property(lambda s: s._max_places)
-    min_value = property(lambda s: s._min_value)
-    binary_units = property(lambda s: s._binary_units)
-    unit = property(lambda s: s._unit)
-    base = property(lambda s: s._base)
-    rounding_method = property(lambda s: s._rounding_method)
 
 class InputConfig(object):
     """ Configuration for input of Sizes.
@@ -194,17 +182,13 @@ class InputConfig(object):
             :param method: rounding method, default is ROUND_DOWN
             :type method: instance of :func:`._constants.ROUNDING_METHODS`
         """
-        self._unit = unit
-        self._method = method
+        self.unit = unit
+        self.method = method
 
     def __str__(self):
         values = {'method' : self.method, 'unit' : self.unit}
         return "InputConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
-
-    # pylint: disable=protected-access
-    method = property(lambda s: s._method)
-    unit = property(lambda s: s._unit)
 
 
 class SizeConfig(object):
