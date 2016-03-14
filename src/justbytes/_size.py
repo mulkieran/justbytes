@@ -44,6 +44,7 @@ from ._constants import B
 from ._constants import BinaryUnits
 from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
+from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
 from ._util.misc import as_single_number
@@ -192,21 +193,19 @@ class Size(object):
         return self.getString(SizeConfig.STR_CONFIG, SizeConfig.DISPLAY_CONFIG)
 
     def __repr__(self):
-        (radix_num, _) = justbases.Radices.from_rational(self._magnitude, 10)
-        integer_part = justbases.Nats.convert_to_int(radix_num.integer_part, 10)
+        """
+        Displaying value to arbitrary precision could be time consuming.
 
-        sign = "" if radix_num.positive else "-"
+        Instead, explicitly round to nearest integer, and display relation.
 
-        if radix_num.non_repeating_part == [] and radix_num.repeating_part == []:
-            return "Size(%s%s)" % (sign, integer_part)
-
-        non_repeating = "".join(str(x) for x in radix_num.non_repeating_part)
-        if radix_num.repeating_part == []:
-            return "Size(%s%s.%s)" % (sign, integer_part, non_repeating)
-
-        repeating = "".join(str(x) for x in radix_num.repeating_part)
-        return "Size(%s%s.%s(%s))" % \
-           (sign, integer_part, non_repeating, repeating)
+        Usually, the magnitude will be an integer.
+        """
+        (value, relation) = \
+           justbases.Rationals.round_to_int(
+              self._magnitude,
+              RoundingMethods.ROUND_HALF_ZERO
+           )
+        return "%sSize(%s)" % (relation_to_symbol(relation), value)
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument
