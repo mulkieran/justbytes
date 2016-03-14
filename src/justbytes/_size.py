@@ -46,6 +46,7 @@ from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import UNIT_TYPES
 
+from ._util.misc import as_single_number
 from ._util.misc import get_string_info
 from ._util.misc import next_or_last
 from ._util.misc import take_until_satisfied
@@ -505,7 +506,7 @@ class Size(object):
 
         if config.exact_value:
             return next_or_last(
-               lambda x: get_string_info(x[0], config.max_places)[0],
+               lambda x: as_single_number(x[0], config)[1] == 0,
                reversed(candidates)
             )
         else:
