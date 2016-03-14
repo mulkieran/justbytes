@@ -132,31 +132,6 @@ class Size(object):
         """
         return self._magnitude
 
-    def getDecimalInfo(self, config):
-        """
-        Get information for the decimal representation of ``self``.
-
-        :param StrConfig config: the display configuration
-        :returns: a tuple representing the value
-        :rtype: tuple of int * int * list of int * list of int
-
-        Components:
-          1. sign, -1 if negative else 1
-          2. portion on the left of the decimal point
-          3. non-repeating portion to the right of the decimal point
-          4. repeating portion to the right of the decimal point
-          5. units specifier
-        """
-        (magnitude, units) = self.components(config)
-        (radix, _) = justbases.Radices.from_rational(magnitude, 10)
-        return (
-           1 if radix.positive else -1,
-           justbases.Nats.convert_to_int(radix.integer_part, 10),
-           radix.non_repeating_part,
-           radix.repeating_part,
-           units
-        )
-
     def getStringInfo(self, config):
         """
         Return a representation of the size.
