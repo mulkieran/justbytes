@@ -49,6 +49,7 @@ from ._constants import UNIT_TYPES
 from ._util.misc import as_single_number
 from ._util.misc import next_or_last
 from ._util.misc import relation_to_symbol
+from ._util.misc import strip_trailing_zeros
 from ._util.misc import take_until_satisfied
 
 _BYTES_SYMBOL = "B"
@@ -155,6 +156,12 @@ class Size(object):
         """
         (result, relation, units) = self.getStringInfo(config)
 
+        right = result.non_repeating_part
+        left = result.integer_part
+
+        if display.strip:
+            right = strip_trailing_zeros(right)
+
         if display.show_approx_str:
             approx_str = relation_to_symbol(relation)
         else:
@@ -162,15 +169,9 @@ class Size(object):
 
         sign = '' if result.positive else '-'
 
-        right = result.non_repeating_part
-        left = result.integer_part
-
         separator = '' if config.base == 10 else ','
         right = separator.join(str(x) for x in right)
         left = separator.join(str(x) for x in left)
-
-        if display.strip:
-            right = right.rstrip('0')
 
         result = {
            'approx' : approx_str,
