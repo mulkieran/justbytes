@@ -86,7 +86,7 @@ class DisplayTestCase(unittest.TestCase):
         self.assertEqual(str(s), "26.55 MiB")
 
         s = Size('12.687', TiB)
-        self.assertEqual(str(s), "@12.69 TiB")
+        self.assertEqual(str(s), "<12.69 TiB")
 
     def testHumanReadableFractionalQuantities(self):
         """ Test behavior when the displayed value is a fraction of units. """
@@ -180,7 +180,7 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(s), "300 MiB")
 
         s = Size('12.6998', TiB)
-        self.assertEqual(str(s), "@12.7 TiB")
+        self.assertEqual(str(s), "<12.7 TiB")
 
         # byte values close to multiples of 2 are shown without trailing zeros
         s = Size(0xff)
@@ -189,28 +189,28 @@ class ConfigurationTestCase(unittest.TestCase):
         # a fractional quantity is shown if the value deviates
         # from the whole number of units by more than 1%
         s = Size(16384 - (Decimal(1024)/100 + 1))
-        self.assertEqual(str(s), "@15.99 KiB")
+        self.assertEqual(str(s), "<15.99 KiB")
 
         # test a very large quantity with no associated abbreviation or prefix
         s = Size(1024**9)
         self.assertEqual(str(s), "1024 YiB")
         s = Size(1024**9 - 1)
-        self.assertEqual(str(s), "@1024 YiB")
+        self.assertEqual(str(s), "<1024 YiB")
         s = Size(1024**10)
         self.assertEqual(str(s), "1048576 YiB")
 
         s = Size(0xfffffffffffff)
-        self.assertEqual(str(s), "@4 PiB")
+        self.assertEqual(str(s), "<4 PiB")
 
         s = Size(0xffff)
         # value is not exactly 64 KiB, but w/ 2 places, value is 64.00 KiB
         # so the trailing 0s are stripped.
-        self.assertEqual(str(s), "@64 KiB")
+        self.assertEqual(str(s), "<64 KiB")
 
         SizeConfig.set_str_config(StrConfig(max_places=3))
         SizeConfig.set_display_config(DisplayConfig(strip=True))
         s = Size('23.7874', TiB)
-        self.assertEqual(str(s), "@23.787 TiB")
+        self.assertEqual(str(s), ">23.787 TiB")
 
         SizeConfig.set_str_config(StrConfig(min_value=10))
         SizeConfig.set_display_config(DisplayConfig(strip=True))
@@ -233,10 +233,10 @@ class ConfigurationTestCase(unittest.TestCase):
         SizeConfig.set_str_config(StrConfig(max_places=2))
         SizeConfig.set_display_config(DisplayConfig(strip=False))
         s = Size(1024**9 + 1)
-        self.assertEqual(str(s), "@1024.00 YiB")
+        self.assertEqual(str(s), ">1024.00 YiB")
 
         s = Size(0xfffff)
-        self.assertEqual(str(s), "@1024.00 KiB")
+        self.assertEqual(str(s), "<1024.00 KiB")
 
     def testStrWithSmallDeviations(self):
         """ Behavior when deviation from whole value is small. """
@@ -246,19 +246,19 @@ class ConfigurationTestCase(unittest.TestCase):
 
         # deviation is less than 1/2 of 1% of 1024
         s = Size(16384 - (eps - 1))
-        self.assertEqual(str(s), "@16 KiB")
+        self.assertEqual(str(s), "<16 KiB")
 
         # deviation is greater than 1/2 of 1% of 1024
         s = Size(16384 - (eps + 1))
-        self.assertEqual(str(s), "@15.99 KiB")
+        self.assertEqual(str(s), ">15.99 KiB")
 
         # deviation is less than 1/2 of 1% of 1024
         s = Size(16384 + (eps - 1))
-        self.assertEqual(str(s), "@16 KiB")
+        self.assertEqual(str(s), ">16 KiB")
 
         # deviation is greater than 1/2 of 1% of 1024
         s = Size(16384 + (eps + 1))
-        self.assertEqual(str(s), "@16.01 KiB")
+        self.assertEqual(str(s), "<16.01 KiB")
 
 
 class ComputationTestCase(unittest.TestCase):

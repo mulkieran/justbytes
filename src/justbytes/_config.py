@@ -32,7 +32,6 @@ class DisplayConfig(object):
     # pylint: disable=too-few-public-methods
 
     _FMT_STR = ", ".join([
-       "approx_symbol=%(approx_symbol)s",
        "show_approx_str=%(show_approx_str)s",
        "strip=%(strip)s",
     ])
@@ -40,15 +39,13 @@ class DisplayConfig(object):
     def __init__(
        self,
        strip=False,
-       show_approx_str=True,
-       approx_symbol='@'
+       show_approx_str=True
     ):
         """
         Initializer.
 
         :param bool strip: True if trailing zeros are to be stripped.
         :param bool show_approx_str: distinguish approximate str values
-        :param str approx_symbol: symbol to indicate approximation
 
         If strip is True and there is a fractional quantity, trailing
         zeros are removed up to (and including) the decimal point.
@@ -58,11 +55,9 @@ class DisplayConfig(object):
         """
         self._strip = strip
         self._show_approx_str = show_approx_str
-        self._approx_symbol = approx_symbol
 
     def __str__(self):
         values = {
-           'approx_symbol': self.approx_symbol,
            'show_approx_str' : self.show_approx_str,
            'strip' : self.strip,
         }
@@ -70,7 +65,6 @@ class DisplayConfig(object):
     __repr__ = __str__
 
     # pylint: disable=protected-access
-    approx_symbol = property(lambda s: s._approx_symbol)
     strip = property(lambda s: s._strip)
     show_approx_str = property(lambda s: s._show_approx_str)
 
@@ -206,7 +200,7 @@ class InputConfig(object):
 class SizeConfig(object):
     """ Configuration for :class:`Size` class. """
 
-    DISPLAY_CONFIG = DisplayConfig(False, True, '@')
+    DISPLAY_CONFIG = DisplayConfig(False, True)
 
     STR_CONFIG = StrConfig(
        2,
@@ -232,7 +226,6 @@ class SizeConfig(object):
         :param DisplayConfig config: a configuration object
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
-            approx_symbol=config.approx_symbol,
             show_approx_str=config.show_approx_str,
             strip=config.strip
         )

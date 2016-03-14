@@ -78,7 +78,6 @@ class SizeTestCase(unittest.TestCase):
     @given(
        strategies.builds(
           DisplayConfig,
-          approx_symbol=strategies.just('=~='),
           show_approx_str=strategies.booleans(),
           strip=strategies.booleans()
        )
