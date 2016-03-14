@@ -17,7 +17,6 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """ Test for utility functions. """
-from fractions import Fraction
 
 import unittest
 
@@ -25,30 +24,8 @@ from hypothesis import given
 from hypothesis import settings
 from hypothesis import strategies
 
-from justbytes._util.misc import get_string_info
 from justbytes._util.misc import next_or_last
 from justbytes._util.misc import take_until_satisfied
-
-
-class FormatTestCase(unittest.TestCase):
-    """ Test formatting. """
-
-    @given(
-       strategies.integers(min_value=1),
-       strategies.integers(),
-       strategies.integers(min_value=0, max_value=5),
-       strategies.integers(min_value=0, max_value=5)
-    )
-    @settings(max_examples=10)
-    def testExactness(self, p, q, n, m):
-        """ When max_places is not specified and the denominator of
-            the value is 2^n * 5^m the result is exact.
-        """
-        x = Fraction(p * q, p * (2**n * 5**m))
-        (exact, sign, left, right) = get_string_info(x, places=None)
-        if left != '' or right != '':
-            self.assertEqual(sign * Fraction("%s.%s" % (left, right)), x)
-        self.assertTrue(exact)
 
 
 class NextTestCase(unittest.TestCase):

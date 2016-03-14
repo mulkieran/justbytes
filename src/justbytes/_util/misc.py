@@ -54,36 +54,6 @@ def next_or_last(pred, seq, default=None):
     except NameError:
         return default
 
-def get_string_info(magnitude, places):
-    """
-    Get information about the string that represents this magnitude.
-
-    :param Fraction magnitude: the magnitude
-    :param int places: the number of places after the decimal pt
-    :returns: a tuple with string information
-    :rtypes: tuple of bool * int * str * str
-
-    Components of result are:
-    1. True if the value is exact, otherwise False
-    2. -1 if the value is negative, otherwise 1
-    3. the string representing the numbers to the left of the radix
-    4. the string representing the numbers to the right of the radix
-    """
-
-    (radix_num, relation) = \
-       justbases.Radices.from_rational(
-          magnitude,
-          10,
-          places,
-          justbases.RoundingMethods.ROUND_HALF_DOWN
-       )
-    return (
-       relation == 0,
-       1 if radix_num.positive else -1,
-       ''.join(str(x) for x in radix_num.integer_part),
-       ''.join(str(x) for x in radix_num.non_repeating_part)
-    )
-
 def as_single_number(value, config):
     """
     Returns a rational value as a single number according to the
