@@ -6,7 +6,7 @@ dist
 .cache
 
 doc/_build
-doc/bytesize
+doc/justbytes
 doc/tests
 
 htmlcov

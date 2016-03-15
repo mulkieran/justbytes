@@ -18,123 +18,90 @@
 
 """ Miscellaneous utilities. """
 
-from fractions import Fraction
+import itertools
 
-import six
-
-from .._errors import SizeValueError
-
-from .._types import RadixNumber
-
-from .math_util import long_decimal_division
+import justbases
 
 
-def get_decimal_info(value):
+def take_until_satisfied(pred, seq):
     """
-    Get the full representation of the decimal value.
+    Like next(), but yields all values until the first matching value.
 
-    :param value: the value, a precise numeric quantity
-    :returns: a decimal representation of the value
-    :rtype: RadixNumber
+    :param bool pred: a predicate, return False if the value is not satisfactory
+    :param seq: a sequence of values
     """
-    if isinstance(value, float):
-        raise SizeValueError(
-           value,
-           "value",
-           "must not be a float"
-        )
+    for x in seq:
+        if pred(x):
+            yield x
+            return
+        else:
+            yield x
 
-    value = Fraction(value)
-    (sign, left, non_repeating, repeating) = long_decimal_division(
-       value.denominator,
-       value.numerator
+def next_or_last(pred, seq, default=None):
+    """
+    Return the first element that matches the predicate or the last element in
+    the seq.
+
+    If seq is empty, return ``default``.
+
+    :param bool pred: a predicate, return False if the value is not satisfactory
+    :param seq: a sequence of values
+    :param default: returned if seq is empty, default is None
+    """
+    for x in seq:
+        if pred(x):
+            return x
+    try:
+        return x # pylint: disable=undefined-loop-variable
+    except NameError:
+        return default
+
+def as_single_number(value, config):
+    """
+    Returns a rational value as a single number according to the
+    specified configuration.
+
+    :param Rational value: a numeric value
+    :param StrConfig config: how to calculate the value to display
+
+    :returns: the result and its relation to ``value``
+    :rtype: Radix * int
+    """
+    return justbases.Radices.from_rational(
+       value,
+       config.base,
+       config.max_places,
+       config.rounding_method
     )
 
-    return RadixNumber(sign, left, non_repeating, repeating)
-
-def convert_magnitude(left, non_repeating, repeating, places=2):
-    """ Convert magnitude to a decimal string.
-
-        :param int left: the left side
-        :param non_repeating: the non repeating part after the radix
-        :type non_repeating: list of int
-        :param repeating: the repeating part
-        :type repeating: list of int
-        :param places: number of decimal places to use, default is 2
-        :type places: an integer type or NoneType
-
-        :returns: a representation of the value
-        :rtype: tuple of str * str
-
-        Components of the result are:
-        1. a string representing the value to the left of the decimal
-        2. a string representing the value to the right of the decimal
-
-        Since a rational number may be a non-terminating decimal
-        quantity, this representation is not guaranteed to be exact, regardless
-        of the value of places.
-
-        Even in the case of a terminating decimal representation, the
-        representation may be inexact if the number of significant digits
-        is too large for the precision of the Decimal operations as
-        specified by the context.
+def relation_to_symbol(relation):
     """
-    if places is not None and \
-       (places < 0 or not isinstance(places, six.integer_types)):
-        raise SizeValueError(
-           places,
-           "places",
-           "must be None or a non-negative integer value"
-        )
+    Change a numeric relation to a string symbol.
 
-    places = len(non_repeating) + len(repeating) if places is None else places
+    :param int relation: the relation
 
-    right_side = non_repeating[:]
-    if len(repeating) > 0:
-        while len(right_side) <= places:
-            right_side += repeating
-
-    if len(right_side) > places:
-        right = right_side[:places]
-        next_digits = right_side[places:]
-        decider = next((d for d in next_digits if d != 5), None)
-        if decider is not None:
-            if decider > 5:
-                right = str(int("".join(str(x) for x in right) or "0") + 1)
-                right = [l for l in right]
-        if len(right) > places:
-            left = left + int(right[0])
-            right = right[1:]
-        elif len(right) < places:
-            right = [0 for _ in range(places - len(right))] + right
+    :returns: a symbol with the right relation to ``relation``
+    :rtype: str
+    """
+    if relation == 0:
+        return ''
+    elif relation == -1:
+        return '>'
+    elif relation == 1:
+        return '<'
     else:
-        right = right_side[:] + [0 for _ in range(places - len(right_side))]
+        assert False # pragma: no cover
 
-    return (str(left), "".join(str(x) for x in right))
-
-def get_string_info(magnitude, places):
+def strip_trailing_zeros(value):
     """
-    Get information about the string that represents this magnitude.
+    Strip trailing zeros from a list of ints.
 
-    :param Fraction magnitude: the magnitude
-    :param int places: the number of places after the decimal pt
-    :returns: a tuple with string information
-    :rtypes: tuple of bool * int * str * str
+    :param value: the value to be stripped
+    :type value: list of str
 
-    Components of result are:
-    1. True if the value is exact, otherwise False
-    2. -1 if the value is negative, otherwise 1
-    3. the string representing the numbers to the left of the radix
-    4. the string representing the numbers to the right of the radix
+    :returns: list with trailing zeros stripped
+    :rtype: list of int
     """
-
-    radix_num = get_decimal_info(magnitude)
-    (left, right) = convert_magnitude(
-       radix_num.left,
-       radix_num.non_repeating,
-       radix_num.repeating,
-       places=places
+    return list(
+       reversed(list(itertools.dropwhile(lambda x: x == 0, reversed(value))))
     )
-    exact = \
-       Fraction(radix_num.sign * Fraction("%s.%s" % (left, right))) == magnitude
-    return (exact, radix_num.sign, left, right)

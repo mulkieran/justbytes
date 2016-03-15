@@ -17,194 +17,68 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """ Test for utility functions. """
-from decimal import Decimal
-from fractions import Fraction
 
 import unittest
 
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
-from justbytes._constants import RoundingMethods
-from justbytes._errors import SizeValueError
-from justbytes._util.math_util import get_repeating_fraction
-from justbytes._util.math_util import round_fraction
-from justbytes._util.misc import get_string_info
-from justbytes._util.misc import long_decimal_division
-
-from .utils import NUMBERS_STRATEGY
+from justbytes._util.misc import next_or_last
+from justbytes._util.misc import take_until_satisfied
 
 
-class FormatTestCase(unittest.TestCase):
-    """ Test formatting. """
-
-    def testException(self):
-        """ Raises exception on bad input. """
-        with self.assertRaises(SizeValueError):
-            get_string_info(Decimal(200), places=-1)
-        with self.assertRaises(SizeValueError):
-            get_string_info(0.1, places=0)
-
-    @given(
-       strategies.integers(min_value=1),
-       strategies.integers(),
-       strategies.integers(min_value=0, max_value=5),
-       strategies.integers(min_value=0, max_value=5),
-       settings=Settings(max_examples=10)
-    )
-    def testExactness(self, p, q, n, m):
-        """ When max_places is not specified and the denominator of
-            the value is 2^n * 5^m the result is exact.
-        """
-        x = Fraction(p * q, p * (2**n * 5**m))
-        (exact, sign, left, right) = get_string_info(x, places=None)
-        self.assertEqual(sign * Fraction("%s.%s" % (left, right)), x)
-        self.assertTrue(exact)
-
-
-class RoundingTestCase(unittest.TestCase):
-    """ Test rounding of fraction. """
-    # pylint: disable=too-few-public-methods
-
-    def testExceptions(self):
-        """ Raises exception on bad input. """
-        with self.assertRaises(SizeValueError):
-            round_fraction(Fraction(13, 32), "a string")
-        with self.assertRaises(SizeValueError):
-            round_fraction(Fraction(16, 32), "a string")
-
-    @given(
-       strategies.integers(min_value=1, max_value=9),
-       settings=Settings(max_examples=20)
-    )
-    def testRounding(self, i):
-        """ Rounding various values according to various methods. """
-        f = Fraction(i, 10)
-        self.assertEqual(round_fraction(f, RoundingMethods.ROUND_DOWN), 0)
-        self.assertEqual(round_fraction(f, RoundingMethods.ROUND_UP), 1)
-
-        r = round_fraction(f, RoundingMethods.ROUND_HALF_UP)
-        if i < 5:
-            self.assertEqual(r, 0)
-        else:
-            self.assertEqual(r, 1)
-
-        r = round_fraction(f, RoundingMethods.ROUND_HALF_DOWN)
-        if i > 5:
-            self.assertEqual(r, 1)
-        else:
-            self.assertEqual(r, 0)
-
-class LongDecimalDivisionTestCase(unittest.TestCase):
+class NextTestCase(unittest.TestCase):
     """
-    Test long decimal division.
+    Test next_or_last.
     """
 
-    def testException(self):
+    @given(strategies.lists(strategies.integers()), strategies.integers())
+    @settings(max_examples=10)
+    def testResultsTrue(self, value, default):
         """
-        Test exceptions.
+        Test results when the predicate is always True.
         """
-        with self.assertRaises(SizeValueError):
-            long_decimal_division(1.2, 1)
-        with self.assertRaises(SizeValueError):
-            long_decimal_division(1, 1.2)
-        with self.assertRaises(SizeValueError):
-            long_decimal_division(0, 1)
+        self.assertEqual(
+           next_or_last(lambda x: True, value, default),
+           value[0] if value != [] else default
+        )
 
-    @given(
-       NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
-    )
-    def testExact(self, divisor, multiplier):
+    @given(strategies.lists(strategies.integers()), strategies.integers())
+    @settings(max_examples=10)
+    def testResultsFalse(self, value, default):
         """
-        A divisor that divides the dividend has no decimal part.
+        Test results when the predicate is always False.
         """
-        dividend = Fraction(divisor) * multiplier
-        res = long_decimal_division(divisor, dividend)
-        self.assertEqual(res[3], [])
-        self.assertEqual(res[2], [])
-        self.assertEqual(res[1], multiplier)
-        self.assertEqual(res[0], 1)
-
-    @given(
-       NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
-    )
-    def testNonRepeatingDecimal(self, divisor, multiplier):
-        """
-        Should always end in .5.
-        """
-        dividend = Fraction(divisor) * (multiplier + Fraction(1, 2))
-        res = long_decimal_division(divisor, dividend)
-        self.assertEqual(res[3], [])
-        self.assertEqual(res[2], [5])
-        self.assertEqual(res[1], multiplier)
-        self.assertEqual(res[0], 1)
-
-    @given(
-       NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
-    )
-    def testRepeatingDecimal(self, divisor, multiplier):
-        """
-        Should always end in .33333.....
-        """
-        dividend = Fraction(divisor) * (multiplier + Fraction(1, 3))
-        res = long_decimal_division(divisor, dividend)
-        self.assertEqual(res[3], [3])
-        self.assertEqual(res[2], [])
-        self.assertEqual(res[1], multiplier)
-        self.assertEqual(res[0], 1)
-
-    @given(
-       NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
-    )
-    def testComplexRepeatingDecimal(self, divisor, multiplier):
-        """
-        Should always end in .16666.....
-        """
-        dividend = Fraction(divisor) * (multiplier + Fraction(1, 6))
-        res = long_decimal_division(divisor, dividend)
-        self.assertEqual(res[3], [6])
-        self.assertEqual(res[2], [1])
-        self.assertEqual(res[1], multiplier)
-        self.assertEqual(res[0], 1)
-
-    @given(
-       NUMBERS_STRATEGY.filter(lambda x: x != 0),
-       strategies.integers().filter(lambda x: x > 0),
-       settings=Settings(max_examples=20)
-    )
-    def testMoreComplexRepeatingDecimal(self, divisor, multiplier):
-        """
-        Should always end in .142857142857....
-        """
-        dividend = Fraction(divisor) * (multiplier + Fraction(1, 7))
-        res = long_decimal_division(divisor, dividend)
-        self.assertEqual(res[3], [1, 4, 2, 8, 5, 7])
-        self.assertEqual(res[2], [])
-        self.assertEqual(res[1], multiplier)
-        self.assertEqual(res[0], 1)
+        self.assertEqual(
+           next_or_last(lambda x: False, value, default),
+           value[-1] if value != [] else default
+        )
 
 
-class GetRepeatingFractionTestCase(unittest.TestCase):
+class TakeTestCase(unittest.TestCase):
     """
-    Test get_repeating_fraction.
+    Test take_until_satisfied.
     """
 
-    def testExceptions(self):
+    @given(strategies.lists(strategies.integers()))
+    @settings(max_examples=10)
+    def testResultsFalse(self, value):
         """
-        Test exceptions.
+        Test results when none are sastifactory.
         """
-        with self.assertRaises(SizeValueError):
-            get_repeating_fraction(1, 0)
-        with self.assertRaises(SizeValueError):
-            get_repeating_fraction(-1, 1)
-        with self.assertRaises(SizeValueError):
-            get_repeating_fraction(3, 2)
+        self.assertEqual(
+           list(take_until_satisfied(lambda x: False, value)),
+           value
+        )
+
+    @given(strategies.lists(strategies.integers()))
+    @settings(max_examples=10)
+    def testResultsTrue(self, value):
+        """
+        Test results when all are satisfactory.
+        """
+        self.assertEqual(
+           list(take_until_satisfied(lambda x: True, value)),
+           value[:1]
+        )

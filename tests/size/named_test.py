@@ -22,15 +22,18 @@ from fractions import Fraction
 
 import unittest
 
+from hypothesis import assume
 from hypothesis import example
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
-from hypothesis import Settings
 
 from justbytes import Size
 from justbytes import B
 from justbytes import ROUND_DOWN
+from justbytes import ROUND_HALF_DOWN
 from justbytes import ROUND_HALF_UP
+from justbytes import ROUND_TO_ZERO
 from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
 from justbytes import StrConfig
@@ -40,8 +43,6 @@ from justbytes._constants import DecimalUnits
 from justbytes._constants import UNITS
 
 from justbytes._errors import SizeValueError
-
-from justbytes._util.misc import get_string_info
 
 from tests.utils import SIZE_STRATEGY
 
@@ -54,6 +55,8 @@ class ConversionTestCase(unittest.TestCase):
             Size(0).convertTo(-2)
         with self.assertRaises(SizeValueError):
             Size(0).convertTo(0)
+        with self.assertRaises(SizeValueError):
+            Size(512).convertTo(1.4)
 
     @given(
        strategies.builds(Size, strategies.integers()),
@@ -78,11 +81,11 @@ class ComponentsTestCase(unittest.TestCase):
           min_value=strategies.fractions().filter(lambda x: x >= 0),
           binary_units=strategies.booleans(),
           exact_value=strategies.booleans(),
-          max_places=strategies.integers().filter(lambda x: x >= 0 and x < 64),
+          max_places=strategies.integers(min_value=0, max_value=5),
           unit=strategies.sampled_from(UNITS() + [None])
-       ),
-       settings=Settings(max_examples=100)
+       )
     )
+    @settings(max_examples=200)
     def testResults(self, s, config):
         """ Test component results. """
         (m, u) = s.components(config)
@@ -100,19 +103,31 @@ class ComponentsTestCase(unittest.TestCase):
             self.assertEqual(u, config.unit)
 
 
-        (exact, sign, left, right) = get_string_info(
-           m,
-           places=config.max_places
-        )
-        value = sign * Fraction("%s.%s" % (left, right))
-        if config.exact_value and config.unit is None:
-            self.assertTrue(exact)
-            self.assertTrue(Fraction(value) * int(u) == s.magnitude)
-        if not exact:
-            self.assertFalse(Fraction(value) * int(u) == s.magnitude)
-
 class RoundingTestCase(unittest.TestCase):
     """ Test rounding methods. """
+
+    @given(
+       SIZE_STRATEGY,
+       strategies.one_of(
+          SIZE_STRATEGY.filter(lambda x: x.magnitude >= 0),
+          strategies.sampled_from(UNITS())
+       ),
+       strategies.sampled_from(ROUNDING_METHODS()),
+       strategies.tuples(
+          strategies.one_of(strategies.none(), SIZE_STRATEGY),
+          strategies.one_of(strategies.none(), SIZE_STRATEGY)
+       )
+    )
+    def testBounds(self, s, unit, rounding, bounds):
+        """
+        Test that result is between the specified bounds,
+        assuming that the bounds are legal.
+        """
+        (lower, upper) = bounds
+        assume(lower is None or upper is None or lower <= upper)
+        rounded = s.roundTo(unit, rounding, bounds)
+        self.assertTrue(lower is None or lower <= rounded)
+        self.assertTrue(upper is None or upper >= rounded)
 
     @given(
        SIZE_STRATEGY,
@@ -125,6 +140,7 @@ class RoundingTestCase(unittest.TestCase):
     @example(Size(32), Size(0), ROUND_DOWN)
     def testResults(self, s, unit, rounding):
         """ Test roundTo results. """
+        # pylint: disable=too-many-branches
         rounded = s.roundTo(unit, rounding)
 
         if (isinstance(unit, Size) and unit.magnitude == 0) or \
@@ -149,6 +165,13 @@ class RoundingTestCase(unittest.TestCase):
             self.assertEqual(rounded, floor)
             return
 
+        if rounding is ROUND_TO_ZERO:
+            if s > Size(0):
+                self.assertEqual(rounded, floor)
+            else:
+                self.assertEqual(rounded, ceiling)
+            return
+
         remainder = abs(Fraction(r, converted.denominator))
         half = Fraction(1, 2)
         if remainder > half:
@@ -158,43 +181,20 @@ class RoundingTestCase(unittest.TestCase):
         else:
             if rounding is ROUND_HALF_UP:
                 self.assertEqual(rounded, ceiling)
-            else:
+            elif rounding is ROUND_HALF_DOWN:
                 self.assertEqual(rounded, floor)
+            else:
+                if s > Size(0):
+                    self.assertEqual(rounded, floor)
+                else:
+                    self.assertEqual(rounded, ceiling)
 
     def testExceptions(self):
         """ Test raising exceptions when rounding. """
         with self.assertRaises(SizeValueError):
             Size(0).roundTo(Size(-1, B), rounding=ROUND_HALF_UP)
-
-
-class DecimalInfoTestCase(unittest.TestCase):
-    """
-    Test calculation of decimal info.
-    """
-
-    @given(
-       SIZE_STRATEGY,
-       settings=Settings(max_examples=30)
-    )
-    def testEquivalence(self, s):
-        """
-        Verify that decimal info and corresponding string are same.
-        """
-        config = StrConfig(max_places=None)
-        (sign, left, non_repeating, repeating, units) = s.getDecimalInfo(config)
-        (approx, new_sign, new_left, right, new_units) = s.getStringInfo(config)
-
-        self.assertEqual(sign, new_sign)
-        self.assertEqual(str(left), new_left)
-        self.assertEqual(units, new_units)
-        if not approx:
-            self.assertEqual(repeating, [])
-            self.assertEqual(
-               s,
-               Size(new_sign * Fraction("%s.%s" % (new_left, right)), units)
-            )
-            non_repeating = "".join(str(x) for x in non_repeating)
-            self.assertEqual(
-               s,
-               Size(sign * Fraction("%s.%s" % (left, non_repeating)), units)
-            )
+        with self.assertRaises(SizeValueError):
+            Size(512).roundTo(1.4, rounding=ROUND_HALF_UP)
+        with self.assertRaises(SizeValueError):
+            s = Size(512)
+            s.roundTo(512, rounding=ROUND_HALF_UP, bounds=(Size(0), Size(-1)))

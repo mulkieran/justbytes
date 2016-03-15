@@ -114,11 +114,11 @@ the elements in the list, resulting in an exception.
 
 2. If the list argument is empty, the result will have the wrong type, int::
 
-   >>> res = sum(l[1:])
-   >>> res
-   0
-   >>> type(res)
-   <type 'int'>
+    >>> res = sum(l[1:])
+    >>> res
+    0
+    >>> type(res)
+    <type 'int'>
 
 Of course, the additive identity is just Size(0)::
 

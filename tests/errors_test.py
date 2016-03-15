@@ -25,26 +25,27 @@ from justbytes._errors import SizeNonsensicalBinOpValueError
 from justbytes._errors import SizePowerResultError
 from justbytes._errors import SizeValueError
 
+
 class ErrorTestCase(unittest.TestCase):
     """ Exercise methods of error classes. """
 
     def testSizeValueError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsNotNone(str(SizeValueError("junk", "junk", "junk")))
-        self.assertIsNotNone(str(SizeValueError("junk", "junk")))
+        self.assertIsInstance(str(SizeValueError("junk", "junk", "junk")), str)
+        self.assertIsInstance(str(SizeValueError("junk", "junk")), str)
 
     def testSizeFractionalResultError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsNotNone(str(SizeFractionalResultError()))
+        self.assertIsInstance(str(SizeFractionalResultError()), str)
 
     def testSizeNonsensicalBinOpError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsNotNone(str(SizeNonsensicalBinOpError("+", 2)))
+        self.assertIsInstance(str(SizeNonsensicalBinOpError("+", 2)), str)
 
     def testSizeNonsensicalBinOpValueError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsNotNone(str(SizeNonsensicalBinOpValueError("+", 2)))
+        self.assertIsInstance(str(SizeNonsensicalBinOpValueError("+", 2)), str)
 
     def testSizePowerResultError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsNotNone(str(SizePowerResultError()))
+        self.assertIsInstance(str(SizePowerResultError()), str)

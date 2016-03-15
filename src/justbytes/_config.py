@@ -32,47 +32,47 @@ class DisplayConfig(object):
     # pylint: disable=too-few-public-methods
 
     _FMT_STR = ", ".join([
-       "approx_symbol=%(approx_symbol)s",
        "show_approx_str=%(show_approx_str)s",
        "strip=%(strip)s",
+       "strip_exact=%(strip_exact)s"
     ])
 
     def __init__(
        self,
        strip=False,
        show_approx_str=True,
-       approx_symbol='@'
+       strip_exact=True
     ):
         """
         Initializer.
 
         :param bool strip: True if trailing zeros are to be stripped.
         :param bool show_approx_str: distinguish approximate str values
-        :param str approx_symbol: symbol to indicate approximation
+        :param bool strip_exact: True if stripping exact quantities
 
         If strip is True and there is a fractional quantity, trailing
         zeros are removed up to (and including) the decimal point.
 
         The default for strip is False, so that precision is always shown
         to max_places.
+
+        strip_exact is like strip, but trailing zeros are only removed if
+        the number represented equals its representation. If strip is True,
+        strip_exact does nothing.
         """
-        self._strip = strip
-        self._show_approx_str = show_approx_str
-        self._approx_symbol = approx_symbol
+        self.strip = strip
+        self.show_approx_str = show_approx_str
+        self.strip_exact = strip_exact
 
     def __str__(self):
         values = {
-           'approx_symbol': self.approx_symbol,
            'show_approx_str' : self.show_approx_str,
            'strip' : self.strip,
+           'strip_exact' : self.strip_exact
         }
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
-    # pylint: disable=protected-access
-    approx_symbol = property(lambda s: s._approx_symbol)
-    strip = property(lambda s: s._strip)
-    show_approx_str = property(lambda s: s._show_approx_str)
 
 class StrConfig(object):
     """ Configuration for __str__ method.
@@ -92,10 +92,12 @@ class StrConfig(object):
     # pylint: disable=too-few-public-methods
 
     _FMT_STR = ", ".join([
+       "base=%(base)s",
        "binary_units=%(binary_units)s",
        "exact_value=%(exact_value)s",
        "max_places=%(max_places)s",
        "min_value=%(min_value)s",
+       "rounding_method=%(rounding_method)s",
        "unit=%(unit)s"
     ])
 
@@ -105,7 +107,9 @@ class StrConfig(object):
        min_value=1,
        binary_units=True,
        exact_value=False,
-       unit=None
+       unit=None,
+       base=10,
+       rounding_method=RoundingMethods.ROUND_HALF_ZERO
     ):
         """ Initializer.
 
@@ -116,6 +120,8 @@ class StrConfig(object):
             :param bool binary_units: binary units if True, else SI
             :param bool exact_value: uses largest units that allow exact value
             :param unit: use the specified unit, overrides other options
+            :param base: numeric base
+            :param rounding_method: one of RoundingMethods.METHODS()
         """
         # pylint: disable=too-many-arguments
         if min_value < 0 or \
@@ -133,29 +139,30 @@ class StrConfig(object):
                "must be one of %s" % ", ".join(str(x) for x in UNITS())
             )
 
-        self._max_places = max_places
-        self._min_value = min_value
-        self._binary_units = binary_units
-        self._exact_value = exact_value
-        self._unit = unit
+        if base < 2:
+            raise SizeValueError(base, "base", "must be at least 2")
+
+        self.max_places = max_places
+        self.min_value = min_value
+        self.binary_units = binary_units
+        self.exact_value = exact_value
+        self.unit = unit
+        self.base = base
+        self.rounding_method = rounding_method
 
     def __str__(self):
         values = {
+           'base' : self.base,
            'binary_units' : self.binary_units,
            'exact_value' : self.exact_value,
            'max_places' : self.max_places,
            'min_value' : self.min_value,
+           'rounding_method' : self.rounding_method,
            'unit' : self.unit
         }
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
-    # pylint: disable=protected-access
-    exact_value = property(lambda s: s._exact_value)
-    max_places = property(lambda s: s._max_places)
-    min_value = property(lambda s: s._min_value)
-    binary_units = property(lambda s: s._binary_units)
-    unit = property(lambda s: s._unit)
 
 class InputConfig(object):
     """ Configuration for input of Sizes.
@@ -175,25 +182,29 @@ class InputConfig(object):
             :param method: rounding method, default is ROUND_DOWN
             :type method: instance of :func:`._constants.ROUNDING_METHODS`
         """
-        self._unit = unit
-        self._method = method
+        self.unit = unit
+        self.method = method
 
     def __str__(self):
         values = {'method' : self.method, 'unit' : self.unit}
         return "InputConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
-    # pylint: disable=protected-access
-    method = property(lambda s: s._method)
-    unit = property(lambda s: s._unit)
-
 
 class SizeConfig(object):
     """ Configuration for :class:`Size` class. """
 
-    DISPLAY_CONFIG = DisplayConfig(False, True, '@')
+    DISPLAY_CONFIG = DisplayConfig(False, True)
 
-    STR_CONFIG = StrConfig(2, 1, True, False, None)
+    STR_CONFIG = StrConfig(
+       2,
+       1,
+       True,
+       False,
+       None,
+       10,
+       RoundingMethods.ROUND_HALF_ZERO
+    )
     """ Default configuration for string display. """
 
     INPUT_CONFIG = InputConfig(B, RoundingMethods.ROUND_DOWN)
@@ -209,9 +220,9 @@ class SizeConfig(object):
         :param DisplayConfig config: a configuration object
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
-            approx_symbol=config.approx_symbol,
             show_approx_str=config.show_approx_str,
-            strip=config.strip
+            strip=config.strip,
+            strip_exact=config.strip_exact
         )
 
     @classmethod
@@ -221,10 +232,12 @@ class SizeConfig(object):
             :param :class:`StrConfig` config: a configuration object
         """
         cls.STR_CONFIG = StrConfig(
+            base=config.base,
             binary_units=config.binary_units,
             max_places=config.max_places,
             min_value=config.min_value,
             exact_value=config.exact_value,
+            rounding_method=config.rounding_method,
             unit=config.unit
         )
 

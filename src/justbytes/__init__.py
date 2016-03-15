@@ -110,6 +110,8 @@ from ._constants import RoundingMethods as _RoundingMethods
 ROUND_DOWN = _RoundingMethods.ROUND_DOWN
 ROUND_HALF_DOWN = _RoundingMethods.ROUND_HALF_DOWN
 ROUND_HALF_UP = _RoundingMethods.ROUND_HALF_UP
+ROUND_HALF_ZERO = _RoundingMethods.ROUND_HALF_ZERO
+ROUND_TO_ZERO = _RoundingMethods.ROUND_TO_ZERO
 ROUND_UP = _RoundingMethods.ROUND_UP
 
 from ._constants import ROUNDING_METHODS
@@ -127,3 +129,6 @@ from ._errors import SizeError
 from ._size import Size
 from ._sizes import getSizeFromInput
 from ._sizes import AI
+
+# VERSION
+from .version import __version__

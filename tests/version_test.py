@@ -16,22 +16,15 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tiny classes used by some methods to pack up their results. """
+""" Test for version information. """
+import unittest
 
-class RadixNumber(object):
-    """ Represents a class with a radix and possibly repeating digits. """
-    # pylint: disable=too-few-public-methods
+import justbytes
 
-    def __init__(self, sign, left, non_repeating, repeating):
-        """
-        Initializer.
 
-        :param int sign: -1 for negative, 1 for positive
-        :param int left: the number to the left of the point
-        :param non_repeating: non-repeating numbers to the right of the point
-        :param repeating: repeating numbers to the right of the point
-        """
-        self.sign = sign
-        self.left = left
-        self.non_repeating = non_repeating
-        self.repeating = repeating
+class VersionTestCase(unittest.TestCase):
+    """ Test version. """
+
+    def testValue(self):
+        """ That value is reasonable. """
+        self.assertEqual(justbytes.__version__, '0.05')

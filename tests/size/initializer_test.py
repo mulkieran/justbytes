@@ -24,6 +24,7 @@ from fractions import Fraction
 import unittest
 
 from hypothesis import given
+from hypothesis import settings
 from hypothesis import strategies
 
 from justbytes import B
@@ -49,6 +50,12 @@ class InitializerTestCase(unittest.TestCase):
         with self.assertRaises(SizeValueError):
             Size(s, B)
 
+        with self.assertRaises(SizeValueError):
+            Size(1, 1.2)
+
+        with self.assertRaises(SizeValueError):
+            Size(1, Decimal("NaN"))
+
     @given(
        strategies.one_of(
           strategies.integers(),
@@ -61,12 +68,15 @@ class InitializerTestCase(unittest.TestCase):
        ),
        strategies.one_of(
           strategies.sampled_from(UNITS()),
-          strategies.builds(Size, strategies.fractions())
+          strategies.builds(Size, strategies.fractions()),
+          strategies.fractions(),
+          strategies.decimals().filter(lambda x: x.is_finite())
        )
     )
+    @settings(max_examples=50)
     def testInitialization(self, s, u):
         """ Test the initializer. """
-        self.assertEqual(
-           Size(s, u).magnitude,
-           Fraction(s) * (getattr(u, "magnitude", None) or int(u))
-        )
+        factor = getattr(u, "factor", getattr(u, "magnitude", None))
+        if factor is None:
+            factor = Fraction(u)
+        self.assertEqual(Size(s, u).magnitude, Fraction(s) * factor)
