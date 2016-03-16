@@ -6,6 +6,7 @@ os:
 branches:
   only:
     - master
+    - develop-0.06
 language: python
 
 env:
