@@ -488,7 +488,7 @@ class Size(object):
                reversed(candidates)
             )
         else:
-            return next(x for x in reversed(candidates))
+            return candidates[-1]
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
