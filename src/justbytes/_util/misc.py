@@ -31,11 +31,9 @@ def take_until_satisfied(pred, seq):
     :param seq: a sequence of values
     """
     for x in seq:
+        yield x
         if pred(x):
-            yield x
-            return
-        else:
-            yield x
+            break
 
 def next_or_last(pred, seq, default=None):
     """
