@@ -25,7 +25,6 @@
     will cause an exception to be raised.
 """
 
-
 from fractions import Fraction
 
 import six
@@ -50,6 +49,8 @@ from ._constants import UNIT_TYPES
 from ._util.misc import as_single_number
 from ._util.misc import relation_to_symbol
 from ._util.misc import strip_trailing_zeros
+
+from ._util.digits import Digits
 
 from ._util.generators import next_or_last
 from ._util.generators import take_until_satisfied
@@ -147,14 +148,16 @@ class Size(object):
         (result, relation) = as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config, display):
+    def getString(self, config, display, digits):
         """
         Return a string representation of the size.
 
         :param StrConfig config: representation configuration
         :param DisplayConfig display: configuration for display
+        :param DigitsConfig digits: configuration for representing digits
         :returns: a string representation
         :rtype: str
+        :raises: SizeValueError
         """
         (result, relation, units) = self.getStringInfo(config)
 
@@ -167,23 +170,30 @@ class Size(object):
         if display.strip_exact and relation == 0 and all(x == 0 for x in right):
             right = []
 
+        right_str = Digits.xform(right, digits, config.base)
+        left_str = Digits.xform(left, digits, config.base) or '0'
+
+        if display.show_base:
+            if config.base == 8:
+                left_str = '0' + left_str
+            elif config.base == 16:
+                left_str = '0x' + left_str
+            else:
+                left_str = left_str
+
+        sign = '' if result.positive else '-'
+
         if display.show_approx_str:
             approx_str = relation_to_symbol(relation)
         else:
             approx_str = ''
 
-        sign = '' if result.positive else '-'
-
-        separator = '' if config.base == 10 else ','
-        right = separator.join(str(x) for x in right)
-        left = separator.join(str(x) for x in left)
-
         result = {
            'approx' : approx_str,
            'sign': sign,
-           'left': left or '0',
-           'radix': '.' if right else "",
-           'right' : right,
+           'left': left_str,
+           'radix': '.' if right_str else "",
+           'right' : right_str,
            'units' : units.abbr,
            'bytes' : _BYTES_SYMBOL
         }
@@ -191,7 +201,11 @@ class Size(object):
         return self._FMT_STR % result
 
     def __str__(self):
-        return self.getString(SizeConfig.STR_CONFIG, SizeConfig.DISPLAY_CONFIG)
+        return self.getString(
+           SizeConfig.STR_CONFIG,
+           SizeConfig.DISPLAY_CONFIG,
+           SizeConfig.DIGITS_CONFIG
+        )
 
     def __repr__(self):
         """
