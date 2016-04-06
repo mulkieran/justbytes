@@ -122,6 +122,7 @@ from ._config import DisplayConfig
 from ._config import InputConfig
 from ._config import SizeConfig
 from ._config import StrConfig
+from ._config import StripConfig
 
 # EXCEPTIONS
 from ._errors import SizeError

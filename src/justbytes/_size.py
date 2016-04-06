@@ -148,13 +148,14 @@ class Size(object):
         (result, relation) = as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config, display, digits):
+    def getString(self, config, display, digits, strip):
         """
         Return a string representation of the size.
 
         :param StrConfig config: representation configuration
         :param DisplayConfig display: configuration for display
         :param DigitsConfig digits: configuration for representing digits
+        :param StripConfig strip: configuration for stripping
         :returns: a string representation
         :rtype: str
         :raises: SizeValueError
@@ -164,11 +165,12 @@ class Size(object):
         right = result.non_repeating_part
         left = result.integer_part
 
-        if display.strip:
+        # pylint: disable=too-many-boolean-expressions
+        if (strip.strip) or \
+           (strip.strip_exact and relation == 0) or \
+           (strip.strip_whole and relation == 0 and \
+            all(x == 0 for x in right)):
             right = strip_trailing_zeros(right)
-
-        if display.strip_exact and relation == 0 and all(x == 0 for x in right):
-            right = []
 
         right_str = Digits.xform(right, digits, config.base)
         left_str = Digits.xform(left, digits, config.base) or '0'
@@ -204,7 +206,8 @@ class Size(object):
         return self.getString(
            SizeConfig.STR_CONFIG,
            SizeConfig.DISPLAY_CONFIG,
-           SizeConfig.DIGITS_CONFIG
+           SizeConfig.DIGITS_CONFIG,
+           SizeConfig.STRIP_CONFIG
         )
 
     def __repr__(self):
