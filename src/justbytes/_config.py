@@ -244,22 +244,34 @@ class InputConfig(object):
 class SizeConfig(object):
     """ Configuration for :class:`Size` class. """
 
-    DIGITS_CONFIG = DigitsConfig('~', False, True)
+    DIGITS_CONFIG = DigitsConfig(
+       separator='~',
+       use_caps=False,
+       use_letters=True
+    )
 
-    DISPLAY_CONFIG = DisplayConfig(False, True, True, False)
+    DISPLAY_CONFIG = DisplayConfig(
+       strip=False,
+       show_approx_str=True,
+       strip_exact=True,
+       show_base=False
+    )
 
     STR_CONFIG = StrConfig(
-       2,
-       1,
-       True,
-       False,
-       None,
-       10,
-       RoundingMethods.ROUND_HALF_ZERO
+       max_places=2,
+       min_value=1,
+       binary_units=True,
+       exact_value=False,
+       unit=None,
+       base=10,
+       rounding_method=RoundingMethods.ROUND_HALF_ZERO
     )
     """ Default configuration for string display. """
 
-    INPUT_CONFIG = InputConfig(B, RoundingMethods.ROUND_DOWN)
+    INPUT_CONFIG = InputConfig(
+       unit=B,
+       method=RoundingMethods.ROUND_DOWN
+    )
     """ Default configuration for interpreting input values. """
 
     STRICT = False
