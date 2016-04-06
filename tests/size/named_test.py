@@ -20,6 +20,7 @@
 
 from fractions import Fraction
 
+import string
 import unittest
 
 from hypothesis import assume
@@ -36,6 +37,9 @@ from justbytes import ROUND_HALF_UP
 from justbytes import ROUND_TO_ZERO
 from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
+from justbytes import DigitsConfig
+from justbytes import DisplayConfig
+from justbytes import SizeConfig
 from justbytes import StrConfig
 
 from justbytes._constants import BinaryUnits
@@ -101,6 +105,87 @@ class ComponentsTestCase(unittest.TestCase):
             self.assertTrue(abs(m) >= config.min_value)
         else:
             self.assertEqual(u, config.unit)
+
+
+class DisplayConfigTestCase(unittest.TestCase):
+    """
+    Test some aspects of the getString() method.
+    """
+
+    @given(
+       SIZE_STRATEGY,
+       strategies.builds(
+          DisplayConfig,
+          show_approx_str=strategies.booleans(),
+          strip=strategies.booleans(),
+          strip_exact=strategies.booleans(),
+          show_base=strategies.booleans()
+       ),
+       strategies.integers(min_value=2, max_value=16)
+    )
+    @settings(max_examples=100)
+    def testConfig(self, a_size, config, base):
+        """
+        Test properties of configuration.
+        """
+        result = a_size.getString(
+           StrConfig(base=base),
+           config,
+           DigitsConfig(use_letters=False)
+        )
+
+        if config.strip:
+            self.assertNotEqual(result[-1], '0')
+
+        if config.show_base and base == 16:
+            self.assertNotEqual(result.find('0x'), -1)
+
+class DigitsConfigTestCase(unittest.TestCase):
+    """
+    Test digits config.
+    """
+
+    @given(
+       SIZE_STRATEGY,
+       strategies.builds(
+          DigitsConfig,
+          separator=strategies.text(alphabet='-/*j:', max_size=1),
+          use_caps=strategies.booleans(),
+          use_letters=strategies.booleans()
+       )
+    )
+    @settings(max_examples=50)
+    def testConfig(self, a_size, config):
+        """
+        Test some basic configurations.
+        """
+        result = a_size.getString(
+           SizeConfig.STR_CONFIG,
+           SizeConfig.DISPLAY_CONFIG,
+           config
+        )
+        if config.use_letters:
+            (number, _, _) = result.partition(' ')
+            letters = [r for r in number if r in string.ascii_letters]
+            if config.use_caps:
+                self.assertTrue(
+                   all(r in string.ascii_uppercase for r in letters)
+                )
+            else:
+                self.assertTrue(
+                   all(r in string.ascii_lowercase for r in letters)
+                )
+
+    def testExceptions(self):
+        """
+        Test exceptions.
+        """
+        with self.assertRaises(SizeValueError):
+            Size(0).getString(
+               StrConfig(base=100),
+               SizeConfig.DISPLAY_CONFIG,
+               SizeConfig.DIGITS_CONFIG
+            )
 
 
 class RoundingTestCase(unittest.TestCase):

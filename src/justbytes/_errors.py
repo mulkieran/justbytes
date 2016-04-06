@@ -27,6 +27,7 @@ class SizeError(Exception):
     """ Generic Size error. """
     pass
 
+
 class SizeValueError(SizeError):
     """ Raised when a parameter has an unacceptable value.
 

@@ -1,4 +1,4 @@
-# Copyright (C) 2015  Red Hat, Inc.
+# Copyright (C) 2015-2016  Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -25,6 +25,48 @@ from ._constants import UNITS
 
 from ._errors import SizeValueError
 
+
+class DigitsConfig(object):
+    """
+    How to display digits.
+    """
+    # pylint: disable=too-few-public-methods
+
+    _FMT_STR = ", ".join([
+       "separator=%(separator)s",
+       "use_caps=%(use_caps)s",
+       "use_letters=%(use_letters)s"
+    ])
+
+    def __init__(
+       self,
+       separator='~',
+       use_caps=False,
+       use_letters=True
+    ):
+        """
+        Initializer.
+
+        :param str separator: separate for digits
+        :param bool use_caps: if set, use capital letters
+        :param bool use_letters: if set, use letters
+
+        If digits in this base require more than one character.
+        """
+        self.separator = separator
+        self.use_caps = use_caps
+        self.use_letters = use_letters
+
+    def __str__(self): # pragma: no cover
+        values = {
+           'separator' : self.separator,
+           'use_caps' : self.use_caps,
+           'use_letters' : self.use_letters
+        }
+        return "DigitsConfig(%s)" % (self._FMT_STR % values)
+    __repr__ = __str__
+
+
 class DisplayConfig(object):
     """
     Superficial aspects of display.
@@ -33,6 +75,7 @@ class DisplayConfig(object):
 
     _FMT_STR = ", ".join([
        "show_approx_str=%(show_approx_str)s",
+       "show_base=%(show_base)s",
        "strip=%(strip)s",
        "strip_exact=%(strip_exact)s"
     ])
@@ -41,7 +84,8 @@ class DisplayConfig(object):
        self,
        strip=False,
        show_approx_str=True,
-       strip_exact=True
+       strip_exact=True,
+       show_base=False
     ):
         """
         Initializer.
@@ -49,6 +93,7 @@ class DisplayConfig(object):
         :param bool strip: True if trailing zeros are to be stripped.
         :param bool show_approx_str: distinguish approximate str values
         :param bool strip_exact: True if stripping exact quantities
+        :param bool show_base: True if base prefix to be prepended
 
         If strip is True and there is a fractional quantity, trailing
         zeros are removed up to (and including) the decimal point.
@@ -59,14 +104,19 @@ class DisplayConfig(object):
         strip_exact is like strip, but trailing zeros are only removed if
         the number represented equals its representation. If strip is True,
         strip_exact does nothing.
+
+        There are only two base prefixes acknowledged, 0 for octal and 0x for
+        hexadecimal.
         """
         self.strip = strip
         self.show_approx_str = show_approx_str
         self.strip_exact = strip_exact
+        self.show_base = show_base
 
     def __str__(self):
         values = {
            'show_approx_str' : self.show_approx_str,
+           'show_base' : self.show_base,
            'strip' : self.strip,
            'strip_exact' : self.strip_exact
         }
@@ -194,20 +244,34 @@ class InputConfig(object):
 class SizeConfig(object):
     """ Configuration for :class:`Size` class. """
 
-    DISPLAY_CONFIG = DisplayConfig(False, True)
+    DIGITS_CONFIG = DigitsConfig(
+       separator='~',
+       use_caps=False,
+       use_letters=True
+    )
+
+    DISPLAY_CONFIG = DisplayConfig(
+       strip=False,
+       show_approx_str=True,
+       strip_exact=True,
+       show_base=False
+    )
 
     STR_CONFIG = StrConfig(
-       2,
-       1,
-       True,
-       False,
-       None,
-       10,
-       RoundingMethods.ROUND_HALF_ZERO
+       max_places=2,
+       min_value=1,
+       binary_units=True,
+       exact_value=False,
+       unit=None,
+       base=10,
+       rounding_method=RoundingMethods.ROUND_HALF_ZERO
     )
     """ Default configuration for string display. """
 
-    INPUT_CONFIG = InputConfig(B, RoundingMethods.ROUND_DOWN)
+    INPUT_CONFIG = InputConfig(
+       unit=B,
+       method=RoundingMethods.ROUND_DOWN
+    )
     """ Default configuration for interpreting input values. """
 
     STRICT = False
@@ -222,7 +286,8 @@ class SizeConfig(object):
         cls.DISPLAY_CONFIG = DisplayConfig(
             show_approx_str=config.show_approx_str,
             strip=config.strip,
-            strip_exact=config.strip_exact
+            strip_exact=config.strip_exact,
+            show_base=config.show_base
         )
 
     @classmethod
@@ -250,4 +315,17 @@ class SizeConfig(object):
         cls.INPUT_CONFIG = InputConfig(
             method=config.method,
             unit=config.unit
+        )
+
+    @classmethod
+    def set_digits_config(cls, config): # pragma: no cover
+        """
+        Set the configuration for display of digits for all Size objects.
+
+        :param DigitsConfig config: a configuration object
+        """
+        cls.DIGITS_CONFIG = DigitsConfig(
+           separator=config.separator,
+           use_caps=config.use_caps,
+           use_letters=config.use_letters
         )
