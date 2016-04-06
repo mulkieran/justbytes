@@ -48,10 +48,11 @@ from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
 from ._util.misc import as_single_number
-from ._util.misc import next_or_last
 from ._util.misc import relation_to_symbol
 from ._util.misc import strip_trailing_zeros
-from ._util.misc import take_until_satisfied
+
+from ._util.generators import next_or_last
+from ._util.generators import take_until_satisfied
 
 _BYTES_SYMBOL = "B"
 
