@@ -78,8 +78,7 @@ class SizeTestCase(unittest.TestCase):
     @given(
        strategies.builds(
           DisplayConfig,
-          show_approx_str=strategies.booleans(),
-          strip=strategies.booleans()
+          show_approx_str=strategies.booleans()
        )
     )
     @settings(max_examples=30)

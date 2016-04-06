@@ -26,6 +26,42 @@ from ._constants import UNITS
 from ._errors import SizeValueError
 
 
+class StripConfig(object):
+    """
+    Stripping trailing zeros.
+    """
+    # pylint: disable=too-few-public-methods
+
+    _FMT_STR = ", ".join([
+       "strip=%(strip)s",
+       "strip_exact=%(strip_exact)s",
+       "strip_whole=%(strip_whole)s"
+    ])
+
+    def __init__(self, strip=False, strip_exact=False, strip_whole=True):
+        """
+        Initializer.
+
+        :param bool strip: strip all trailing zeros
+        :param bool strip_exact: strip if value is exact
+        :param bool strip_whole: strip if value is exact and non-fractional
+
+        strip is stronger than strip_exact which is stronger than strip_whole
+        """
+        self.strip = strip
+        self.strip_exact = strip_exact
+        self.strip_whole = strip_whole
+
+    def __str__(self): # pragma: no cover
+        values = {
+           'strip' : self.strip,
+           'strip_exact' : self.strip_exact,
+           'strip_whole' : self.strip_whole
+        }
+        return "StripConfig(%s)" % (self._FMT_STR % values)
+    __repr__ = __str__
+
+
 class DigitsConfig(object):
     """
     How to display digits.
@@ -75,50 +111,30 @@ class DisplayConfig(object):
 
     _FMT_STR = ", ".join([
        "show_approx_str=%(show_approx_str)s",
-       "show_base=%(show_base)s",
-       "strip=%(strip)s",
-       "strip_exact=%(strip_exact)s"
+       "show_base=%(show_base)s"
     ])
 
     def __init__(
        self,
-       strip=False,
        show_approx_str=True,
-       strip_exact=True,
        show_base=False
     ):
         """
         Initializer.
 
-        :param bool strip: True if trailing zeros are to be stripped.
         :param bool show_approx_str: distinguish approximate str values
-        :param bool strip_exact: True if stripping exact quantities
         :param bool show_base: True if base prefix to be prepended
-
-        If strip is True and there is a fractional quantity, trailing
-        zeros are removed up to (and including) the decimal point.
-
-        The default for strip is False, so that precision is always shown
-        to max_places.
-
-        strip_exact is like strip, but trailing zeros are only removed if
-        the number represented equals its representation. If strip is True,
-        strip_exact does nothing.
 
         There are only two base prefixes acknowledged, 0 for octal and 0x for
         hexadecimal.
         """
-        self.strip = strip
         self.show_approx_str = show_approx_str
-        self.strip_exact = strip_exact
         self.show_base = show_base
 
     def __str__(self):
         values = {
            'show_approx_str' : self.show_approx_str,
-           'show_base' : self.show_base,
-           'strip' : self.strip,
-           'strip_exact' : self.strip_exact
+           'show_base' : self.show_base
         }
         return "StrConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
@@ -244,6 +260,12 @@ class InputConfig(object):
 class SizeConfig(object):
     """ Configuration for :class:`Size` class. """
 
+    STRIP_CONFIG = StripConfig(
+       strip=False,
+       strip_exact=False,
+       strip_whole=True
+    )
+
     DIGITS_CONFIG = DigitsConfig(
        separator='~',
        use_caps=False,
@@ -251,9 +273,7 @@ class SizeConfig(object):
     )
 
     DISPLAY_CONFIG = DisplayConfig(
-       strip=False,
        show_approx_str=True,
-       strip_exact=True,
        show_base=False
     )
 
@@ -285,8 +305,6 @@ class SizeConfig(object):
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
             show_approx_str=config.show_approx_str,
-            strip=config.strip,
-            strip_exact=config.strip_exact,
             show_base=config.show_base
         )
 
@@ -328,4 +346,15 @@ class SizeConfig(object):
            separator=config.separator,
            use_caps=config.use_caps,
            use_letters=config.use_letters
+        )
+
+    @classmethod
+    def set_strip_config(cls, config): # pragma: no cover
+        """
+        Set the configuration for stripping trailing zeros.
+        """
+        cls.STRIP_CONFIG = StripConfig(
+           strip=config.strip,
+           strip_exact=config.strip_exact,
+           strip_whole=config.strip_whole
         )
