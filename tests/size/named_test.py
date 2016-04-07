@@ -117,8 +117,6 @@ class DisplayConfigTestCase(unittest.TestCase):
        strategies.builds(
           DisplayConfig,
           show_approx_str=strategies.booleans(),
-          strip=strategies.booleans(),
-          strip_exact=strategies.booleans(),
           show_base=strategies.booleans()
        ),
        strategies.integers(min_value=2, max_value=16)
@@ -131,11 +129,9 @@ class DisplayConfigTestCase(unittest.TestCase):
         result = a_size.getString(
            StrConfig(base=base),
            config,
-           DigitsConfig(use_letters=False)
+           DigitsConfig(use_letters=False),
+           SizeConfig.STRIP_CONFIG
         )
-
-        if config.strip:
-            self.assertNotEqual(result[-1], '0')
 
         if config.show_base and base == 16:
             self.assertNotEqual(result.find('0x'), -1)
@@ -162,7 +158,8 @@ class DigitsConfigTestCase(unittest.TestCase):
         result = a_size.getString(
            SizeConfig.STR_CONFIG,
            SizeConfig.DISPLAY_CONFIG,
-           config
+           config,
+           SizeConfig.STRIP_CONFIG
         )
         if config.use_letters:
             (number, _, _) = result.partition(' ')
@@ -184,7 +181,8 @@ class DigitsConfigTestCase(unittest.TestCase):
             Size(0).getString(
                StrConfig(base=100),
                SizeConfig.DISPLAY_CONFIG,
-               SizeConfig.DIGITS_CONFIG
+               SizeConfig.DIGITS_CONFIG,
+               SizeConfig.STRIP_CONFIG
             )
 
 
