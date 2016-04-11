@@ -46,8 +46,6 @@ from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
-from ._util.misc import as_single_number
-
 from ._util.display import Decorators
 from ._util.display import String
 
@@ -57,6 +55,25 @@ from ._util.generators import take_until_satisfied
 
 class Size(object):
     """ Class for instantiating Size objects. """
+
+    @classmethod
+    def _as_single_number(cls, value, config):
+        """
+        Returns a rational value as a single number according to the
+        specified configuration.
+
+        :param Rational value: a numeric value
+        :param StrConfig config: how to calculate the value to display
+
+        :returns: the result and its relation to ``value``
+        :rtype: Radix * int
+        """
+        return justbases.Radices.from_rational(
+           value,
+           config.base,
+           config.max_places,
+           config.rounding_method
+        )
 
     @classmethod
     def _get_unit_value(cls, unit):
@@ -132,7 +149,7 @@ class Size(object):
         :rtype: tuple of Radix * int * unit
         """
         (magnitude, units) = self.components(config)
-        (result, relation) = as_single_number(magnitude, config)
+        (result, relation) = self._as_single_number(magnitude, config)
         return (result, relation, units)
 
     def getString(self, config, display, digits, strip):
@@ -450,7 +467,7 @@ class Size(object):
 
         if config.exact_value:
             return next_or_last(
-               lambda x: as_single_number(x[0], config)[1] == 0,
+               lambda x: self._as_single_number(x[0], config)[1] == 0,
                reversed(candidates)
             )
         else:
