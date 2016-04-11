@@ -18,8 +18,6 @@
 
 """ Miscellaneous utilities. """
 
-import itertools
-
 import justbases
 
 
@@ -39,36 +37,4 @@ def as_single_number(value, config):
        config.base,
        config.max_places,
        config.rounding_method
-    )
-
-def relation_to_symbol(relation):
-    """
-    Change a numeric relation to a string symbol.
-
-    :param int relation: the relation
-
-    :returns: a symbol with the right relation to ``relation``
-    :rtype: str
-    """
-    if relation == 0:
-        return ''
-    elif relation == -1:
-        return '>'
-    elif relation == 1:
-        return '<'
-    else:
-        assert False # pragma: no cover
-
-def strip_trailing_zeros(value):
-    """
-    Strip trailing zeros from a list of ints.
-
-    :param value: the value to be stripped
-    :type value: list of str
-
-    :returns: list with trailing zeros stripped
-    :rtype: list of int
-    """
-    return list(
-       reversed(list(itertools.dropwhile(lambda x: x == 0, reversed(value))))
     )
