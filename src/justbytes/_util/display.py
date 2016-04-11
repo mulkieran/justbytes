@@ -106,14 +106,67 @@ class Strip(object):
             return number
 
 
-_Prefixes = namedtuple('_Prefixes', ['approx_str', 'base_str', 'sign'])
+class Number(object):
+    """
+    Handle generic number display stuff.
+
+    Returns modifications to the number string.
+    """
+    # pylint: disable=too-few-public-methods
+
+    _FMT_STR = "".join([
+       "%(sign)s",
+       "%(base_str)s",
+       "%(left)s",
+       "%(radix)s",
+       "%(right)s"
+    ])
+
+    @classmethod
+    def xform(cls, left, right, config, base, positive):
+        """
+        Return prefixes for tuple.
+
+        :param str left: left of the radix
+        :param str right: right of the radix
+        :param DisplayConfig config: display configuration
+        :param int base: the base in which value is displayed
+        :param bool positive: whether value is non-negative
+        :returns: the number string
+        :rtype: str
+        """
+        # pylint: disable=too-many-arguments
+
+        base_str = ''
+        if config.show_base:
+            if base == 8:
+                base_str = '0'
+            elif base == 16:
+                base_str = '0x'
+            else:
+                base_str = ''
+
+        sign = '' if positive else '-'
+
+        result = {
+           'sign' : sign,
+           'base_str' : base_str,
+           'left' : left,
+           'radix' : '.' if right else "",
+           'right' : right
+        }
+
+        return cls._FMT_STR % result
 
 
-class Display(object):
+_Decorators = namedtuple('_Decorators', ['approx_str'])
+
+
+class Decorators(object):
     """
     Handle generic display stuff.
 
-    Returns prefixes for display.
+    Returns decorators for the value.
     """
 
     @staticmethod
@@ -136,30 +189,16 @@ class Display(object):
             assert False # pragma: no cover
 
     @classmethod
-    def prefixes(cls, config, base, positive, relation):
+    def decorators(cls, config, relation):
         """
         Return prefixes for tuple.
 
         :param DisplayConfig config: display configuration
-        :param int base: the base in which value is displayed
-        :param bool positive: whether value is non-negative
         :param int relation: relation of string value to actual value
         """
-
-        base_str = ''
-        if config.show_base:
-            if base == 8:
-                base_str = '0'
-            elif base == 16:
-                base_str = '0x'
-            else:
-                base_str = ''
-
-        sign = '' if positive else '-'
-
         if config.show_approx_str:
             approx_str = cls.relation_to_symbol(relation)
         else:
             approx_str = ''
 
-        return _Prefixes(approx_str=approx_str, base_str=base_str, sign=sign)
+        return _Decorators(approx_str=approx_str)

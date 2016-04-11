@@ -49,7 +49,8 @@ from ._constants import UNIT_TYPES
 from ._util.misc import as_single_number
 
 from ._util.display import Digits
-from ._util.display import Display
+from ._util.display import Decorators
+from ._util.display import Number
 from ._util.display import Strip
 
 from ._util.generators import next_or_last
@@ -62,11 +63,7 @@ class Size(object):
 
     _FMT_STR = "".join([
        "%(approx)s",
-       "%(sign)s",
-       "%(base_str)s",
-       "%(left)s",
-       "%(radix)s",
-       "%(right)s",
+       "%(number)s",
        " ",
        "%(units)s",
        "%(bytes)s"
@@ -171,16 +168,19 @@ class Size(object):
         right_str = Digits.xform(right, digits, config.base)
         left_str = Digits.xform(left, digits, config.base) or '0'
 
-        prefixes = \
-           Display.prefixes(display, config.base, result.positive, relation)
+        number = Number.xform(
+           left_str,
+           right_str,
+           display,
+           config.base,
+           result.positive
+        )
+
+        decorators = Decorators.decorators(display, relation)
 
         result = {
-           'approx' : prefixes.approx_str,
-           'sign': prefixes.sign,
-           'base_str' : prefixes.base_str,
-           'left': left_str,
-           'radix': '.' if right_str else "",
-           'right' : right_str,
+           'approx' : decorators.approx_str,
+           'number' : number,
            'units' : units.abbr,
            'bytes' : _BYTES_SYMBOL
         }
@@ -208,7 +208,7 @@ class Size(object):
               self._magnitude,
               RoundingMethods.ROUND_HALF_ZERO
            )
-        return "%sSize(%s)" % (Display.relation_to_symbol(relation), value)
+        return "%sSize(%s)" % (Decorators.relation_to_symbol(relation), value)
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument
