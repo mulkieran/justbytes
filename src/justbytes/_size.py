@@ -165,14 +165,14 @@ class Size(object):
 
         right = Strip.xform(right, strip, relation)
 
-        right_str = Digits.xform(right, digits, config.base)
-        left_str = Digits.xform(left, digits, config.base) or '0'
+        right_str = Digits.xform(right, digits, result.base)
+        left_str = Digits.xform(left, digits, result.base) or '0'
 
         number = Number.xform(
            left_str,
            right_str,
            display,
-           config.base,
+           result.base,
            result.positive
         )
 
