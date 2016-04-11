@@ -48,26 +48,15 @@ from ._constants import UNIT_TYPES
 
 from ._util.misc import as_single_number
 
-from ._util.display import Digits
 from ._util.display import Decorators
-from ._util.display import Number
-from ._util.display import Strip
+from ._util.display import String
 
 from ._util.generators import next_or_last
 from ._util.generators import take_until_satisfied
 
-_BYTES_SYMBOL = "B"
 
 class Size(object):
     """ Class for instantiating Size objects. """
-
-    _FMT_STR = "".join([
-       "%(approx)s",
-       "%(number)s",
-       " ",
-       "%(units)s",
-       "%(bytes)s"
-    ])
 
     @classmethod
     def _get_unit_value(cls, unit):
@@ -159,33 +148,7 @@ class Size(object):
         :raises: SizeValueError
         """
         (result, relation, units) = self.getStringInfo(config)
-
-        right = result.non_repeating_part
-        left = result.integer_part
-
-        right = Strip.xform(right, strip, relation)
-
-        right_str = Digits.xform(right, digits, result.base)
-        left_str = Digits.xform(left, digits, result.base) or '0'
-
-        number = Number.xform(
-           left_str,
-           right_str,
-           display,
-           result.base,
-           result.positive
-        )
-
-        decorators = Decorators.decorators(display, relation)
-
-        result = {
-           'approx' : decorators.approx_str,
-           'number' : number,
-           'units' : units.abbr,
-           'bytes' : _BYTES_SYMBOL
-        }
-
-        return self._FMT_STR % result
+        return String.xform(result, display, digits, strip, relation, units)
 
     def __str__(self):
         return self.getString(
