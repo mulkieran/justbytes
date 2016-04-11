@@ -47,10 +47,10 @@ from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
 from ._util.misc import as_single_number
-from ._util.misc import relation_to_symbol
-from ._util.misc import strip_trailing_zeros
 
 from ._util.display import Digits
+from ._util.display import Display
+from ._util.display import Strip
 
 from ._util.generators import next_or_last
 from ._util.generators import take_until_satisfied
@@ -63,6 +63,7 @@ class Size(object):
     _FMT_STR = "".join([
        "%(approx)s",
        "%(sign)s",
+       "%(base_str)s",
        "%(left)s",
        "%(radix)s",
        "%(right)s",
@@ -165,34 +166,18 @@ class Size(object):
         right = result.non_repeating_part
         left = result.integer_part
 
-        # pylint: disable=too-many-boolean-expressions
-        if (strip.strip) or \
-           (strip.strip_exact and relation == 0) or \
-           (strip.strip_whole and relation == 0 and \
-            all(x == 0 for x in right)):
-            right = strip_trailing_zeros(right)
+        right = Strip.xform(right, strip, relation)
 
         right_str = Digits.xform(right, digits, config.base)
         left_str = Digits.xform(left, digits, config.base) or '0'
 
-        if display.show_base:
-            if config.base == 8:
-                left_str = '0' + left_str
-            elif config.base == 16:
-                left_str = '0x' + left_str
-            else:
-                left_str = left_str
-
-        sign = '' if result.positive else '-'
-
-        if display.show_approx_str:
-            approx_str = relation_to_symbol(relation)
-        else:
-            approx_str = ''
+        prefixes = \
+           Display.prefixes(display, config.base, result.positive, relation)
 
         result = {
-           'approx' : approx_str,
-           'sign': sign,
+           'approx' : prefixes.approx_str,
+           'sign': prefixes.sign,
+           'base_str' : prefixes.base_str,
            'left': left_str,
            'radix': '.' if right_str else "",
            'right' : right_str,
@@ -223,7 +208,7 @@ class Size(object):
               self._magnitude,
               RoundingMethods.ROUND_HALF_ZERO
            )
-        return "%sSize(%s)" % (relation_to_symbol(relation), value)
+        return "%sSize(%s)" % (Display.relation_to_symbol(relation), value)
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument

@@ -18,7 +18,10 @@
 
 """ Handling lists of digits. """
 
+import itertools
 import string
+
+from collections import namedtuple
 
 from .._errors import SizeValueError
 
@@ -57,3 +60,106 @@ class Digits(object):
         else:
             separator = '' if base <= 10 else config.separator
             return separator.join(str(x) for x in number)
+
+
+class Strip(object):
+    """
+    Handle stripping digits.
+    """
+    # pylint: disable=too-few-public-methods
+
+    @staticmethod
+    def _strip_trailing_zeros(value):
+        """
+        Strip trailing zeros from a list of ints.
+
+        :param value: the value to be stripped
+        :type value: list of str
+
+        :returns: list with trailing zeros stripped
+        :rtype: list of int
+        """
+        return list(
+           reversed(
+              list(itertools.dropwhile(lambda x: x == 0, reversed(value)))
+           )
+        )
+
+    @classmethod
+    def xform(cls, number, config, relation):
+        """
+        Strip trailing zeros from a number according to config and relation.
+
+        :param number: a number
+        :type number: list of int
+        :param StripConfig config: configuration for stripping zeros
+        :param int relation: the relation of the display value to the actual
+        """
+
+        # pylint: disable=too-many-boolean-expressions
+        if (config.strip) or \
+           (config.strip_exact and relation == 0) or \
+           (config.strip_whole and relation == 0 and \
+            all(x == 0 for x in number)):
+            return cls._strip_trailing_zeros(number)
+        else:
+            return number
+
+
+_Prefixes = namedtuple('_Prefixes', ['approx_str', 'base_str', 'sign'])
+
+
+class Display(object):
+    """
+    Handle generic display stuff.
+
+    Returns prefixes for display.
+    """
+
+    @staticmethod
+    def relation_to_symbol(relation):
+        """
+        Change a numeric relation to a string symbol.
+
+        :param int relation: the relation
+
+        :returns: a symbol with the right relation to ``relation``
+        :rtype: str
+        """
+        if relation == 0:
+            return ''
+        elif relation == -1:
+            return '>'
+        elif relation == 1:
+            return '<'
+        else:
+            assert False # pragma: no cover
+
+    @classmethod
+    def prefixes(cls, config, base, positive, relation):
+        """
+        Return prefixes for tuple.
+
+        :param DisplayConfig config: display configuration
+        :param int base: the base in which value is displayed
+        :param bool positive: whether value is non-negative
+        :param int relation: relation of string value to actual value
+        """
+
+        base_str = ''
+        if config.show_base:
+            if base == 8:
+                base_str = '0'
+            elif base == 16:
+                base_str = '0x'
+            else:
+                base_str = ''
+
+        sign = '' if positive else '-'
+
+        if config.show_approx_str:
+            approx_str = cls.relation_to_symbol(relation)
+        else:
+            approx_str = ''
+
+        return _Prefixes(approx_str=approx_str, base_str=base_str, sign=sign)
