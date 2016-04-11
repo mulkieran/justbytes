@@ -50,7 +50,7 @@ from ._util.misc import as_single_number
 from ._util.misc import relation_to_symbol
 from ._util.misc import strip_trailing_zeros
 
-from ._util.digits import Digits
+from ._util.display import Digits
 
 from ._util.generators import next_or_last
 from ._util.generators import take_until_satisfied
