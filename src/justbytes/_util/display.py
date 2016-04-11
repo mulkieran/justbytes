@@ -214,6 +214,7 @@ class String(object):
 
     _FMT_STR = "".join([
        "%(approx)s",
+       "%(space)s",
        "%(number)s",
        " ",
        "%(units)s",
@@ -256,6 +257,7 @@ class String(object):
 
         result = {
            'approx' : decorators.approx_str,
+           'space' : ' ' if decorators.approx_str else '',
            'number' : number,
            'units' : units.abbr,
            'bytes' : cls._BYTES_SYMBOL
