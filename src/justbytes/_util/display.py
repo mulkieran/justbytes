@@ -202,3 +202,63 @@ class Decorators(object):
             approx_str = ''
 
         return _Decorators(approx_str=approx_str)
+
+
+class String(object):
+    """
+    Convert size components to string according to configuration.
+    """
+    # pylint: disable=too-few-public-methods
+
+    _BYTES_SYMBOL = "B"
+
+    _FMT_STR = "".join([
+       "%(approx)s",
+       "%(number)s",
+       " ",
+       "%(units)s",
+       "%(bytes)s"
+    ])
+
+    @classmethod
+    def xform(cls, radix, display, digits, strip, relation, units):
+        """
+        Transform a radix and some information to a str according to
+        configurations.
+
+        :param Radix radix: the radix
+        :param DisplayConfig display: the display config
+        :param DigitsConfig digits: the digits config
+        :param StripConfig strip: the strip config
+        :param int relation: relation of display value to actual value
+        :param units: element of UNITS()
+        :returns: a string representing the value
+        :rtype: str
+        """
+        # pylint: disable=too-many-arguments
+        right = radix.non_repeating_part
+        left = radix.integer_part
+
+        right = Strip.xform(right, strip, relation)
+
+        right_str = Digits.xform(right, digits, radix.base)
+        left_str = Digits.xform(left, digits, radix.base) or '0'
+
+        number = Number.xform(
+           left_str,
+           right_str,
+           display,
+           radix.base,
+           radix.positive
+        )
+
+        decorators = Decorators.decorators(display, relation)
+
+        result = {
+           'approx' : decorators.approx_str,
+           'number' : number,
+           'units' : units.abbr,
+           'bytes' : cls._BYTES_SYMBOL
+        }
+
+        return cls._FMT_STR % result
