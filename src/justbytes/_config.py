@@ -140,7 +140,7 @@ class DisplayConfig(object):
     __repr__ = __str__
 
 
-class StrConfig(object):
+class ValueConfig(object):
     """ Configuration for __str__ method.
 
         If max_places is set to None, all non-zero digits after the
@@ -226,7 +226,7 @@ class StrConfig(object):
            'rounding_method' : self.rounding_method,
            'unit' : self.unit
         }
-        return "StrConfig(%s)" % (self._FMT_STR % values)
+        return "ValueConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
 
@@ -277,7 +277,7 @@ class SizeConfig(object):
        show_base=False
     )
 
-    STR_CONFIG = StrConfig(
+    VALUE_CONFIG = ValueConfig(
        max_places=2,
        min_value=1,
        binary_units=True,
@@ -309,12 +309,13 @@ class SizeConfig(object):
         )
 
     @classmethod
-    def set_str_config(cls, config):
-        """ Set the configuration for __str__ method for all Size objects.
-
-            :param :class:`StrConfig` config: a configuration object
+    def set_value_config(cls, config):
         """
-        cls.STR_CONFIG = StrConfig(
+        Set the configuration for computing the value of string representation.
+
+        :param :class:`ValueConfig` config: a configuration object
+        """
+        cls.VALUE_CONFIG = ValueConfig(
             base=config.base,
             binary_units=config.binary_units,
             max_places=config.max_places,
