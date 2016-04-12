@@ -136,7 +136,7 @@ class DisplayConfig(object):
            'show_approx_str' : self.show_approx_str,
            'show_base' : self.show_base
         }
-        return "StrConfig(%s)" % (self._FMT_STR % values)
+        return "DisplayConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
 
