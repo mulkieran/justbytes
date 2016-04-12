@@ -26,7 +26,7 @@ from hypothesis import strategies
 from justbytes._config import DisplayConfig
 from justbytes._config import InputConfig
 from justbytes._config import SizeConfig
-from justbytes._config import StrConfig
+from justbytes._config import ValueConfig
 
 from justbytes._constants import RoundingMethods
 from justbytes._constants import UNITS
@@ -38,20 +38,20 @@ class ConfigTestCase(unittest.TestCase):
     """ Exercise methods of output configuration classes. """
     # pylint: disable=too-few-public-methods
 
-    def testStrConfigObject(self):
+    def testValueConfigObject(self):
         """ Miscellaneous tests for string configuration. """
-        self.assertIsInstance(str(SizeConfig.STR_CONFIG), str)
+        self.assertIsInstance(str(SizeConfig.VALUE_CONFIG), str)
 
     def testException(self):
         """ Test exceptions. """
         with self.assertRaises(SizeValueError):
-            StrConfig(min_value=-1)
+            ValueConfig(min_value=-1)
         with self.assertRaises(SizeValueError):
-            StrConfig(min_value=3.2)
+            ValueConfig(min_value=3.2)
         with self.assertRaises(SizeValueError):
-            StrConfig(unit=2)
+            ValueConfig(unit=2)
         with self.assertRaises(SizeValueError):
-            StrConfig(base=1)
+            ValueConfig(base=1)
 
 class InputTestCase(unittest.TestCase):
     """ Exercise methods of input configuration classes. """
@@ -68,12 +68,12 @@ class SizeTestCase(unittest.TestCase):
     def setUp(self):
         self.display_config = SizeConfig.DISPLAY_CONFIG
         self.input_config = SizeConfig.INPUT_CONFIG
-        self.str_config = SizeConfig.STR_CONFIG
+        self.str_config = SizeConfig.VALUE_CONFIG
 
     def tearDown(self):
         SizeConfig.DISPLAY_CONFIG = self.display_config
         SizeConfig.INPUT_CONFIG = self.input_config
-        SizeConfig.STR_CONFIG = self.str_config
+        SizeConfig.VALUE_CONFIG = self.str_config
 
     @given(
        strategies.builds(
@@ -89,7 +89,7 @@ class SizeTestCase(unittest.TestCase):
 
     @given(
        strategies.builds(
-          StrConfig,
+          ValueConfig,
           binary_units=strategies.booleans(),
           max_places=strategies.integers().filter(lambda x: x >= 0),
           min_value=strategies.fractions().filter(lambda x: x >= 0),
@@ -98,10 +98,10 @@ class SizeTestCase(unittest.TestCase):
        )
     )
     @settings(max_examples=30)
-    def testSettingStrConfig(self, config):
+    def testSettingValueConfig(self, config):
         """ Test that new str config is the correct one. """
-        SizeConfig.set_str_config(config)
-        self.assertEqual(str(config), str(SizeConfig.STR_CONFIG))
+        SizeConfig.set_value_config(config)
+        self.assertEqual(str(config), str(SizeConfig.VALUE_CONFIG))
 
     @given(
        strategies.builds(

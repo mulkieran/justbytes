@@ -63,7 +63,7 @@ class Size(object):
         specified configuration.
 
         :param Rational value: a numeric value
-        :param StrConfig config: how to calculate the value to display
+        :param ValueConfig config: how to calculate the value to display
 
         :returns: the result and its relation to ``value``
         :rtype: Radix * int
@@ -144,7 +144,7 @@ class Size(object):
         """
         Return a representation of the size.
 
-        :param `StrConfig` config: representation configuration
+        :param `ValueConfig` config: representation configuration
         :returns: a tuple representing the number to display
         :rtype: tuple of Radix * int * unit
         """
@@ -156,7 +156,7 @@ class Size(object):
         """
         Return a string representation of the size.
 
-        :param StrConfig config: representation configuration
+        :param ValueConfig config: representation configuration
         :param DisplayConfig display: configuration for display
         :param DigitsConfig digits: configuration for representing digits
         :param StripConfig strip: configuration for stripping
@@ -169,7 +169,7 @@ class Size(object):
 
     def __str__(self):
         return self.getString(
-           SizeConfig.STR_CONFIG,
+           SizeConfig.VALUE_CONFIG,
            SizeConfig.DISPLAY_CONFIG,
            SizeConfig.DIGITS_CONFIG,
            SizeConfig.STRIP_CONFIG
@@ -438,18 +438,18 @@ class Size(object):
         for unit in [B] + units.UNITS():
             yield (self.convertTo(unit), unit)
 
-    def components(self, config=SizeConfig.STR_CONFIG):
+    def components(self, config=SizeConfig.VALUE_CONFIG):
         """ Return a representation of this size, decomposed into a
             Fraction value and a unit specifier tuple.
 
-            :param StrConfig config: configuration
+            :param ValueConfig config: configuration
 
             :returns: a pair of a decimal value and a unit
             :rtype: tuple of Fraction and unit
             :raises SizeValueError: if min_value is not usable
 
             The meaning of the parameters is the same as for
-            :class:`._config.StrConfig`.
+            :class:`._config.ValueConfig`.
         """
         units = BinaryUnits if config.binary_units else DecimalUnits
 

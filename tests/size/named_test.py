@@ -40,7 +40,7 @@ from justbytes import ROUNDING_METHODS
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
 from justbytes import SizeConfig
-from justbytes import StrConfig
+from justbytes import ValueConfig
 
 from justbytes._constants import BinaryUnits
 from justbytes._constants import DecimalUnits
@@ -81,7 +81,7 @@ class ComponentsTestCase(unittest.TestCase):
     @given(
        SIZE_STRATEGY,
        strategies.builds(
-          StrConfig,
+          ValueConfig,
           min_value=strategies.fractions().filter(lambda x: x >= 0),
           binary_units=strategies.booleans(),
           exact_value=strategies.booleans(),
@@ -127,7 +127,7 @@ class DisplayConfigTestCase(unittest.TestCase):
         Test properties of configuration.
         """
         result = a_size.getString(
-           StrConfig(base=base),
+           ValueConfig(base=base),
            config,
            DigitsConfig(use_letters=False),
            SizeConfig.STRIP_CONFIG
@@ -156,7 +156,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         Test some basic configurations.
         """
         result = a_size.getString(
-           SizeConfig.STR_CONFIG,
+           SizeConfig.VALUE_CONFIG,
            SizeConfig.DISPLAY_CONFIG,
            config,
            SizeConfig.STRIP_CONFIG
@@ -179,7 +179,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         with self.assertRaises(SizeValueError):
             Size(0).getString(
-               StrConfig(base=100),
+               ValueConfig(base=100),
                SizeConfig.DISPLAY_CONFIG,
                SizeConfig.DIGITS_CONFIG,
                SizeConfig.STRIP_CONFIG
