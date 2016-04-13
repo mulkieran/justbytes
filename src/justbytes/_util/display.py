@@ -222,28 +222,25 @@ class String(object):
     ])
 
     @classmethod
-    def xform(cls, radix, display, digits, strip, relation, units):
+    def xform(cls, radix, display, relation, units):
         """
         Transform a radix and some information to a str according to
         configurations.
 
         :param Radix radix: the radix
         :param DisplayConfig display: the display config
-        :param DigitsConfig digits: the digits config
-        :param StripConfig strip: the strip config
         :param int relation: relation of display value to actual value
         :param units: element of UNITS()
         :returns: a string representing the value
         :rtype: str
         """
-        # pylint: disable=too-many-arguments
         right = radix.non_repeating_part
         left = radix.integer_part
 
-        right = Strip.xform(right, strip, relation)
+        right = Strip.xform(right, display.strip_config, relation)
 
-        right_str = Digits.xform(right, digits, radix.base)
-        left_str = Digits.xform(left, digits, radix.base) or '0'
+        right_str = Digits.xform(right, display.digits_config, radix.base)
+        left_str = Digits.xform(left, display.digits_config, radix.base) or '0'
 
         number = Number.xform(
            left_str,

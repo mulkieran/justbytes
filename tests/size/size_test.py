@@ -30,6 +30,7 @@ from justbytes import MiB
 from justbytes import GiB
 from justbytes import TiB
 from justbytes import KB
+from justbytes import DisplayConfig
 from justbytes import ValueConfig
 from justbytes import StripConfig
 
@@ -158,7 +159,9 @@ class ConfigurationTestCase(unittest.TestCase):
 
     def testValueConfigs(self):
         """ Test str with various configuration options. """
-        SizeConfig.set_strip_config(StripConfig(strip=True))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip_config=StripConfig(strip=True))
+        )
 
         # exactly 4 Pi
         s = Size(0x10000000000000)
@@ -196,18 +199,24 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(s), "< 64 KiB")
 
         SizeConfig.set_value_config(ValueConfig(max_places=3))
-        SizeConfig.set_strip_config(StripConfig(strip=True))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip_config=StripConfig(strip=True))
+        )
         s = Size('23.7874', TiB)
         self.assertEqual(str(s), "> 23.787 TiB")
 
         SizeConfig.set_value_config(ValueConfig(min_value=10))
-        SizeConfig.set_strip_config(StripConfig(strip=True))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip_config=StripConfig(strip=True))
+        )
         s = Size(8193)
         self.assertEqual(str(s), ("8193 B"))
 
         # if max_places is set to None, all digits are displayed
         SizeConfig.set_value_config(ValueConfig(max_places=None))
-        SizeConfig.set_strip_config(StripConfig(strip=True))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip_config=StripConfig(strip=True))
+        )
         s = Size(0xfffffffffffff)
         self.assertEqual(
            str(s),
@@ -219,7 +228,9 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(s), "64.0009765625 KiB")
 
         SizeConfig.set_value_config(ValueConfig(max_places=2))
-        SizeConfig.set_strip_config(StripConfig(strip=False))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip_config=StripConfig(strip=False))
+        )
         s = Size(1024**9 + 1)
         self.assertEqual(str(s), "> 1024.00 YiB")
 
@@ -228,7 +239,9 @@ class ConfigurationTestCase(unittest.TestCase):
 
     def testStrWithSmallDeviations(self):
         """ Behavior when deviation from whole value is small. """
-        SizeConfig.set_strip_config(StripConfig(strip=True))
+        SizeConfig.set_display_config(
+           DisplayConfig(strip_config=StripConfig(strip=True))
+        )
 
         eps = Decimal(1024)/100/2 # 1/2 of 1% of 1024
 

@@ -152,27 +152,23 @@ class Size(object):
         (result, relation) = self._as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config, display, digits, strip):
+    def getString(self, config, display):
         """
         Return a string representation of the size.
 
         :param ValueConfig config: representation configuration
         :param DisplayConfig display: configuration for display
-        :param DigitsConfig digits: configuration for representing digits
-        :param StripConfig strip: configuration for stripping
         :returns: a string representation
         :rtype: str
         :raises: SizeValueError
         """
         (result, relation, units) = self.getStringInfo(config)
-        return String.xform(result, display, digits, strip, relation, units)
+        return String.xform(result, display, relation, units)
 
     def __str__(self):
         return self.getString(
            SizeConfig.VALUE_CONFIG,
-           SizeConfig.DISPLAY_CONFIG,
-           SizeConfig.DIGITS_CONFIG,
-           SizeConfig.STRIP_CONFIG
+           SizeConfig.DISPLAY_CONFIG
         )
 
     def __repr__(self):

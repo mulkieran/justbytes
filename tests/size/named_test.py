@@ -40,6 +40,7 @@ from justbytes import ROUNDING_METHODS
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
 from justbytes import SizeConfig
+from justbytes import StripConfig
 from justbytes import ValueConfig
 
 from justbytes._constants import BinaryUnits
@@ -117,7 +118,9 @@ class DisplayConfigTestCase(unittest.TestCase):
        strategies.builds(
           DisplayConfig,
           show_approx_str=strategies.booleans(),
-          show_base=strategies.booleans()
+          show_base=strategies.booleans(),
+          digits_config=strategies.just(DigitsConfig(use_letters=False)),
+          strip_config=strategies.just(StripConfig())
        ),
        strategies.integers(min_value=2, max_value=16)
     )
@@ -126,12 +129,7 @@ class DisplayConfigTestCase(unittest.TestCase):
         """
         Test properties of configuration.
         """
-        result = a_size.getString(
-           ValueConfig(base=base),
-           config,
-           DigitsConfig(use_letters=False),
-           SizeConfig.STRIP_CONFIG
-        )
+        result = a_size.getString(ValueConfig(base=base), config)
 
         if config.show_base and base == 16:
             self.assertNotEqual(result.find('0x'), -1)
@@ -157,9 +155,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         result = a_size.getString(
            SizeConfig.VALUE_CONFIG,
-           SizeConfig.DISPLAY_CONFIG,
-           config,
-           SizeConfig.STRIP_CONFIG
+           DisplayConfig(digits_config=config)
         )
         if config.use_letters:
             (number, _, _) = result.partition(' ')
@@ -178,12 +174,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         Test exceptions.
         """
         with self.assertRaises(SizeValueError):
-            Size(0).getString(
-               ValueConfig(base=100),
-               SizeConfig.DISPLAY_CONFIG,
-               SizeConfig.DIGITS_CONFIG,
-               SizeConfig.STRIP_CONFIG
-            )
+            Size(0).getString(ValueConfig(base=100), SizeConfig.DISPLAY_CONFIG)
 
 
 class RoundingTestCase(unittest.TestCase):
