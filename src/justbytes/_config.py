@@ -111,30 +111,48 @@ class DisplayConfig(object):
 
     _FMT_STR = ", ".join([
        "show_approx_str=%(show_approx_str)s",
-       "show_base=%(show_base)s"
+       "show_base=%(show_base)s",
+       "digits_config=%(digits_config)s",
+       "strip_config-%(strip_config)s"
     ])
 
     def __init__(
        self,
        show_approx_str=True,
-       show_base=False
+       show_base=False,
+       digits_config=DigitsConfig(
+          separator='~',
+          use_caps=False,
+          use_letters=True
+       ),
+       strip_config=StripConfig(
+          strip=False,
+          strip_exact=False,
+          strip_whole=True
+       )
     ):
         """
         Initializer.
 
         :param bool show_approx_str: distinguish approximate str values
         :param bool show_base: True if base prefix to be prepended
+        :param DigitsConfig digits_config:
+        :param StripConfig strip_config:
 
         There are only two base prefixes acknowledged, 0 for octal and 0x for
         hexadecimal.
         """
         self.show_approx_str = show_approx_str
         self.show_base = show_base
+        self.digits_config = digits_config
+        self.strip_config = strip_config
 
     def __str__(self):
         values = {
            'show_approx_str' : self.show_approx_str,
-           'show_base' : self.show_base
+           'show_base' : self.show_base,
+           'digits_config' : self.digits_config,
+           'strip_config' : self.strip_config
         }
         return "DisplayConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
@@ -260,21 +278,19 @@ class InputConfig(object):
 class SizeConfig(object):
     """ Configuration for :class:`Size` class. """
 
-    STRIP_CONFIG = StripConfig(
-       strip=False,
-       strip_exact=False,
-       strip_whole=True
-    )
-
-    DIGITS_CONFIG = DigitsConfig(
-       separator='~',
-       use_caps=False,
-       use_letters=True
-    )
-
     DISPLAY_CONFIG = DisplayConfig(
        show_approx_str=True,
-       show_base=False
+       show_base=False,
+       digits_config=DigitsConfig(
+          separator='~',
+          use_caps=False,
+          use_letters=True
+       ),
+       strip_config=StripConfig(
+          strip=False,
+          strip_exact=False,
+          strip_whole=True
+       )
     )
 
     VALUE_CONFIG = ValueConfig(
@@ -305,7 +321,9 @@ class SizeConfig(object):
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
             show_approx_str=config.show_approx_str,
-            show_base=config.show_base
+            show_base=config.show_base,
+            digits_config=config.digits_config,
+            strip_config=config.strip_config
         )
 
     @classmethod
@@ -334,28 +352,4 @@ class SizeConfig(object):
         cls.INPUT_CONFIG = InputConfig(
             method=config.method,
             unit=config.unit
-        )
-
-    @classmethod
-    def set_digits_config(cls, config): # pragma: no cover
-        """
-        Set the configuration for display of digits for all Size objects.
-
-        :param DigitsConfig config: a configuration object
-        """
-        cls.DIGITS_CONFIG = DigitsConfig(
-           separator=config.separator,
-           use_caps=config.use_caps,
-           use_letters=config.use_letters
-        )
-
-    @classmethod
-    def set_strip_config(cls, config): # pragma: no cover
-        """
-        Set the configuration for stripping trailing zeros.
-        """
-        cls.STRIP_CONFIG = StripConfig(
-           strip=config.strip,
-           strip_exact=config.strip_exact,
-           strip_whole=config.strip_whole
         )
