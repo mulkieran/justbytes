@@ -106,6 +106,17 @@ Errors
 ------
 All errors raised by justbytes operations are subtypes of the RangeError class.
 
+Measures of Bandwidth vs. Address Ranges
+----------------------------------------
+Bandwidth, e.g., KiB/second and address ranges, e.g., KiB, are related, as their
+units both contain bytes. This relationship is misleading; address ranges and
+bandwidth are far less similar than are volume and flow, e.g., gallons
+and gallons/minute. Bandwidth is simply a measure of the flow of a quantity,
+and there is no implied structure to that quantity. The usual choices for
+representation are appropriate in the case of operations on bandwidth;
+the precision required for manipulation and computation of address ranges
+is not necessary.
+
 Alternative Packages
 --------------------
 If you are interested in computing in Python with physical, rather than
