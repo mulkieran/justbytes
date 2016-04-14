@@ -217,8 +217,7 @@ class String(object):
        "%(space)s",
        "%(number)s",
        " ",
-       "%(units)s",
-       "%(bytes)s"
+       "%(units)s"
     ])
 
     @classmethod
@@ -252,12 +251,13 @@ class String(object):
 
         decorators = Decorators.decorators(display, relation)
 
+        units = units.abbr + cls._BYTES_SYMBOL
+
         result = {
            'approx' : decorators.approx_str,
            'space' : ' ' if decorators.approx_str else '',
            'number' : number,
-           'units' : units.abbr,
-           'bytes' : cls._BYTES_SYMBOL
+           'units' : units
         }
 
         return cls._FMT_STR % result
