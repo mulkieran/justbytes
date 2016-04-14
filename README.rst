@@ -117,6 +117,13 @@ representation are appropriate in the case of operations on bandwidth;
 the precision required for manipulation and computation of address ranges
 is not necessary.
 
+User Input
+----------
+This package does not handle arbitrary user input. It is expected that the
+client will transform any input, from whatever source, into a number and an
+optional unit specification which can be passed directly to the Range
+constructor.
+
 Alternative Packages
 --------------------
 If you are interested in computing in Python with physical, rather than
