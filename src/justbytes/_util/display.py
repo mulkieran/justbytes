@@ -23,7 +23,7 @@ import string
 
 from collections import namedtuple
 
-from .._errors import SizeValueError
+from .._errors import RangeValueError
 
 class Digits(object):
     """
@@ -45,11 +45,11 @@ class Digits(object):
         :type number: list of int
         :param DigitsConfig config: configuration for displaying digits
         :param int base: the base in which this number is being represented
-        :raises: SizeValueError
+        :raises: RangeValueError
         """
         if config.use_letters:
             if base > cls._MAX_SIZE_BASE_FOR_CHARS:
-                raise SizeValueError(
+                raise RangeValueError(
                    base,
                    "base",
                    "must be no greater than number of available characters"

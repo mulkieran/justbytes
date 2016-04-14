@@ -23,7 +23,7 @@ from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import RoundingMethods
 from ._constants import UNITS
 
-from ._errors import SizeValueError
+from ._errors import RangeValueError
 
 
 class StripConfig(object):
@@ -210,21 +210,21 @@ class ValueConfig(object):
         # pylint: disable=too-many-arguments
         if min_value < 0 or \
            not isinstance(min_value, PRECISE_NUMERIC_TYPES):
-            raise SizeValueError(
+            raise RangeValueError(
                min_value,
                "min_value",
                "must be a precise positive numeric value."
             )
 
         if unit is not None and unit not in UNITS():
-            raise SizeValueError(
+            raise RangeValueError(
                unit,
                "unit",
                "must be one of %s" % ", ".join(str(x) for x in UNITS())
             )
 
         if base < 2:
-            raise SizeValueError(base, "base", "must be at least 2")
+            raise RangeValueError(base, "base", "must be at least 2")
 
         self.max_places = max_places
         self.min_value = min_value
@@ -249,9 +249,9 @@ class ValueConfig(object):
 
 
 class InputConfig(object):
-    """ Configuration for input of Sizes.
+    """ Configuration for input of Ranges.
 
-        Specifies rounding unit and method for Sizes constructed from
+        Specifies rounding unit and method for Ranges constructed from
         user input.
     """
     # pylint: disable=too-few-public-methods
@@ -275,8 +275,8 @@ class InputConfig(object):
     __repr__ = __str__
 
 
-class SizeConfig(object):
-    """ Configuration for :class:`Size` class. """
+class RangeConfig(object):
+    """ Configuration for :class:`Range` class. """
 
     DISPLAY_CONFIG = DisplayConfig(
        show_approx_str=True,
@@ -345,7 +345,7 @@ class SizeConfig(object):
 
     @classmethod
     def set_input_config(cls, config):
-        """ Set the configuration for input method for all Size objects.
+        """ Set the configuration for input method for all Range objects.
 
             :param :class:`.InputConfig` config: a configuration object
         """

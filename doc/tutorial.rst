@@ -7,16 +7,16 @@ Import everything::
 
     >>> from justbytes import *
 
-Create a Size object from a numeric value and a unit specification::
+Create a Range object from a numeric value and a unit specification::
 
-    >>> size = Size(8, GiB)
+    >>> size = Range(8, GiB)
 
 Displaying
 ----------
 Display it using the internal representation which shows the number of bytes::
 
     >>> size
-    Size(8589934592)
+    Range(8589934592)
 
 Display it using the string representation which uses units::
 
@@ -26,16 +26,16 @@ Display it using the string representation which uses units::
 The string representation is configurable through the default configuration
 and also by parameters to the getString() method::
 
-    >>> size.getString(SizeConfig.VALUE_CONFIG, SizeConfig.DISPLAY_CONFIG)
+    >>> size.getString(RangeConfig.VALUE_CONFIG, RangeConfig.DISPLAY_CONFIG)
     '8 GiB'
-    >>> size.getString(SizeConfig.VALUE_CONFIG, DisplayConfig(strip_config=StripConfig(strip_whole=False))) 
+    >>> size.getString(RangeConfig.VALUE_CONFIG, DisplayConfig(strip_config=StripConfig(strip_whole=False))) 
     '8.00 GiB'
-    >>> size.getString(ValueConfig(min_value=10), SizeConfig.DISPLAY_CONFIG)
+    >>> size.getString(ValueConfig(min_value=10), RangeConfig.DISPLAY_CONFIG)
     '8192 MiB'
 
 Arithmetic
 ----------
-Various arithmetic operations on Size objects are available::
+Various arithmetic operations on Range objects are available::
 
     >>> str(size * 8)
     '64 GiB'
@@ -44,9 +44,9 @@ Various arithmetic operations on Size objects are available::
 
 Floats and non-numbers like infinity are not allowed in these computations.
 
-Some arithmetic operations work with two Size operands::
+Some arithmetic operations work with two Range operands::
 
-    >>> new_size = size + Size(1, KiB)
+    >>> new_size = size + Range(1, KiB)
     >>> str(new_size)
     '> 8.00 GiB'
 
@@ -60,7 +60,7 @@ Miscellaneous Examples
 Sometimes it is desirable to get the components of the string output rather
 than the whole string value::
 
-    >>> size.getStringInfo(SizeConfig.VALUE_CONFIG)
+    >>> size.getStringInfo(RangeConfig.VALUE_CONFIG)
     (Radix(True,[8],[0, 0],[],10), 0, GiB)
 
 For information about the Radix type see the justbases package.
@@ -80,34 +80,34 @@ The final list indicates the repeating values after the radix.
 Round to get whole byte values, if desired::
 
     >>> (size / 3).roundTo(B, ROUND_DOWN)
-    Size(2863311530)
+    Range(2863311530)
 
 Display in selected units::
 
-    >>> size.getString(ValueConfig(unit=YiB), SizeConfig.DISPLAY_CONFIG)
+    >>> size.getString(ValueConfig(unit=YiB), RangeConfig.DISPLAY_CONFIG)
     '> 0.00 YiB'
 
 
 Using the Additive Identity
 ---------------------------
 
-Sum a list of Size objects using the sum method and the additive identity::
+Sum a list of Range objects using the sum method and the additive identity::
 
     >>> sum([], AI)
-    Size(0)
+    Range(0)
 
 If the additive identity is not specified, there are two possiblities, both
 bad:
 
-1. A SizeError exception may be raised::
+1. A RangeError exception may be raised::
 
-    >>> l = [Size(32)]
+    >>> l = [Range(32)]
     >>> sum(l)
     Traceback (most recent call last):
     ...
 
-This is due to the fact that addition must be type-correct. Only a Size can be
-added to another Size, but the implementation of sum() adds the number 0 to
+This is due to the fact that addition must be type-correct. Only a Range can be
+added to another Range, but the implementation of sum() adds the number 0 to
 the elements in the list, resulting in an exception.
 
 2. If the list argument is empty, the result will have the wrong type, int::
@@ -118,7 +118,7 @@ the elements in the list, resulting in an exception.
     >>> type(res)
     <type 'int'>
 
-Of course, the additive identity is just Size(0)::
+Of course, the additive identity is just Range(0)::
 
     >>> AI
-    Size(0)
+    Range(0)

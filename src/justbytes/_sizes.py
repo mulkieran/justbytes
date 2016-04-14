@@ -16,27 +16,27 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Class for methods that do not properly belong in the Size class. """
+""" Class for methods that do not properly belong in the Range class. """
 
-from ._config import SizeConfig
+from ._config import RangeConfig
 
-from ._size import Size
+from ._size import Range
 
-def getSizeFromInput(value=0, units=None, config=None):
-    """ Get a Size object from an input value and units.
+def getRangeFromInput(value=0, units=None, config=None):
+    """ Get a Range object from an input value and units.
 
         :param value: a size value, default is 0
-        :type value: Size, or any finite numeric type (possibly as str)
+        :type value: Range, or any finite numeric type (possibly as str)
         :param units: the units of the size, default is None
-        :type units: any of the defined units constants or Size or NoneType
+        :type units: any of the defined units constants or Range or NoneType
         :param config: configures interpretation of inputs
         :type config: a member of :class:`InputConfig` or NoneType
-        :returns: a Size object
-        :rtype: :class:`Size`
-        :raises SizeValueError: on bad parameters
+        :returns: a Range object
+        :rtype: :class:`Range`
+        :raises RangeValueError: on bad parameters
     """
-    config = config or SizeConfig.INPUT_CONFIG
+    config = config or RangeConfig.INPUT_CONFIG
 
-    return Size(value, units).roundTo(config.unit, config.method)
+    return Range(value, units).roundTo(config.unit, config.method)
 
-AI = Size(0) # pragma: no cover
+AI = Range(0) # pragma: no cover

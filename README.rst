@@ -5,9 +5,9 @@ Justbytes
 ========
 
 Justbytes is a module for handling computation with
-sizes expressed in bytes. Its principle feature is a Size class from
-which can be constructed Size objects which represent a precise and finite
-quantity of bytes. Various arithmetic operations are defined for Size objects.
+sizes expressed in bytes. Its principle feature is a Range class from
+which can be constructed Range objects which represent a precise and finite
+quantity of bytes. Various arithmetic operations are defined for Range objects.
 
 Its sole purpose is the representation of real quantities of memory on real
 machines. For that reason, it does not allow powers of bytes, imprecise
@@ -26,7 +26,7 @@ or on a disk, is a quantity that is not measured, but is known precisely.
 This precision arises because the number represents not as much an amount of
 memory as a number of addressable, byte-size, locations in memory.
 
-Consequently, computations such as addition of two Sizes, and conversion
+Consequently, computations such as addition of two Ranges, and conversion
 between different magnitudes of bytes, i.e., from MiB to GiB, must be done
 precisely. The underlying implementation must therefore use a precise
 representation of the number of bytes. Floating point numbers, which are
@@ -36,7 +36,7 @@ quantities, are disallowed by this requirement.
 Operations
 ----------
 This module does not accomodate multi-dimensionality of byte quantities.
-Consequently, multiplying one Size object by another Size object will cause
+Consequently, multiplying one Range object by another Range object will cause
 an error to be raised, since bytes^2 is not representable by the module.
 For most uses any operation which would yield a multi-dimensional quantity
 of bytes is not useful. There are no plans to adapt this package so that it
@@ -48,28 +48,28 @@ operations cause an error to be raised.
 
 Some computations with precise, finite, values may yield irrational results.
 For example, while 2 is rational, its square root is an irrational number.
-There is no allowed operation on Size objects which can result in an
-irrational Size value. It turns out that all such operations are either
+There is no allowed operation on Range objects which can result in an
+irrational Range value. It turns out that all such operations are either
 nonsensical or would result in a value with an unrepresentable type.
 
-The result type of operations is a Size, where appropriate, or a subtype of
+The result type of operations is a Range, where appropriate, or a subtype of
 Rational, where a numeric value is appropriate.
 
 Floating Point Numbers
 ----------------------
-It is not possible to use floating point numbers in computations with Sizes.
+It is not possible to use floating point numbers in computations with Ranges.
 Where a fractional quantity is desired, use Decimal objects instead of floats.
-Thus, Size(0) * 1.2 raises an exception, but Size(0) * Decimal("1.2") is
+Thus, Range(0) * 1.2 raises an exception, but Range(0) * Decimal("1.2") is
 acceptable.
 
-Displaying Sizes
+Displaying Ranges
 ----------------
-Sizes are displayed according to a specified configuration. In the default
-configuration, Sizes are displayed using binary rather than SI prefixes
+Ranges are displayed according to a specified configuration. In the default
+configuration, Ranges are displayed using binary rather than SI prefixes
 or names, regardless of the value. For example, 1000 bytes is not displayed
 as 1KB (1 kilobyte), but as some number of bytes or KiB (kibibytes).
 
-The detailed representation of Sizes uses a precise decimal representation
+The detailed representation of Ranges uses a precise decimal representation
 that includes the repeating portion, if any.
 
 Representing Units
@@ -77,20 +77,20 @@ Representing Units
 The size module supplies a set of named prefixes for both SI and binary units,
 for all non-fractional prefixes. Fractional prefixes are not defined.
 
-Constructing Sizes Programatically
+Constructing Ranges Programatically
 ----------------------------------
-New Size objects can be constructed from Size objects, numeric values, e.g.,
+New Range objects can be constructed from Range objects, numeric values, e.g.,
 int or Decimal, or strings which represent such numeric values.
 strings may be used to represent fractional quantities, e.g., "1.2", but
 floats are disallowed.
 
 The constructor takes an optional units specifier, which defaults to bytes
-for all numeric values, and to None for Size objects. The type of the
-unit specifier is a named prefix supplied by the size module or a Size object.
+for all numeric values, and to None for Range objects. The type of the
+unit specifier is a named prefix supplied by the size module or a Range object.
 
 Errors
 ------
-All errors raised by justbytes operations are subtypes of the SizeError class.
+All errors raised by justbytes operations are subtypes of the RangeError class.
 
 Alternative Packages
 --------------------
