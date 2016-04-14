@@ -119,7 +119,6 @@ from ._constants import ROUNDING_METHODS
 # CONFIGURATION
 from ._config import DigitsConfig
 from ._config import DisplayConfig
-from ._config import InputConfig
 from ._config import RangeConfig
 from ._config import StripConfig
 from ._config import ValueConfig
@@ -129,7 +128,6 @@ from ._errors import RangeError
 
 # SIZE
 from ._size import Range
-from ._sizes import getRangeFromInput
 from ._sizes import AI
 
 # VERSION

@@ -18,7 +18,6 @@
 
 """ Configuration of the justbytes package. """
 
-from ._constants import B
 from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import RoundingMethods
 from ._constants import UNITS
@@ -248,33 +247,6 @@ class ValueConfig(object):
     __repr__ = __str__
 
 
-class InputConfig(object):
-    """ Configuration for input of Ranges.
-
-        Specifies rounding unit and method for Ranges constructed from
-        user input.
-    """
-    # pylint: disable=too-few-public-methods
-
-    _FMT_STR = ", ".join(["method=%(method)s", "unit=%(unit)s"])
-
-    def __init__(self, unit=B, method=RoundingMethods.ROUND_DOWN):
-        """ Initializer.
-
-            :param unit: unit to round to, default is B
-            :type unit: an instance of :func:`._constants.UNITS`
-            :param method: rounding method, default is ROUND_DOWN
-            :type method: instance of :func:`._constants.ROUNDING_METHODS`
-        """
-        self.unit = unit
-        self.method = method
-
-    def __str__(self):
-        values = {'method' : self.method, 'unit' : self.unit}
-        return "InputConfig(%s)" % (self._FMT_STR % values)
-    __repr__ = __str__
-
-
 class RangeConfig(object):
     """ Configuration for :class:`Range` class. """
 
@@ -303,12 +275,6 @@ class RangeConfig(object):
        rounding_method=RoundingMethods.ROUND_HALF_ZERO
     )
     """ Default configuration for string display. """
-
-    INPUT_CONFIG = InputConfig(
-       unit=B,
-       method=RoundingMethods.ROUND_DOWN
-    )
-    """ Default configuration for interpreting input values. """
 
     STRICT = False
 
@@ -340,16 +306,5 @@ class RangeConfig(object):
             min_value=config.min_value,
             exact_value=config.exact_value,
             rounding_method=config.rounding_method,
-            unit=config.unit
-        )
-
-    @classmethod
-    def set_input_config(cls, config):
-        """ Set the configuration for input method for all Range objects.
-
-            :param :class:`.InputConfig` config: a configuration object
-        """
-        cls.INPUT_CONFIG = InputConfig(
-            method=config.method,
             unit=config.unit
         )

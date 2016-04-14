@@ -24,11 +24,9 @@ from hypothesis import settings
 from hypothesis import strategies
 
 from justbytes._config import DisplayConfig
-from justbytes._config import InputConfig
 from justbytes._config import RangeConfig
 from justbytes._config import ValueConfig
 
-from justbytes._constants import RoundingMethods
 from justbytes._constants import UNITS
 
 from justbytes._errors import RangeValueError
@@ -53,13 +51,6 @@ class ConfigTestCase(unittest.TestCase):
         with self.assertRaises(RangeValueError):
             ValueConfig(base=1)
 
-class InputTestCase(unittest.TestCase):
-    """ Exercise methods of input configuration classes. """
-    # pylint: disable=too-few-public-methods
-
-    def testInputConfigObject(self):
-        """ Miscellaneous tests for input configuration. """
-        self.assertIsInstance(str(RangeConfig.INPUT_CONFIG), str)
 
 class RangeTestCase(unittest.TestCase):
     """ Test Range configuration. """
@@ -67,12 +58,10 @@ class RangeTestCase(unittest.TestCase):
 
     def setUp(self):
         self.display_config = RangeConfig.DISPLAY_CONFIG
-        self.input_config = RangeConfig.INPUT_CONFIG
         self.str_config = RangeConfig.VALUE_CONFIG
 
     def tearDown(self):
         RangeConfig.DISPLAY_CONFIG = self.display_config
-        RangeConfig.INPUT_CONFIG = self.input_config
         RangeConfig.VALUE_CONFIG = self.str_config
 
     @given(
@@ -102,16 +91,3 @@ class RangeTestCase(unittest.TestCase):
         """ Test that new str config is the correct one. """
         RangeConfig.set_value_config(config)
         self.assertEqual(str(config), str(RangeConfig.VALUE_CONFIG))
-
-    @given(
-       strategies.builds(
-          InputConfig,
-          method=strategies.sampled_from(RoundingMethods.METHODS()),
-          unit=strategies.sampled_from(UNITS())
-       )
-    )
-    @settings(max_examples=10)
-    def testSettingInputConfig(self, config):
-        """ That that new input config is the correct one. """
-        RangeConfig.set_input_config(config)
-        self.assertEqual(str(config), str(RangeConfig.INPUT_CONFIG))
