@@ -5,24 +5,25 @@ Justbytes
 ========
 
 Justbytes is a module for handling computation with
-sizes expressed in bytes. Its principle feature is a Range class from
+address ranges expressed in bytes. Its principle feature is a Range class from
 which can be constructed Range objects which represent a precise and finite
-quantity of bytes. Various arithmetic operations are defined for Range objects.
+address range in bytes. Various arithmetic operations are defined for Range
+objects.
 
-Its sole purpose is the representation of real quantities of memory on real
-machines. For that reason, it does not allow powers of bytes, imprecise
-quantities of bytes, or non-finite quantities of bytes. In order that the
-usual laws of arithmetic can be maintained, it does allow fractional quantities
-of bytes.
+Its sole purpose is the representation of real address ranges on real
+machines. For that reason, it does not allow powers of ranges, imprecise
+ranges, or non-finite ranges. In order that the
+usual laws of arithmetic can be maintained, it does allow fractional ranges.
 
-Practical Computing with Bytes
-------------------------------
 
-When computing with bytes, the numeric value can be viewed as a logical,
-rather than a physical, quantity. That is, unlike, e.g., mass or length,
-which are quantities which must be measured with a measuring instrument
-which has some built-in imprecision, the number of bytes of memory in RAM,
-or on a disk, is a quantity that is not measured, but is known precisely.
+Practical Computing with Address Ranges
+---------------------------------------
+
+When computing with address ranges, the numeric value can be viewed as a
+logical, rather than a physical, quantity. That is, unlike, e.g., mass or
+length, which are quantities which must be measured with a measuring instrument
+which has some built-in imprecision, an address range
+is a quantity that is not measured, but is known precisely.
 This precision arises because the number represents not as much an amount of
 memory as a number of addressable, byte-size, locations in memory.
 
@@ -35,16 +36,16 @@ quantities, are disallowed by this requirement.
 
 Operations
 ----------
-This module does not accomodate multi-dimensionality of byte quantities.
+This module does not accomodate multi-dimensionality of address ranges.
 Consequently, multiplying one Range object by another Range object will cause
 an error to be raised, since bytes^2 is not representable by the module.
 For most uses any operation which would yield a multi-dimensional quantity
-of bytes is not useful. There are no plans to adapt this package so that it
-can accomodate multi-dimensionality of bytes.
+is not useful. There are no plans to adapt this package so that it
+can accomodate multi-dimensionality of address ranges.
 
-Numerous computations with bytes are nonsensical. For example, 2 raised to a
-power which is some number of bytes, is a meaningless computation. All such
-operations cause an error to be raised.
+Numerous computations with address ranges are nonsensical. For example, 2
+raised to a power which is some address range, is a meaningless computation.
+All such operations cause an error to be raised.
 
 Some computations with precise, finite, values may yield irrational results.
 For example, while 2 is rational, its square root is an irrational number.
@@ -62,15 +63,28 @@ Where a fractional quantity is desired, use Decimal objects instead of floats.
 Thus, Range(0) * 1.2 raises an exception, but Range(0) * Decimal("1.2") is
 acceptable.
 
+Computing the Representation of a Range
+---------------------------------------
+The representation of a Range is computed according to a specified
+configuration. In the default configuration, the representation uses IEC
+rather than SI units.
+
+The representation of a Range is not a string, but a structured representation
+of the precise value, as well as the relationship of the representation to
+the actual value.
+
+This representation is exposed to clients of the library, which may use it
+in any way.
+
 Displaying Ranges
 ----------------
-Ranges are displayed according to a specified configuration. In the default
-configuration, Ranges are displayed using binary rather than SI prefixes
-or names, regardless of the value. For example, 1000 bytes is not displayed
-as 1KB (1 kilobyte), but as some number of bytes or KiB (kibibytes).
+The Range class also has standard methods for the representation of Range
+objects as str objects.
 
-The detailed representation of Ranges uses a precise decimal representation
-that includes the repeating portion, if any.
+The str representation can also be configured. The manipulation of the
+representation to form a str object is abstracted from the rest of the source
+to emphasize that clients of the package may choose to represent address ranges
+in any manner they choose.
 
 Representing Units
 ------------------
