@@ -19,33 +19,33 @@
 """ Test for error classes. """
 import unittest
 
-from justbytes._errors import SizeFractionalResultError
-from justbytes._errors import SizeNonsensicalBinOpError
-from justbytes._errors import SizeNonsensicalBinOpValueError
-from justbytes._errors import SizePowerResultError
-from justbytes._errors import SizeValueError
+from justbytes._errors import RangeFractionalResultError
+from justbytes._errors import RangeNonsensicalBinOpError
+from justbytes._errors import RangeNonsensicalBinOpValueError
+from justbytes._errors import RangePowerResultError
+from justbytes._errors import RangeValueError
 
 
 class ErrorTestCase(unittest.TestCase):
     """ Exercise methods of error classes. """
 
-    def testSizeValueError(self):
+    def testRangeValueError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsInstance(str(SizeValueError("junk", "junk", "junk")), str)
-        self.assertIsInstance(str(SizeValueError("junk", "junk")), str)
+        self.assertIsInstance(str(RangeValueError("junk", "junk", "junk")), str)
+        self.assertIsInstance(str(RangeValueError("junk", "junk")), str)
 
-    def testSizeFractionalResultError(self):
+    def testRangeFractionalResultError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsInstance(str(SizeFractionalResultError()), str)
+        self.assertIsInstance(str(RangeFractionalResultError()), str)
 
-    def testSizeNonsensicalBinOpError(self):
+    def testRangeNonsensicalBinOpError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsInstance(str(SizeNonsensicalBinOpError("+", 2)), str)
+        self.assertIsInstance(str(RangeNonsensicalBinOpError("+", 2)), str)
 
-    def testSizeNonsensicalBinOpValueError(self):
+    def testRangeNonsensicalBinOpValueError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsInstance(str(SizeNonsensicalBinOpValueError("+", 2)), str)
+        self.assertIsInstance(str(RangeNonsensicalBinOpValueError("+", 2)), str)
 
-    def testSizePowerResultError(self):
+    def testRangePowerResultError(self):
         """ Miscellaneous tests for the method. """
-        self.assertIsInstance(str(SizePowerResultError()), str)
+        self.assertIsInstance(str(RangePowerResultError()), str)

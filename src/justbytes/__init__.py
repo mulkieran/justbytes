@@ -58,23 +58,23 @@
        - StrConfig: :class:`._config.StrConfig`
 
     * Exception classes:
-       - SizeError: :class:`._errors.SizeError`
+       - RangeError: :class:`._errors.RangeError`
 
-    * Size classes:
-       - Size: :class:`._size.Size`
+    * Range classes:
+       - Range: :class:`._size.Range`
        - AI: :class:`._sizes.AI`
 
     All parts of the public interface of justbytes must be imported directly
     from the top-level justbytes module, as::
 
-        from justbytes import Size
+        from justbytes import Range
         from justbytes import KiB
-        from justbytes import SizeError
+        from justbytes import RangeError
 
-        s = Size(24, KiB)
+        s = Range(24, KiB)
         try:
             s + 32
-        except SizeError as e:
+        except RangeError as e:
             raise e
 """
 # pylint: disable=invalid-name
@@ -120,16 +120,16 @@ from ._constants import ROUNDING_METHODS
 from ._config import DigitsConfig
 from ._config import DisplayConfig
 from ._config import InputConfig
-from ._config import SizeConfig
+from ._config import RangeConfig
 from ._config import StripConfig
 from ._config import ValueConfig
 
 # EXCEPTIONS
-from ._errors import SizeError
+from ._errors import RangeError
 
 # SIZE
-from ._size import Size
-from ._sizes import getSizeFromInput
+from ._size import Range
+from ._sizes import getRangeFromInput
 from ._sizes import AI
 
 # VERSION

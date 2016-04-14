@@ -16,7 +16,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tests for Size initialization. """
+""" Tests for Range initialization. """
 
 from decimal import Decimal
 from fractions import Fraction
@@ -28,10 +28,10 @@ from hypothesis import settings
 from hypothesis import strategies
 
 from justbytes import B
-from justbytes import Size
+from justbytes import Range
 from justbytes import UNITS
 
-from justbytes._errors import SizeValueError
+from justbytes._errors import RangeValueError
 
 
 class InitializerTestCase(unittest.TestCase):
@@ -39,22 +39,22 @@ class InitializerTestCase(unittest.TestCase):
 
     def testExceptions(self):
         """ Test exceptions. """
-        with self.assertRaises(SizeValueError):
-            Size(1.23)
-        with self.assertRaises(SizeValueError):
-            Size("1.2.3")
-        with self.assertRaises(SizeValueError):
-            Size(Decimal('NaN'))
+        with self.assertRaises(RangeValueError):
+            Range(1.23)
+        with self.assertRaises(RangeValueError):
+            Range("1.2.3")
+        with self.assertRaises(RangeValueError):
+            Range(Decimal('NaN'))
 
-        s = Size(0)
-        with self.assertRaises(SizeValueError):
-            Size(s, B)
+        s = Range(0)
+        with self.assertRaises(RangeValueError):
+            Range(s, B)
 
-        with self.assertRaises(SizeValueError):
-            Size(1, 1.2)
+        with self.assertRaises(RangeValueError):
+            Range(1, 1.2)
 
-        with self.assertRaises(SizeValueError):
-            Size(1, Decimal("NaN"))
+        with self.assertRaises(RangeValueError):
+            Range(1, Decimal("NaN"))
 
     @given(
        strategies.one_of(
@@ -68,7 +68,7 @@ class InitializerTestCase(unittest.TestCase):
        ),
        strategies.one_of(
           strategies.sampled_from(UNITS()),
-          strategies.builds(Size, strategies.fractions()),
+          strategies.builds(Range, strategies.fractions()),
           strategies.fractions(),
           strategies.decimals().filter(lambda x: x.is_finite())
        )
@@ -79,4 +79,4 @@ class InitializerTestCase(unittest.TestCase):
         factor = getattr(u, "factor", getattr(u, "magnitude", None))
         if factor is None:
             factor = Fraction(u)
-        self.assertEqual(Size(s, u).magnitude, Fraction(s) * factor)
+        self.assertEqual(Range(s, u).magnitude, Fraction(s) * factor)

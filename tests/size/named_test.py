@@ -16,7 +16,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tests for named methods of Size objects. """
+""" Tests for named methods of Range objects. """
 
 from fractions import Fraction
 
@@ -29,7 +29,7 @@ from hypothesis import given
 from hypothesis import settings
 from hypothesis import strategies
 
-from justbytes import Size
+from justbytes import Range
 from justbytes import B
 from justbytes import ROUND_DOWN
 from justbytes import ROUND_HALF_DOWN
@@ -39,7 +39,7 @@ from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
-from justbytes import SizeConfig
+from justbytes import RangeConfig
 from justbytes import StripConfig
 from justbytes import ValueConfig
 
@@ -47,7 +47,7 @@ from justbytes._constants import BinaryUnits
 from justbytes._constants import DecimalUnits
 from justbytes._constants import UNITS
 
-from justbytes._errors import SizeValueError
+from justbytes._errors import RangeValueError
 
 from tests.utils import SIZE_STRATEGY
 
@@ -56,19 +56,19 @@ class ConversionTestCase(unittest.TestCase):
 
     def testException(self):
         """ Test exceptions. """
-        with self.assertRaises(SizeValueError):
-            Size(0).convertTo(-2)
-        with self.assertRaises(SizeValueError):
-            Size(0).convertTo(0)
-        with self.assertRaises(SizeValueError):
-            Size(512).convertTo(1.4)
+        with self.assertRaises(RangeValueError):
+            Range(0).convertTo(-2)
+        with self.assertRaises(RangeValueError):
+            Range(0).convertTo(0)
+        with self.assertRaises(RangeValueError):
+            Range(512).convertTo(1.4)
 
     @given(
-       strategies.builds(Size, strategies.integers()),
+       strategies.builds(Range, strategies.integers()),
        strategies.one_of(
            strategies.none(),
            strategies.sampled_from(UNITS()),
-           strategies.builds(Size, strategies.integers(min_value=1))
+           strategies.builds(Range, strategies.integers(min_value=1))
        )
     )
     def testPrecision(self, s, u):
@@ -154,7 +154,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         Test some basic configurations.
         """
         result = a_size.getString(
-           SizeConfig.VALUE_CONFIG,
+           RangeConfig.VALUE_CONFIG,
            DisplayConfig(digits_config=config)
         )
         if config.use_letters:
@@ -173,8 +173,8 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         Test exceptions.
         """
-        with self.assertRaises(SizeValueError):
-            Size(0).getString(ValueConfig(base=100), SizeConfig.DISPLAY_CONFIG)
+        with self.assertRaises(RangeValueError):
+            Range(0).getString(ValueConfig(base=100), RangeConfig.DISPLAY_CONFIG)
 
 
 class RoundingTestCase(unittest.TestCase):
@@ -211,15 +211,15 @@ class RoundingTestCase(unittest.TestCase):
        ),
        strategies.sampled_from(ROUNDING_METHODS())
     )
-    @example(Size(32), Size(0), ROUND_DOWN)
+    @example(Range(32), Range(0), ROUND_DOWN)
     def testResults(self, s, unit, rounding):
         """ Test roundTo results. """
         # pylint: disable=too-many-branches
         rounded = s.roundTo(unit, rounding)
 
-        if (isinstance(unit, Size) and unit.magnitude == 0) or \
-           (not isinstance(unit, Size) and int(unit) == 0):
-            self.assertEqual(rounded, Size(0))
+        if (isinstance(unit, Range) and unit.magnitude == 0) or \
+           (not isinstance(unit, Range) and int(unit) == 0):
+            self.assertEqual(rounded, Range(0))
             return
 
         converted = s.convertTo(unit)
@@ -229,8 +229,8 @@ class RoundingTestCase(unittest.TestCase):
 
         factor = getattr(unit, 'magnitude', None) or int(unit)
         (q, r) = divmod(converted.numerator, converted.denominator)
-        ceiling = Size((q + 1) * factor)
-        floor = Size(q * factor)
+        ceiling = Range((q + 1) * factor)
+        floor = Range(q * factor)
         if rounding is ROUND_UP:
             self.assertEqual(rounded, ceiling)
             return
@@ -240,7 +240,7 @@ class RoundingTestCase(unittest.TestCase):
             return
 
         if rounding is ROUND_TO_ZERO:
-            if s > Size(0):
+            if s > Range(0):
                 self.assertEqual(rounded, floor)
             else:
                 self.assertEqual(rounded, ceiling)
@@ -258,17 +258,17 @@ class RoundingTestCase(unittest.TestCase):
             elif rounding is ROUND_HALF_DOWN:
                 self.assertEqual(rounded, floor)
             else:
-                if s > Size(0):
+                if s > Range(0):
                     self.assertEqual(rounded, floor)
                 else:
                     self.assertEqual(rounded, ceiling)
 
     def testExceptions(self):
         """ Test raising exceptions when rounding. """
-        with self.assertRaises(SizeValueError):
-            Size(0).roundTo(Size(-1, B), rounding=ROUND_HALF_UP)
-        with self.assertRaises(SizeValueError):
-            Size(512).roundTo(1.4, rounding=ROUND_HALF_UP)
-        with self.assertRaises(SizeValueError):
-            s = Size(512)
-            s.roundTo(512, rounding=ROUND_HALF_UP, bounds=(Size(0), Size(-1)))
+        with self.assertRaises(RangeValueError):
+            Range(0).roundTo(Range(-1, B), rounding=ROUND_HALF_UP)
+        with self.assertRaises(RangeValueError):
+            Range(512).roundTo(1.4, rounding=ROUND_HALF_UP)
+        with self.assertRaises(RangeValueError):
+            s = Range(512)
+            s.roundTo(512, rounding=ROUND_HALF_UP, bounds=(Range(0), Range(-1)))

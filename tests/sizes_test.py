@@ -24,25 +24,25 @@ import unittest
 from hypothesis import given
 from hypothesis import settings
 
-from justbytes import getSizeFromInput
+from justbytes import getRangeFromInput
 from justbytes import B
 from justbytes import InputConfig
 from justbytes import ROUND_DOWN
-from justbytes import SizeConfig
+from justbytes import RangeConfig
 
 from .utils import NUMBERS_STRATEGY
 
 
-class GetSizeFromInputTestCase(unittest.TestCase):
+class GetRangeFromInputTestCase(unittest.TestCase):
     """
     Test getting size from input.
     """
 
     def setUp(self):
-        self._input_config = SizeConfig.INPUT_CONFIG
+        self._input_config = RangeConfig.INPUT_CONFIG
 
     def tearDown(self):
-        SizeConfig.set_input_config(self._input_config)
+        RangeConfig.set_input_config(self._input_config)
 
     @given(NUMBERS_STRATEGY)
     @settings(max_examples=5)
@@ -50,7 +50,7 @@ class GetSizeFromInputTestCase(unittest.TestCase):
         """
         Test that it does the proper thing rounding down to bytes.
         """
-        SizeConfig.set_input_config(InputConfig(B, ROUND_DOWN))
-        res = getSizeFromInput(n)
+        RangeConfig.set_input_config(InputConfig(B, ROUND_DOWN))
+        res = getRangeFromInput(n)
         self.assertLessEqual(res.magnitude, Fraction(n))
         self.assertEqual(Fraction(res.magnitude).denominator, 1)
