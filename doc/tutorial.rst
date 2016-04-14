@@ -21,26 +21,26 @@ Display it using the internal representation which shows the number of bytes::
 Display it using the string representation which uses units::
 
     >>> str(size)
-    '8.00 GiB'
+    '8 GiB'
 
 The string representation is configurable through the default configuration
 and also by parameters to the getString() method::
 
-    >>> size.getString(SizeConfig.STR_CONFIG, SizeConfig.DISPLAY_CONFIG)
-    '8.00 GiB'
-    >>> size.getString(SizeConfig.STR_CONFIG, DisplayConfig(strip=True))
+    >>> size.getString(SizeConfig.VALUE_CONFIG, SizeConfig.DISPLAY_CONFIG)
     '8 GiB'
-    >>> size.getString(StrConfig(min_value=10), SizeConfig.DISPLAY_CONFIG)
-    '8192.00 MiB'
+    >>> size.getString(SizeConfig.VALUE_CONFIG, DisplayConfig(strip_config=StripConfig(strip_whole=False))) 
+    '8.00 GiB'
+    >>> size.getString(ValueConfig(min_value=10), SizeConfig.DISPLAY_CONFIG)
+    '8192 MiB'
 
 Arithmetic
 ----------
 Various arithmetic operations on Size objects are available::
 
     >>> str(size * 8)
-    '64.00 GiB'
+    '64 GiB'
     >>> str(size * Fraction(1, 2))
-    '4.00 GiB'
+    '4 GiB'
 
 Floats and non-numbers like infinity are not allowed in these computations.
 
@@ -48,9 +48,10 @@ Some arithmetic operations work with two Size operands::
 
     >>> new_size = size + Size(1, KiB)
     >>> str(new_size)
-    '@8.00 GiB'
+    '> 8.00 GiB'
 
-The symbol '@' is used to indicate that the value is approximate. With
+The symbol '>' is used to indicate that the value is approximate and that the
+actual value represented is greater than that displayed. With
 the current defaults, only 2 places are allowed after the decimal point,
 and so the value can not be shown precisely.
 
@@ -59,25 +60,22 @@ Miscellaneous Examples
 Sometimes it is desirable to get the components of the string output rather
 than the whole string value::
 
-    >>> size.getStringInfo(SizeConfig.STR_CONFIG)
-    (False, 1, '8', '00', GiB)
+    >>> size.getStringInfo(SizeConfig.VALUE_CONFIG)
+    (Radix(True,[8],[0, 0],[],10), 0, GiB)
+
+For information about the Radix type see the justbases package.
 
 getStringInfo() takes the same configuration parameters as getString()::
 
-    >>> size.getStringInfo(StrConfig(min_value=10))
-    (False, 1, '8192', '00', MiB)
+    >>> size.getStringInfo(ValueConfig(min_value=10))
+    (Radix(True,[8, 1, 9, 2],[0, 0],[],10), 0, MiB)
 
-To get a precise raw representation of a value use getDecimalInfo()::
+To get an exact representation, set the configuration max_places value to None. ::
 
-    >>> size.getDecimalInfo(StrConfig(min_value=10))
-    (1, 8192, [], [], MiB)
+    >>> (size / 3).getStringInfo(ValueConfig(max_places=None))
+    (Radix(True,[2],[],[6],10), 0, GiB)
 
-If the decimal is non-terminating, the repeating string is also shown::
-
-    >>> size / 3
-    Size(2863311530.(6))
-    >>> (size / 3).getDecimalInfo(SizeConfig.STR_CONFIG)
-    (1, 2, [], [6], GiB)
+The final list indicates the repeating values after the radix.
 
 Round to get whole byte values, if desired::
 
@@ -86,8 +84,8 @@ Round to get whole byte values, if desired::
 
 Display in selected units::
 
-    >>> size.getString(StrConfig(unit=YiB), SizeConfig.DISPLAY_CONFIG)
-    '@0.00 YiB'
+    >>> size.getString(ValueConfig(unit=YiB), SizeConfig.DISPLAY_CONFIG)
+    '> 0.00 YiB'
 
 
 Using the Additive Identity
