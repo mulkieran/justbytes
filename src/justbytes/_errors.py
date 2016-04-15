@@ -23,11 +23,12 @@ import abc
 from six import add_metaclass
 
 @add_metaclass(abc.ABCMeta)
-class SizeError(Exception):
-    """ Generic Size error. """
+class RangeError(Exception):
+    """ Generic Range error. """
     pass
 
-class SizeValueError(SizeError):
+
+class RangeValueError(RangeError):
     """ Raised when a parameter has an unacceptable value.
 
         May also be raised when the parameter has an unacceptable type.
@@ -55,16 +56,16 @@ class SizeValueError(SizeError):
             return self._FMT_STR % (self._value, self._param)
 
 @add_metaclass(abc.ABCMeta)
-class SizeUnsupportedOpError(SizeError):
-    """ Error when executing unsupported operation on Size. """
+class RangeUnsupportedOpError(RangeError):
+    """ Error when executing unsupported operation on Range. """
     pass
 
 @add_metaclass(abc.ABCMeta)
-class SizeNonsensicalOpError(SizeUnsupportedOpError):
+class RangeNonsensicalOpError(RangeUnsupportedOpError):
     """ Error when requesting an operation that doesn't make sense. """
     pass
 
-class SizeNonsensicalBinOpValueError(SizeNonsensicalOpError):
+class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
     """ Error when requesting a binary operation with a nonsense value. """
 
     _FMT_STR = "nonsensical value for for %s: '%s'"
@@ -82,9 +83,9 @@ class SizeNonsensicalBinOpValueError(SizeNonsensicalOpError):
     def __str__(self):
         return self._FMT_STR % (self._operator, self._other)
 
-class SizeNonsensicalBinOpError(SizeNonsensicalOpError):
+class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
     """ Error when requesting a binary operation that doesn't make sense. """
-    _FMT_STR = "nonsensical operand types for %s: 'Size' and '%s'"
+    _FMT_STR = "nonsensical operand types for %s: 'Range' and '%s'"
 
     def __init__(self, operator, other):
         """ Initializer.
@@ -100,20 +101,20 @@ class SizeNonsensicalBinOpError(SizeNonsensicalOpError):
         return self._FMT_STR % (self._operator, type(self._other).__name__)
 
 @add_metaclass(abc.ABCMeta)
-class SizeUnrepresentableResultError(SizeUnsupportedOpError):
+class RangeUnrepresentableResultError(RangeUnsupportedOpError):
     """ Error when requesting an operation that yields units that cannot
-        be represented with Size, e.g., when multiplying a Size by a Size.
+        be represented with Range, e.g., when multiplying a Range by a Range.
     """
     pass
 
-class SizePowerResultError(SizeUnrepresentableResultError):
+class RangePowerResultError(RangeUnrepresentableResultError):
     """ Error when requesting an operation that would yield a byte power. """
 
     def __str__(self):
         return  "requested operation result requires non-unit power of bytes"
 
-class SizeFractionalResultError(SizeUnrepresentableResultError):
-    """ Error when Size construction is strict. """
+class RangeFractionalResultError(RangeUnrepresentableResultError):
+    """ Error when Range construction is strict. """
 
     def __str__(self):
         return "requested operation result has a fractional quantity of bytes"

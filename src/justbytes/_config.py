@@ -1,4 +1,4 @@
-# Copyright (C) 2015  Red Hat, Inc.
+# Copyright (C) 2015-2016  Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -18,12 +18,89 @@
 
 """ Configuration of the justbytes package. """
 
-from ._constants import B
 from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import RoundingMethods
 from ._constants import UNITS
 
-from ._errors import SizeValueError
+from ._errors import RangeValueError
+
+
+class StripConfig(object):
+    """
+    Stripping trailing zeros.
+    """
+    # pylint: disable=too-few-public-methods
+
+    _FMT_STR = ", ".join([
+       "strip=%(strip)s",
+       "strip_exact=%(strip_exact)s",
+       "strip_whole=%(strip_whole)s"
+    ])
+
+    def __init__(self, strip=False, strip_exact=False, strip_whole=True):
+        """
+        Initializer.
+
+        :param bool strip: strip all trailing zeros
+        :param bool strip_exact: strip if value is exact
+        :param bool strip_whole: strip if value is exact and non-fractional
+
+        strip is stronger than strip_exact which is stronger than strip_whole
+        """
+        self.strip = strip
+        self.strip_exact = strip_exact
+        self.strip_whole = strip_whole
+
+    def __str__(self): # pragma: no cover
+        values = {
+           'strip' : self.strip,
+           'strip_exact' : self.strip_exact,
+           'strip_whole' : self.strip_whole
+        }
+        return "StripConfig(%s)" % (self._FMT_STR % values)
+    __repr__ = __str__
+
+
+class DigitsConfig(object):
+    """
+    How to display digits.
+    """
+    # pylint: disable=too-few-public-methods
+
+    _FMT_STR = ", ".join([
+       "separator=%(separator)s",
+       "use_caps=%(use_caps)s",
+       "use_letters=%(use_letters)s"
+    ])
+
+    def __init__(
+       self,
+       separator='~',
+       use_caps=False,
+       use_letters=True
+    ):
+        """
+        Initializer.
+
+        :param str separator: separate for digits
+        :param bool use_caps: if set, use capital letters
+        :param bool use_letters: if set, use letters
+
+        If digits in this base require more than one character.
+        """
+        self.separator = separator
+        self.use_caps = use_caps
+        self.use_letters = use_letters
+
+    def __str__(self): # pragma: no cover
+        values = {
+           'separator' : self.separator,
+           'use_caps' : self.use_caps,
+           'use_letters' : self.use_letters
+        }
+        return "DigitsConfig(%s)" % (self._FMT_STR % values)
+    __repr__ = __str__
+
 
 class DisplayConfig(object):
     """
@@ -33,48 +110,54 @@ class DisplayConfig(object):
 
     _FMT_STR = ", ".join([
        "show_approx_str=%(show_approx_str)s",
-       "strip=%(strip)s",
-       "strip_exact=%(strip_exact)s"
+       "show_base=%(show_base)s",
+       "digits_config=%(digits_config)s",
+       "strip_config-%(strip_config)s"
     ])
 
     def __init__(
        self,
-       strip=False,
        show_approx_str=True,
-       strip_exact=True
+       show_base=False,
+       digits_config=DigitsConfig(
+          separator='~',
+          use_caps=False,
+          use_letters=True
+       ),
+       strip_config=StripConfig(
+          strip=False,
+          strip_exact=False,
+          strip_whole=True
+       )
     ):
         """
         Initializer.
 
-        :param bool strip: True if trailing zeros are to be stripped.
         :param bool show_approx_str: distinguish approximate str values
-        :param bool strip_exact: True if stripping exact quantities
+        :param bool show_base: True if base prefix to be prepended
+        :param DigitsConfig digits_config:
+        :param StripConfig strip_config:
 
-        If strip is True and there is a fractional quantity, trailing
-        zeros are removed up to (and including) the decimal point.
-
-        The default for strip is False, so that precision is always shown
-        to max_places.
-
-        strip_exact is like strip, but trailing zeros are only removed if
-        the number represented equals its representation. If strip is True,
-        strip_exact does nothing.
+        There are only two base prefixes acknowledged, 0 for octal and 0x for
+        hexadecimal.
         """
-        self.strip = strip
         self.show_approx_str = show_approx_str
-        self.strip_exact = strip_exact
+        self.show_base = show_base
+        self.digits_config = digits_config
+        self.strip_config = strip_config
 
     def __str__(self):
         values = {
            'show_approx_str' : self.show_approx_str,
-           'strip' : self.strip,
-           'strip_exact' : self.strip_exact
+           'show_base' : self.show_base,
+           'digits_config' : self.digits_config,
+           'strip_config' : self.strip_config
         }
-        return "StrConfig(%s)" % (self._FMT_STR % values)
+        return "DisplayConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
 
-class StrConfig(object):
+class ValueConfig(object):
     """ Configuration for __str__ method.
 
         If max_places is set to None, all non-zero digits after the
@@ -126,21 +209,21 @@ class StrConfig(object):
         # pylint: disable=too-many-arguments
         if min_value < 0 or \
            not isinstance(min_value, PRECISE_NUMERIC_TYPES):
-            raise SizeValueError(
+            raise RangeValueError(
                min_value,
                "min_value",
                "must be a precise positive numeric value."
             )
 
         if unit is not None and unit not in UNITS():
-            raise SizeValueError(
+            raise RangeValueError(
                unit,
                "unit",
                "must be one of %s" % ", ".join(str(x) for x in UNITS())
             )
 
         if base < 2:
-            raise SizeValueError(base, "base", "must be at least 2")
+            raise RangeValueError(base, "base", "must be at least 2")
 
         self.max_places = max_places
         self.min_value = min_value
@@ -160,55 +243,38 @@ class StrConfig(object):
            'rounding_method' : self.rounding_method,
            'unit' : self.unit
         }
-        return "StrConfig(%s)" % (self._FMT_STR % values)
+        return "ValueConfig(%s)" % (self._FMT_STR % values)
     __repr__ = __str__
 
 
-class InputConfig(object):
-    """ Configuration for input of Sizes.
+class RangeConfig(object):
+    """ Configuration for :class:`Range` class. """
 
-        Specifies rounding unit and method for Sizes constructed from
-        user input.
-    """
-    # pylint: disable=too-few-public-methods
+    DISPLAY_CONFIG = DisplayConfig(
+       show_approx_str=True,
+       show_base=False,
+       digits_config=DigitsConfig(
+          separator='~',
+          use_caps=False,
+          use_letters=True
+       ),
+       strip_config=StripConfig(
+          strip=False,
+          strip_exact=False,
+          strip_whole=True
+       )
+    )
 
-    _FMT_STR = ", ".join(["method=%(method)s", "unit=%(unit)s"])
-
-    def __init__(self, unit=B, method=RoundingMethods.ROUND_DOWN):
-        """ Initializer.
-
-            :param unit: unit to round to, default is B
-            :type unit: an instance of :func:`._constants.UNITS`
-            :param method: rounding method, default is ROUND_DOWN
-            :type method: instance of :func:`._constants.ROUNDING_METHODS`
-        """
-        self.unit = unit
-        self.method = method
-
-    def __str__(self):
-        values = {'method' : self.method, 'unit' : self.unit}
-        return "InputConfig(%s)" % (self._FMT_STR % values)
-    __repr__ = __str__
-
-
-class SizeConfig(object):
-    """ Configuration for :class:`Size` class. """
-
-    DISPLAY_CONFIG = DisplayConfig(False, True)
-
-    STR_CONFIG = StrConfig(
-       2,
-       1,
-       True,
-       False,
-       None,
-       10,
-       RoundingMethods.ROUND_HALF_ZERO
+    VALUE_CONFIG = ValueConfig(
+       max_places=2,
+       min_value=1,
+       binary_units=True,
+       exact_value=False,
+       unit=None,
+       base=10,
+       rounding_method=RoundingMethods.ROUND_HALF_ZERO
     )
     """ Default configuration for string display. """
-
-    INPUT_CONFIG = InputConfig(B, RoundingMethods.ROUND_DOWN)
-    """ Default configuration for interpreting input values. """
 
     STRICT = False
 
@@ -221,33 +287,24 @@ class SizeConfig(object):
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
             show_approx_str=config.show_approx_str,
-            strip=config.strip,
-            strip_exact=config.strip_exact
+            show_base=config.show_base,
+            digits_config=config.digits_config,
+            strip_config=config.strip_config
         )
 
     @classmethod
-    def set_str_config(cls, config):
-        """ Set the configuration for __str__ method for all Size objects.
-
-            :param :class:`StrConfig` config: a configuration object
+    def set_value_config(cls, config):
         """
-        cls.STR_CONFIG = StrConfig(
+        Set the configuration for computing the value of string representation.
+
+        :param :class:`ValueConfig` config: a configuration object
+        """
+        cls.VALUE_CONFIG = ValueConfig(
             base=config.base,
             binary_units=config.binary_units,
             max_places=config.max_places,
             min_value=config.min_value,
             exact_value=config.exact_value,
             rounding_method=config.rounding_method,
-            unit=config.unit
-        )
-
-    @classmethod
-    def set_input_config(cls, config):
-        """ Set the configuration for input method for all Size objects.
-
-            :param :class:`.InputConfig` config: a configuration object
-        """
-        cls.INPUT_CONFIG = InputConfig(
-            method=config.method,
             unit=config.unit
         )

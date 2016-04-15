@@ -16,41 +16,36 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for reading from user input. """
-from fractions import Fraction
-
-import unittest
-
-from hypothesis import given
-from hypothesis import settings
-
-from justbytes import getSizeFromInput
-from justbytes import B
-from justbytes import InputConfig
-from justbytes import ROUND_DOWN
-from justbytes import SizeConfig
-
-from .utils import NUMBERS_STRATEGY
+""" Special purpose generators. """
 
 
-class GetSizeFromInputTestCase(unittest.TestCase):
+def take_until_satisfied(pred, seq):
     """
-    Test getting size from input.
+    Like next(), but yields all values until the first matching value.
+
+    :param bool pred: a predicate, return False if the value is not satisfactory
+    :param seq: a sequence of values
     """
+    for x in seq:
+        yield x
+        if pred(x):
+            break
 
-    def setUp(self):
-        self._input_config = SizeConfig.INPUT_CONFIG
+def next_or_last(pred, seq, default=None):
+    """
+    Return the first element that matches the predicate or the last element in
+    the seq.
 
-    def tearDown(self):
-        SizeConfig.set_input_config(self._input_config)
+    If seq is empty, return ``default``.
 
-    @given(NUMBERS_STRATEGY)
-    @settings(max_examples=5)
-    def testRoundingToBytes(self, n):
-        """
-        Test that it does the proper thing rounding down to bytes.
-        """
-        SizeConfig.set_input_config(InputConfig(B, ROUND_DOWN))
-        res = getSizeFromInput(n)
-        self.assertLessEqual(res.magnitude, Fraction(n))
-        self.assertEqual(Fraction(res.magnitude).denominator, 1)
+    :param bool pred: a predicate, return False if the value is not satisfactory
+    :param seq: a sequence of values
+    :param default: returned if seq is empty, default is None
+    """
+    for x in seq:
+        if pred(x):
+            return x
+    try:
+        return x # pylint: disable=undefined-loop-variable
+    except NameError:
+        return default

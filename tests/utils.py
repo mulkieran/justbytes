@@ -19,7 +19,7 @@
 """ Utilities for testing. """
 from hypothesis import strategies
 
-from justbytes import Size
+from justbytes import Range
 from justbytes import UNITS
 
 NUMBERS_STRATEGY = strategies.one_of(
@@ -29,7 +29,7 @@ NUMBERS_STRATEGY = strategies.one_of(
 )
 
 SIZE_STRATEGY = strategies.builds(
-   Size,
+   Range,
    strategies.one_of(
       NUMBERS_STRATEGY,
       strategies.builds(

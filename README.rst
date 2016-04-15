@@ -5,28 +5,29 @@ Justbytes
 ========
 
 Justbytes is a module for handling computation with
-sizes expressed in bytes. Its principle feature is a Size class from
-which can be constructed Size objects which represent a precise and finite
-quantity of bytes. Various arithmetic operations are defined for Size objects.
+address ranges expressed in bytes. Its principle feature is a Range class from
+which can be constructed Range objects which represent a precise and finite
+address range in bytes. Various arithmetic operations are defined for Range
+objects.
 
-Its sole purpose is the representation of real quantities of memory on real
-machines. For that reason, it does not allow powers of bytes, imprecise
-quantities of bytes, or non-finite quantities of bytes. In order that the
-usual laws of arithmetic can be maintained, it does allow fractional quantities
-of bytes.
+Its sole purpose is the representation of real address ranges on real
+machines. For that reason, it does not allow powers of ranges, imprecise
+ranges, or non-finite ranges. In order that the
+usual laws of arithmetic can be maintained, it does allow fractional ranges.
 
-Practical Computing with Bytes
-------------------------------
 
-When computing with bytes, the numeric value can be viewed as a logical,
-rather than a physical, quantity. That is, unlike, e.g., mass or length,
-which are quantities which must be measured with a measuring instrument
-which has some built-in imprecision, the number of bytes of memory in RAM,
-or on a disk, is a quantity that is not measured, but is known precisely.
+Practical Computing with Address Ranges
+---------------------------------------
+
+When computing with address ranges, the numeric value can be viewed as a
+logical, rather than a physical, quantity. That is, unlike, e.g., mass or
+length, which are quantities which must be measured with a measuring instrument
+which has some built-in imprecision, an address range
+is a quantity that is not measured, but is known precisely.
 This precision arises because the number represents not as much an amount of
 memory as a number of addressable, byte-size, locations in memory.
 
-Consequently, computations such as addition of two Sizes, and conversion
+Consequently, computations such as addition of two Ranges, and conversion
 between different magnitudes of bytes, i.e., from MiB to GiB, must be done
 precisely. The underlying implementation must therefore use a precise
 representation of the number of bytes. Floating point numbers, which are
@@ -35,62 +36,93 @@ quantities, are disallowed by this requirement.
 
 Operations
 ----------
-This module does not accomodate multi-dimensionality of byte quantities.
-Consequently, multiplying one Size object by another Size object will cause
+This module does not accomodate multi-dimensionality of address ranges.
+Consequently, multiplying one Range object by another Range object will cause
 an error to be raised, since bytes^2 is not representable by the module.
 For most uses any operation which would yield a multi-dimensional quantity
-of bytes is not useful. There are no plans to adapt this package so that it
-can accomodate multi-dimensionality of bytes.
+is not useful. There are no plans to adapt this package so that it
+can accomodate multi-dimensionality of address ranges.
 
-Numerous computations with bytes are nonsensical. For example, 2 raised to a
-power which is some number of bytes, is a meaningless computation. All such
-operations cause an error to be raised.
+Numerous computations with address ranges are nonsensical. For example, 2
+raised to a power which is some address range, is a meaningless computation.
+All such operations cause an error to be raised.
 
 Some computations with precise, finite, values may yield irrational results.
 For example, while 2 is rational, its square root is an irrational number.
-There is no allowed operation on Size objects which can result in an
-irrational Size value. It turns out that all such operations are either
+There is no allowed operation on Range objects which can result in an
+irrational Range value. It turns out that all such operations are either
 nonsensical or would result in a value with an unrepresentable type.
 
-The result type of operations is a Size, where appropriate, or a subtype of
+The result type of operations is a Range, where appropriate, or a subtype of
 Rational, where a numeric value is appropriate.
 
 Floating Point Numbers
 ----------------------
-It is not possible to use floating point numbers in computations with Sizes.
+It is not possible to use floating point numbers in computations with Ranges.
 Where a fractional quantity is desired, use Decimal objects instead of floats.
-Thus, Size(0) * 1.2 raises an exception, but Size(0) * Decimal("1.2") is
+Thus, Range(0) * 1.2 raises an exception, but Range(0) * Decimal("1.2") is
 acceptable.
 
-Displaying Sizes
-----------------
-Sizes are displayed according to a specified configuration. In the default
-configuration, Sizes are displayed using binary rather than SI prefixes
-or names, regardless of the value. For example, 1000 bytes is not displayed
-as 1KB (1 kilobyte), but as some number of bytes or KiB (kibibytes).
+Computing the Representation of a Range
+---------------------------------------
+The representation of a Range is computed according to a specified
+configuration. In the default configuration, the representation uses IEC
+rather than SI units.
 
-The detailed representation of Sizes uses a precise decimal representation
-that includes the repeating portion, if any.
+The representation of a Range is not a string, but a structured representation
+of the precise value, as well as the relationship of the representation to
+the actual value.
+
+This representation is exposed to clients of the library, which may use it
+in any way.
+
+Displaying Ranges
+----------------
+The Range class also has standard methods for the representation of Range
+objects as str objects.
+
+The str representation can also be configured. The manipulation of the
+representation to form a str object is abstracted from the rest of the source
+to emphasize that clients of the package may choose to represent address ranges
+in any manner they choose.
 
 Representing Units
 ------------------
 The size module supplies a set of named prefixes for both SI and binary units,
 for all non-fractional prefixes. Fractional prefixes are not defined.
 
-Constructing Sizes Programatically
+Constructing Ranges Programatically
 ----------------------------------
-New Size objects can be constructed from Size objects, numeric values, e.g.,
+New Range objects can be constructed from Range objects, numeric values, e.g.,
 int or Decimal, or strings which represent such numeric values.
 strings may be used to represent fractional quantities, e.g., "1.2", but
 floats are disallowed.
 
 The constructor takes an optional units specifier, which defaults to bytes
-for all numeric values, and to None for Size objects. The type of the
-unit specifier is a named prefix supplied by the size module or a Size object.
+for all numeric values, and to None for Range objects. The type of the
+unit specifier is a named prefix supplied by the size module or a Range object.
 
 Errors
 ------
-All errors raised by justbytes operations are subtypes of the SizeError class.
+All errors raised by justbytes operations are subtypes of the RangeError class.
+
+Measures of Bandwidth vs. Address Ranges
+----------------------------------------
+Bandwidth, e.g., KiB/second and address ranges, e.g., KiB, are related, as their
+units both contain bytes. This relationship is misleading; address ranges and
+bandwidth are far less similar than are volume and flow, e.g., gallons
+and gallons/minute. Bandwidth is simply a measure of the flow of a quantity,
+and there is no implied structure to that quantity. The usual choices for
+representation are appropriate in the case of operations on bandwidth;
+the precision required for manipulation and computation of address ranges
+is not necessary.
+
+User Input
+----------
+This package does not handle arbitrary user input. It is expected that the
+client will transform any input, from whatever source, into a number and an
+optional unit specification which can be passed directly to the Range
+constructor.
 
 Alternative Packages
 --------------------

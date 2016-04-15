@@ -24,8 +24,8 @@ from hypothesis import given
 from hypothesis import settings
 from hypothesis import strategies
 
-from justbytes._util.misc import next_or_last
-from justbytes._util.misc import take_until_satisfied
+from justbytes._util.generators import next_or_last
+from justbytes._util.generators import take_until_satisfied
 
 
 class NextTestCase(unittest.TestCase):
