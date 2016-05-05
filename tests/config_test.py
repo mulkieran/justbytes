@@ -50,6 +50,8 @@ class ConfigTestCase(unittest.TestCase):
             ValueConfig(unit=2)
         with self.assertRaises(RangeValueError):
             ValueConfig(base=1)
+        with self.assertRaises(RangeValueError):
+            ValueConfig(max_places=-1)
 
 
 class RangeTestCase(unittest.TestCase):

@@ -207,6 +207,13 @@ class ValueConfig(object):
             :param rounding_method: one of RoundingMethods.METHODS()
         """
         # pylint: disable=too-many-arguments
+        if max_places is not None and max_places < 0:
+            raise RangeValueError(
+               max_places,
+               "max_places",
+               "must be an int at least 0"
+            )
+
         if min_value < 0 or \
            not isinstance(min_value, PRECISE_NUMERIC_TYPES):
             raise RangeValueError(
