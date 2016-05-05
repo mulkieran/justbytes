@@ -106,16 +106,18 @@ Errors
 ------
 All errors raised by justbytes operations are subtypes of the RangeError class.
 
-Measures of Bandwidth vs. Address Ranges
-----------------------------------------
-Bandwidth, e.g., KiB/second and address ranges, e.g., KiB, are related, as their
-units both contain bytes. This relationship is misleading; address ranges and
-bandwidth are far less similar than are volume and flow, e.g., gallons
-and gallons/minute. Bandwidth is simply a measure of the flow of a quantity,
-and there is no implied structure to that quantity. The usual choices for
-representation are appropriate in the case of operations on bandwidth;
-the precision required for manipulation and computation of address ranges
-is not necessary.
+Memory Consumption and Bandwidth vs. Address Ranges
+---------------------------------------------------
+Memory consumption, e.g., by a process during execution on a specified
+workload, is a quantity, that like address ranges, is specified in
+bytes. However, memory consumption is simply a measurement of the amount of
+a phsyical quantity consumed.  When bytes are used only to represent memory
+consumption, computations do not generally require the special handling
+supplied by this library. Generally, measurement of memory consumption can
+be treated like any other physical quantity. The same reasoning applies to
+bandwidth. For a physical analogy, one can imagine memory consumption to be
+analogous to volume, e.g., litres, and bandwidth to be analogous to flow,
+e.g., litres per minute.
 
 User Input
 ----------
