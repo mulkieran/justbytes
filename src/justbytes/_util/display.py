@@ -119,16 +119,18 @@ class Number(object):
        "%(base_str)s",
        "%(left)s",
        "%(radix)s",
-       "%(right)s"
+       "%(right)s",
+       "%(repeating)s"
     ])
 
     @classmethod
-    def xform(cls, left, right, config, base, positive):
+    def xform(cls, left, right, repeating, config, base, positive):
         """
         Return prefixes for tuple.
 
         :param str left: left of the radix
         :param str right: right of the radix
+        :param str repeating: repeating part
         :param DisplayConfig config: display configuration
         :param int base: the base in which value is displayed
         :param bool positive: whether value is non-negative
@@ -153,7 +155,8 @@ class Number(object):
            'base_str' : base_str,
            'left' : left,
            'radix' : '.' if right else "",
-           'right' : right
+           'right' : right,
+           'repeating' : ("(%s)" % repeating) if repeating != "" else ""
         }
 
         return cls._FMT_STR % result
@@ -235,15 +238,20 @@ class String(object):
         """
         right = radix.non_repeating_part
         left = radix.integer_part
+        repeating = radix.repeating_part
 
-        right = Strip.xform(right, display.strip_config, relation)
+        if repeating == []:
+            right = Strip.xform(right, display.strip_config, relation)
 
         right_str = Digits.xform(right, display.digits_config, radix.base)
         left_str = Digits.xform(left, display.digits_config, radix.base) or '0'
+        repeating_str = \
+           Digits.xform(repeating, display.digits_config, radix.base)
 
         number = Number.xform(
            left_str,
            right_str,
+           repeating_str,
            display,
            radix.base,
            radix.positive
