@@ -25,7 +25,6 @@ import justbases
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
 from justbytes import StripConfig
-from justbytes import UNITS
 
 from justbytes._util.display import String
 
@@ -69,13 +68,12 @@ class TestString(unittest.TestCase):
           digits_config=strategies.just(DigitsConfig(use_letters=False)),
           strip_config=strategies.just(StripConfig())
        ),
-       strategies.integers(min_value=-1, max_value=1),
-       strategies.sampled_from(UNITS())
+       strategies.integers(min_value=-1, max_value=1)
     )
     @settings(max_examples=100)
-    def testFormat(self, radix, display, relation, units):
+    def testFormat(self, radix, display, relation):
         """
         Verify that a xformed string with a repeating part shows that part.
         """
-        result = String.xform(radix, display, relation, units)
-        assert (radix.repeating_part != []) == ('(' in result and ')' in result)
+        result = String.xform(radix, display, relation)
+        assert (radix.repeating_part != []) == (result[-1] == ")")
