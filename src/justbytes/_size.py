@@ -56,6 +56,8 @@ from ._util.generators import take_until_satisfied
 class Range(object):
     """ Class for instantiating Range objects. """
 
+    _BYTES_SYMBOL = "B"
+
     @classmethod
     def _as_single_number(cls, value, config):
         """
@@ -163,7 +165,8 @@ class Range(object):
         :raises: RangeValueError
         """
         (result, relation, units) = self.getStringInfo(config)
-        return String.xform(result, display, relation, units)
+        number = String.xform(result, display, relation)
+        return "%s %s" % (number, units.abbr + self._BYTES_SYMBOL)
 
     def __str__(self):
         return self.getString(
