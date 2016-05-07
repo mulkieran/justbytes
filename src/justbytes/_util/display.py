@@ -213,18 +213,14 @@ class String(object):
     """
     # pylint: disable=too-few-public-methods
 
-    _BYTES_SYMBOL = "B"
-
     _FMT_STR = "".join([
        "%(approx)s",
        "%(space)s",
-       "%(number)s",
-       " ",
-       "%(units)s"
+       "%(number)s"
     ])
 
     @classmethod
-    def xform(cls, radix, display, relation, units):
+    def xform(cls, radix, display, relation):
         """
         Transform a radix and some information to a str according to
         configurations.
@@ -259,13 +255,10 @@ class String(object):
 
         decorators = Decorators.decorators(display, relation)
 
-        units = units.abbr + cls._BYTES_SYMBOL
-
         result = {
            'approx' : decorators.approx_str,
            'space' : ' ' if decorators.approx_str else '',
-           'number' : number,
-           'units' : units
+           'number' : number
         }
 
         return cls._FMT_STR % result
