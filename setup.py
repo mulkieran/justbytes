@@ -56,7 +56,7 @@ setuptools.setup(
         'Topic :: System :: Operating System Kernels :: Linux',
     ],
     install_requires = [
-        'justbases',
+        'justbases>0.06',
         'six'
     ],
     package_dir={"": "src"},
