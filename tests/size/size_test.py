@@ -160,7 +160,9 @@ class ConfigurationTestCase(unittest.TestCase):
     def testValueConfigs(self):
         """ Test str with various configuration options. """
         RangeConfig.set_display_config(
-           DisplayConfig(strip_config=StripConfig(strip=True))
+           DisplayConfig(
+              strip_config=StripConfig(strip=True)
+           )
         )
 
         # exactly 4 Pi
@@ -200,14 +202,18 @@ class ConfigurationTestCase(unittest.TestCase):
 
         RangeConfig.set_value_config(ValueConfig(max_places=3))
         RangeConfig.set_display_config(
-           DisplayConfig(strip_config=StripConfig(strip=True))
+           DisplayConfig(
+              strip_config=StripConfig(strip=True)
+           )
         )
         s = Range('23.7874', TiB)
         self.assertEqual(str(s), "> 23.787 TiB")
 
         RangeConfig.set_value_config(ValueConfig(min_value=10))
         RangeConfig.set_display_config(
-           DisplayConfig(strip_config=StripConfig(strip=True))
+           DisplayConfig(
+              strip_config=StripConfig(strip=True)
+           )
         )
         s = Range(8193)
         self.assertEqual(str(s), ("8193 B"))
@@ -215,7 +221,9 @@ class ConfigurationTestCase(unittest.TestCase):
         # if max_places is set to None, all digits are displayed
         RangeConfig.set_value_config(ValueConfig(max_places=None))
         RangeConfig.set_display_config(
-           DisplayConfig(strip_config=StripConfig(strip=True))
+           DisplayConfig(
+              strip_config=StripConfig(strip=True)
+           )
         )
         s = Range(0xfffffffffffff)
         self.assertEqual(
@@ -229,7 +237,9 @@ class ConfigurationTestCase(unittest.TestCase):
 
         RangeConfig.set_value_config(ValueConfig(max_places=2))
         RangeConfig.set_display_config(
-           DisplayConfig(strip_config=StripConfig(strip=False))
+           DisplayConfig(
+              strip_config=StripConfig(strip=False)
+           )
         )
         s = Range(1024**9 + 1)
         self.assertEqual(str(s), "> 1024.00 YiB")
@@ -240,7 +250,9 @@ class ConfigurationTestCase(unittest.TestCase):
     def testStrWithSmallDeviations(self):
         """ Behavior when deviation from whole value is small. """
         RangeConfig.set_display_config(
-           DisplayConfig(strip_config=StripConfig(strip=True))
+           DisplayConfig(
+              strip_config=StripConfig(strip=True)
+           )
         )
 
         eps = Decimal(1024)/100/2 # 1/2 of 1% of 1024

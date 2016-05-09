@@ -46,9 +46,6 @@ from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
-from ._util.display import Decorators
-from ._util.display import String
-
 from ._util.generators import next_or_last
 from ._util.generators import take_until_satisfied
 
@@ -165,7 +162,7 @@ class Range(object):
         :raises: RangeValueError
         """
         (result, relation, units) = self.getStringInfo(config)
-        number = String.xform(result, display, relation)
+        number = result.getString(display, relation)
         return "%s %s" % (number, units.abbr + self._BYTES_SYMBOL)
 
     def __str__(self):
@@ -182,12 +179,12 @@ class Range(object):
 
         Usually, the magnitude will be an integer.
         """
-        (value, relation) = \
+        (value, _) = \
            justbases.Rationals.round_to_int(
               self._magnitude,
               RoundingMethods.ROUND_HALF_ZERO
            )
-        return "%sRange(%s)" % (Decorators.relation_to_symbol(relation), value)
+        return "Range(%s)" % value
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument

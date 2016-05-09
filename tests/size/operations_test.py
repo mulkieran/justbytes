@@ -118,7 +118,7 @@ class UtilityMethodsTestCase(unittest.TestCase):
 
         self.assertEqual(repr(Range(0)), "Range(0)")
         self.assertEqual(repr(Range(1024)), "Range(1024)")
-        self.assertEqual(repr(Range("1024.1")), ">Range(1024)")
+        self.assertEqual(repr(Range("1024.1")), "Range(1024)")
 
 
 class AdditionTestCase(unittest.TestCase):
