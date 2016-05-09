@@ -37,6 +37,7 @@ from justbytes import ROUND_HALF_UP
 from justbytes import ROUND_TO_ZERO
 from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
+from justbytes import BaseConfig
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
 from justbytes import RangeConfig
@@ -48,6 +49,8 @@ from justbytes._constants import DecimalUnits
 from justbytes._constants import UNITS
 
 from justbytes._errors import RangeValueError
+
+from justbases import BasesError
 
 from tests.utils import SIZE_STRATEGY
 
@@ -118,7 +121,7 @@ class DisplayConfigTestCase(unittest.TestCase):
        strategies.builds(
           DisplayConfig,
           show_approx_str=strategies.booleans(),
-          show_base=strategies.booleans(),
+          base_config=strategies.just(BaseConfig()),
           digits_config=strategies.just(DigitsConfig(use_letters=False)),
           strip_config=strategies.just(StripConfig())
        ),
@@ -131,7 +134,7 @@ class DisplayConfigTestCase(unittest.TestCase):
         """
         result = a_size.getString(ValueConfig(base=base), config)
 
-        if config.show_base and base == 16:
+        if config.base_config.use_prefix and base == 16:
             self.assertNotEqual(result.find('0x'), -1)
 
 class DigitsConfigTestCase(unittest.TestCase):
@@ -173,7 +176,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         Test exceptions.
         """
-        with self.assertRaises(RangeValueError):
+        with self.assertRaises(BasesError):
             Range(0).getString(ValueConfig(base=100), RangeConfig.DISPLAY_CONFIG)
 
 
