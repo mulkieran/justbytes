@@ -18,6 +18,8 @@
 
 """ Configuration of the justbytes package. """
 
+import justbases
+
 from ._constants import PRECISE_NUMERIC_TYPES
 from ._constants import RoundingMethods
 from ._constants import UNITS
@@ -25,136 +27,57 @@ from ._constants import UNITS
 from ._errors import RangeValueError
 
 
-class StripConfig(object):
+class BaseConfig(justbases.BaseConfig):
     """
-    Stripping trailing zeros.
+    Configuration for display of bases.
+
+    Override defaults of justbases.BaseConfig.
     """
     # pylint: disable=too-few-public-methods
 
-    _FMT_STR = ", ".join([
-       "strip=%(strip)s",
-       "strip_exact=%(strip_exact)s",
-       "strip_whole=%(strip_whole)s"
-    ])
-
-    def __init__(self, strip=False, strip_exact=False, strip_whole=True):
+    def __init__(self, use_prefix=False, use_subscript=False):
         """
         Initializer.
 
-        :param bool strip: strip all trailing zeros
-        :param bool strip_exact: strip if value is exact
-        :param bool strip_whole: strip if value is exact and non-fractional
-
-        strip is stronger than strip_exact which is stronger than strip_whole
+        :param bool use_prefix: display base as prefix
+        :param bool use_subscript: display base as subscript
         """
-        self.strip = strip
-        self.strip_exact = strip_exact
-        self.strip_whole = strip_whole
 
-    def __str__(self): # pragma: no cover
-        values = {
-           'strip' : self.strip,
-           'strip_exact' : self.strip_exact,
-           'strip_whole' : self.strip_whole
-        }
-        return "StripConfig(%s)" % (self._FMT_STR % values)
-    __repr__ = __str__
+        super(BaseConfig, self).__init__(
+           use_prefix=use_prefix,
+           use_subscript=use_subscript
+        )
 
+DigitsConfig = justbases.DigitsConfig
+StripConfig = justbases.StripConfig
 
-class DigitsConfig(object):
+class DisplayConfig(justbases.DisplayConfig):
     """
-    How to display digits.
+    DisplayConfig overrides justbases.DisplayConfig's defaults.
     """
     # pylint: disable=too-few-public-methods
-
-    _FMT_STR = ", ".join([
-       "separator=%(separator)s",
-       "use_caps=%(use_caps)s",
-       "use_letters=%(use_letters)s"
-    ])
 
     def __init__(
-       self,
-       separator='~',
-       use_caps=False,
-       use_letters=True
+        self,
+        show_approx_str=True,
+        base_config=BaseConfig(),
+        digits_config=DigitsConfig(),
+        strip_config=StripConfig()
     ):
         """
-        Initializer.
+        Intializer.
 
-        :param str separator: separate for digits
-        :param bool use_caps: if set, use capital letters
-        :param bool use_letters: if set, use letters
-
-        If digits in this base require more than one character.
+        :param boolean show_approx_str: whether to indicate approximation
+        :param BaseConfig base_config: the base config
+        :param DigitsConfig digits_config: the digits config
+        :param StripConfig strip_config: the strip config
         """
-        self.separator = separator
-        self.use_caps = use_caps
-        self.use_letters = use_letters
-
-    def __str__(self): # pragma: no cover
-        values = {
-           'separator' : self.separator,
-           'use_caps' : self.use_caps,
-           'use_letters' : self.use_letters
-        }
-        return "DigitsConfig(%s)" % (self._FMT_STR % values)
-    __repr__ = __str__
-
-
-class DisplayConfig(object):
-    """
-    Superficial aspects of display.
-    """
-    # pylint: disable=too-few-public-methods
-
-    _FMT_STR = ", ".join([
-       "show_approx_str=%(show_approx_str)s",
-       "show_base=%(show_base)s",
-       "digits_config=%(digits_config)s",
-       "strip_config-%(strip_config)s"
-    ])
-
-    def __init__(
-       self,
-       show_approx_str=True,
-       show_base=False,
-       digits_config=DigitsConfig(
-          separator='~',
-          use_caps=False,
-          use_letters=True
-       ),
-       strip_config=StripConfig(
-          strip=False,
-          strip_exact=False,
-          strip_whole=True
-       )
-    ):
-        """
-        Initializer.
-
-        :param bool show_approx_str: distinguish approximate str values
-        :param bool show_base: True if base prefix to be prepended
-        :param DigitsConfig digits_config:
-        :param StripConfig strip_config:
-
-        There are only two base prefixes acknowledged, 0 for octal and 0x for
-        hexadecimal.
-        """
-        self.show_approx_str = show_approx_str
-        self.show_base = show_base
-        self.digits_config = digits_config
-        self.strip_config = strip_config
-
-    def __str__(self):
-        values = {
-           'show_approx_str' : self.show_approx_str,
-           'show_base' : self.show_base,
-           'digits_config' : self.digits_config,
-           'strip_config' : self.strip_config
-        }
-        return "DisplayConfig(%s)" % (self._FMT_STR % values)
-    __repr__ = __str__
+        super(DisplayConfig, self).__init__(
+           show_approx_str=show_approx_str,
+           base_config=base_config,
+           digits_config=digits_config,
+           strip_config=strip_config
+        )
 
 
 class ValueConfig(object):
@@ -207,6 +130,13 @@ class ValueConfig(object):
             :param rounding_method: one of RoundingMethods.METHODS()
         """
         # pylint: disable=too-many-arguments
+        if max_places is not None and max_places < 0:
+            raise RangeValueError(
+               max_places,
+               "max_places",
+               "must be an int at least 0"
+            )
+
         if min_value < 0 or \
            not isinstance(min_value, PRECISE_NUMERIC_TYPES):
             raise RangeValueError(
@@ -250,30 +180,9 @@ class ValueConfig(object):
 class RangeConfig(object):
     """ Configuration for :class:`Range` class. """
 
-    DISPLAY_CONFIG = DisplayConfig(
-       show_approx_str=True,
-       show_base=False,
-       digits_config=DigitsConfig(
-          separator='~',
-          use_caps=False,
-          use_letters=True
-       ),
-       strip_config=StripConfig(
-          strip=False,
-          strip_exact=False,
-          strip_whole=True
-       )
-    )
+    DISPLAY_CONFIG = DisplayConfig()
 
-    VALUE_CONFIG = ValueConfig(
-       max_places=2,
-       min_value=1,
-       binary_units=True,
-       exact_value=False,
-       unit=None,
-       base=10,
-       rounding_method=RoundingMethods.ROUND_HALF_ZERO
-    )
+    VALUE_CONFIG = ValueConfig()
     """ Default configuration for string display. """
 
     STRICT = False
@@ -287,7 +196,7 @@ class RangeConfig(object):
         """
         cls.DISPLAY_CONFIG = DisplayConfig(
             show_approx_str=config.show_approx_str,
-            show_base=config.show_base,
+            base_config=config.base_config,
             digits_config=config.digits_config,
             strip_config=config.strip_config
         )
