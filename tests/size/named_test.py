@@ -50,8 +50,6 @@ from justbytes._constants import UNITS
 
 from justbytes._errors import RangeValueError
 
-from justbases import BasesError
-
 from tests.utils import SIZE_STRATEGY
 
 class ConversionTestCase(unittest.TestCase):
@@ -176,7 +174,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         Test exceptions.
         """
-        with self.assertRaises(BasesError):
+        with self.assertRaises(RangeValueError):
             Range(0).getString(ValueConfig(base=100), RangeConfig.DISPLAY_CONFIG)
 
 

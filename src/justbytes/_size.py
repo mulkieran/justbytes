@@ -162,7 +162,12 @@ class Range(object):
         :raises: RangeValueError
         """
         (result, relation, units) = self.getStringInfo(config)
-        number = result.getString(display, relation)
+
+        try:
+            number = result.getString(display, relation)
+        except justbases.BasesError as e:
+            raise RangeValueError(display, "display", str(e))
+
         return "%s %s" % (number, units.abbr + self._BYTES_SYMBOL)
 
     def __str__(self):
