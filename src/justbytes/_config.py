@@ -185,7 +185,18 @@ class RangeConfig(object):
     VALUE_CONFIG = ValueConfig()
     """ Default configuration for string display. """
 
+    DISPLAY_IMPL = justbases.String
+
     STRICT = False
+
+    @classmethod
+    def set_display_impl(cls, impl):
+        """
+        Set display implementation.
+
+        :param type impl: the display implementation class
+        """
+        cls.DISPLAY_IMPL = impl
 
     @classmethod
     def set_display_config(cls, config):
