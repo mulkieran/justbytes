@@ -151,24 +151,31 @@ class Range(object):
         (result, relation) = self._as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config, display):
+    def getString(self, config, display, display_impl):
         """
         Return a string representation of the size.
 
         :param ValueConfig config: representation configuration
         :param DisplayConfig display: configuration for display
+        :param type display_impl: display implementation
         :returns: a string representation
         :rtype: str
-        :raises: RangeValueError
+        :raises RangeValueError: if configuration is not satisfiable
         """
+        try:
+            displayer = display_impl(display, config.base)
+        except Exception as err:
+            raise RangeValueError(display, "display", str(err))
+
         (result, relation, units) = self.getStringInfo(config)
-        number = result.getString(display, relation)
+        number = displayer.xform(result, relation)
         return "%s %s" % (number, units.abbr + self._BYTES_SYMBOL)
 
     def __str__(self):
         return self.getString(
            RangeConfig.VALUE_CONFIG,
-           RangeConfig.DISPLAY_CONFIG
+           RangeConfig.DISPLAY_CONFIG,
+           RangeConfig.DISPLAY_IMPL
         )
 
     def __repr__(self):
