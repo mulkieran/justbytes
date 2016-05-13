@@ -31,7 +31,7 @@ import six
 
 import justbases
 
-from ._config import RangeConfig
+from ._config import Config
 
 from ._errors import RangeFractionalResultError
 from ._errors import RangeNonsensicalBinOpError
@@ -127,7 +127,7 @@ class Range(object):
         else:
             raise RangeValueError(value, "value")
 
-        if RangeConfig.STRICT is True and magnitude.denominator != 1:
+        if Config.STRICT is True and magnitude.denominator != 1:
             raise RangeFractionalResultError()
         self._magnitude = magnitude
 
@@ -151,32 +151,21 @@ class Range(object):
         (result, relation) = self._as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config, display, display_impl):
+    def getString(self, config):
         """
         Return a string representation of the size.
 
-        :param ValueConfig config: representation configuration
-        :param DisplayConfig display: configuration for display
-        :param type display_impl: display implementation
+        :param StringConfig config: the configuration
         :returns: a string representation
         :rtype: str
         :raises RangeValueError: if configuration is not satisfiable
         """
-        try:
-            displayer = display_impl(display, config.base)
-        except Exception as err:
-            raise RangeValueError(display, "display", str(err))
-
-        (result, relation, units) = self.getStringInfo(config)
-        number = displayer.xform(result, relation)
+        (result, relation, units) = self.getStringInfo(config.VALUE_CONFIG)
+        number = config.DISPLAY_IMPL.xform(result, relation)
         return "%s %s" % (number, units.abbr + self._BYTES_SYMBOL)
 
     def __str__(self):
-        return self.getString(
-           RangeConfig.VALUE_CONFIG,
-           RangeConfig.DISPLAY_CONFIG,
-           RangeConfig.DISPLAY_IMPL
-        )
+        return self.getString(Config.STRING_CONFIG)
 
     def __repr__(self):
         """
@@ -441,7 +430,7 @@ class Range(object):
         for unit in [B] + units.UNITS():
             yield (self.convertTo(unit), unit)
 
-    def components(self, config=RangeConfig.VALUE_CONFIG):
+    def components(self, config=Config.STRING_CONFIG.VALUE_CONFIG):
         """ Return a representation of this size, decomposed into a
             Fraction value and a unit specifier tuple.
 

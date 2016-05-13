@@ -38,9 +38,10 @@ from justbytes import ROUND_TO_ZERO
 from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
 from justbytes import BaseConfig
+from justbytes import Config
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
-from justbytes import RangeConfig
+from justbytes import StringConfig
 from justbytes import StripConfig
 from justbytes import ValueConfig
 
@@ -131,9 +132,11 @@ class DisplayConfigTestCase(unittest.TestCase):
         Test properties of configuration.
         """
         result = a_size.getString(
-           ValueConfig(base=base),
-           config,
-           RangeConfig.DISPLAY_IMPL
+           StringConfig(
+              ValueConfig(base=base),
+              config,
+              Config.STRING_CONFIG.DISPLAY_IMPL_CLASS
+           )
         )
 
         if config.base_config.use_prefix and base == 16:
@@ -159,9 +162,11 @@ class DigitsConfigTestCase(unittest.TestCase):
         Test some basic configurations.
         """
         result = a_size.getString(
-           RangeConfig.VALUE_CONFIG,
-           DisplayConfig(digits_config=config),
-           RangeConfig.DISPLAY_IMPL
+           StringConfig(
+              Config.STRING_CONFIG.VALUE_CONFIG,
+              DisplayConfig(digits_config=config),
+              Config.STRING_CONFIG.DISPLAY_IMPL_CLASS
+           )
         )
         if config.use_letters:
             (number, _, _) = result.partition(' ')
@@ -181,9 +186,11 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         with self.assertRaises(RangeValueError):
             Range(0).getString(
-               ValueConfig(base=100),
-               RangeConfig.DISPLAY_CONFIG,
-               RangeConfig.DISPLAY_IMPL
+               StringConfig(
+                  ValueConfig(base=100),
+                  Config.STRING_CONFIG.DISPLAY_CONFIG,
+                  Config.STRING_CONFIG.DISPLAY_IMPL_CLASS
+               )
             )
 
 

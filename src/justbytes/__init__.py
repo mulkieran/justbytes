@@ -118,9 +118,10 @@ from ._constants import ROUNDING_METHODS
 
 # CONFIGURATION
 from ._config import BaseConfig
+from ._config import Config
 from ._config import DigitsConfig
 from ._config import DisplayConfig
-from ._config import RangeConfig
+from ._config import StringConfig
 from ._config import StripConfig
 from ._config import ValueConfig
 
