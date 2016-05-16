@@ -38,9 +38,10 @@ from justbytes import ROUND_TO_ZERO
 from justbytes import ROUND_UP
 from justbytes import ROUNDING_METHODS
 from justbytes import BaseConfig
+from justbytes import Config
 from justbytes import DigitsConfig
 from justbytes import DisplayConfig
-from justbytes import RangeConfig
+from justbytes import StringConfig
 from justbytes import StripConfig
 from justbytes import ValueConfig
 
@@ -49,8 +50,6 @@ from justbytes._constants import DecimalUnits
 from justbytes._constants import UNITS
 
 from justbytes._errors import RangeValueError
-
-from justbases import BasesError
 
 from tests.utils import SIZE_STRATEGY
 
@@ -132,7 +131,13 @@ class DisplayConfigTestCase(unittest.TestCase):
         """
         Test properties of configuration.
         """
-        result = a_size.getString(ValueConfig(base=base), config)
+        result = a_size.getString(
+           StringConfig(
+              ValueConfig(base=base),
+              config,
+              Config.STRING_CONFIG.DISPLAY_IMPL_CLASS
+           )
+        )
 
         if config.base_config.use_prefix and base == 16:
             self.assertNotEqual(result.find('0x'), -1)
@@ -157,8 +162,11 @@ class DigitsConfigTestCase(unittest.TestCase):
         Test some basic configurations.
         """
         result = a_size.getString(
-           RangeConfig.VALUE_CONFIG,
-           DisplayConfig(digits_config=config)
+           StringConfig(
+              Config.STRING_CONFIG.VALUE_CONFIG,
+              DisplayConfig(digits_config=config),
+              Config.STRING_CONFIG.DISPLAY_IMPL_CLASS
+           )
         )
         if config.use_letters:
             (number, _, _) = result.partition(' ')
@@ -176,8 +184,14 @@ class DigitsConfigTestCase(unittest.TestCase):
         """
         Test exceptions.
         """
-        with self.assertRaises(BasesError):
-            Range(0).getString(ValueConfig(base=100), RangeConfig.DISPLAY_CONFIG)
+        with self.assertRaises(RangeValueError):
+            Range(0).getString(
+               StringConfig(
+                  ValueConfig(base=100),
+                  Config.STRING_CONFIG.DISPLAY_CONFIG,
+                  Config.STRING_CONFIG.DISPLAY_IMPL_CLASS
+               )
+            )
 
 
 class RoundingTestCase(unittest.TestCase):

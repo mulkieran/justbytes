@@ -23,8 +23,8 @@ from hypothesis import given
 from hypothesis import settings
 from hypothesis import strategies
 
+from justbytes._config import Config
 from justbytes._config import DisplayConfig
-from justbytes._config import RangeConfig
 from justbytes._config import ValueConfig
 
 from justbytes._constants import UNITS
@@ -38,7 +38,7 @@ class ConfigTestCase(unittest.TestCase):
 
     def testValueConfigObject(self):
         """ Miscellaneous tests for string configuration. """
-        self.assertIsInstance(str(RangeConfig.VALUE_CONFIG), str)
+        self.assertIsInstance(str(Config.STRING_CONFIG.VALUE_CONFIG), str)
 
     def testException(self):
         """ Test exceptions. """
@@ -59,12 +59,12 @@ class RangeTestCase(unittest.TestCase):
     # pylint: disable=too-few-public-methods
 
     def setUp(self):
-        self.display_config = RangeConfig.DISPLAY_CONFIG
-        self.str_config = RangeConfig.VALUE_CONFIG
+        self.display_config = Config.STRING_CONFIG.DISPLAY_CONFIG
+        self.str_config = Config.STRING_CONFIG.VALUE_CONFIG
 
     def tearDown(self):
-        RangeConfig.DISPLAY_CONFIG = self.display_config
-        RangeConfig.VALUE_CONFIG = self.str_config
+        Config.STRING_CONFIG.DISPLAY_CONFIG = self.display_config
+        Config.STRING_CONFIG.VALUE_CONFIG = self.str_config
 
     @given(
        strategies.builds(
@@ -75,8 +75,8 @@ class RangeTestCase(unittest.TestCase):
     @settings(max_examples=30)
     def testSettingDisplayConfig(self, config):
         """ Test that new str config is the correct one. """
-        RangeConfig.set_display_config(config)
-        self.assertEqual(str(config), str(RangeConfig.DISPLAY_CONFIG))
+        Config.set_display_config(config)
+        self.assertEqual(str(config), str(Config.STRING_CONFIG.DISPLAY_CONFIG))
 
     @given(
        strategies.builds(
@@ -91,5 +91,5 @@ class RangeTestCase(unittest.TestCase):
     @settings(max_examples=30)
     def testSettingValueConfig(self, config):
         """ Test that new str config is the correct one. """
-        RangeConfig.set_value_config(config)
-        self.assertEqual(str(config), str(RangeConfig.VALUE_CONFIG))
+        Config.set_value_config(config)
+        self.assertEqual(str(config), str(Config.STRING_CONFIG.VALUE_CONFIG))

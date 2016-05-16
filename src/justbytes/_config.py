@@ -177,15 +177,51 @@ class ValueConfig(object):
     __repr__ = __str__
 
 
-class RangeConfig(object):
+class StringConfig(object):
     """ Configuration for :class:`Range` class. """
+    # pylint: disable=too-few-public-methods
 
-    DISPLAY_CONFIG = DisplayConfig()
+    def __init__(self, value_config, display_config, display_impl):
+        """
+        Initializer.
 
-    VALUE_CONFIG = ValueConfig()
-    """ Default configuration for string display. """
+        :param ValueConfig value_config: the value configuration
+        :param DisplayConfig display_config: the display configuration
+        :param type display_impl: display implementation class
+        :raises RangeValueError: if configuration and implementation can't work
+        """
+        try:
+            self.DISPLAY_IMPL = display_impl(display_config, value_config.base)
+        except justbases.BasesError as err:
+            raise RangeValueError(display_config, "display_config", str(err))
+
+        self.DISPLAY_IMPL_CLASS = display_impl
+        self.VALUE_CONFIG = value_config
+        self.DISPLAY_CONFIG = display_config
+
+
+class Config(object):
+    """
+    The super top-level configuration class for ranges.
+    """
+
+    STRING_CONFIG = \
+       StringConfig(ValueConfig(), DisplayConfig(), justbases.String)
 
     STRICT = False
+
+    @classmethod
+    def set_display_impl(cls, impl): # pragma: no cover
+        """
+        Set display implementation.
+
+        :param type impl: the display implementation class
+        """
+        cls.STRING_CONFIG = StringConfig(
+           cls.STRING_CONFIG.VALUE_CONFIG,
+           cls.STRING_CONFIG.DISPLAY_CONFIG,
+           impl
+        )
 
     @classmethod
     def set_display_config(cls, config):
@@ -194,11 +230,10 @@ class RangeConfig(object):
 
         :param DisplayConfig config: a configuration object
         """
-        cls.DISPLAY_CONFIG = DisplayConfig(
-            show_approx_str=config.show_approx_str,
-            base_config=config.base_config,
-            digits_config=config.digits_config,
-            strip_config=config.strip_config
+        cls.STRING_CONFIG = StringConfig(
+           cls.STRING_CONFIG.VALUE_CONFIG,
+           config,
+           cls.STRING_CONFIG.DISPLAY_IMPL_CLASS
         )
 
     @classmethod
@@ -208,12 +243,8 @@ class RangeConfig(object):
 
         :param :class:`ValueConfig` config: a configuration object
         """
-        cls.VALUE_CONFIG = ValueConfig(
-            base=config.base,
-            binary_units=config.binary_units,
-            max_places=config.max_places,
-            min_value=config.min_value,
-            exact_value=config.exact_value,
-            rounding_method=config.rounding_method,
-            unit=config.unit
+        cls.STRING_CONFIG = StringConfig(
+           config,
+           cls.STRING_CONFIG.DISPLAY_CONFIG,
+           cls.STRING_CONFIG.DISPLAY_IMPL_CLASS
         )

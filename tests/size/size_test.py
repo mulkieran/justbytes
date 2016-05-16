@@ -34,7 +34,7 @@ from justbytes import DisplayConfig
 from justbytes import ValueConfig
 from justbytes import StripConfig
 
-from justbytes._config import RangeConfig
+from justbytes._config import Config
 
 from justbytes._errors import RangeFractionalResultError
 from justbytes._errors import RangeValueError
@@ -149,17 +149,17 @@ class ConfigurationTestCase(unittest.TestCase):
 
     def setUp(self):
         """ Get current config. """
-        self.str_config = RangeConfig.VALUE_CONFIG
-        self.display_config = RangeConfig.DISPLAY_CONFIG
+        self.str_config = Config.STRING_CONFIG.VALUE_CONFIG
+        self.display_config = Config.STRING_CONFIG.DISPLAY_CONFIG
 
     def tearDown(self):
         """ Reset configuration to default. """
-        RangeConfig.set_value_config(self.str_config)
-        RangeConfig.set_display_config(self.display_config)
+        Config.set_value_config(self.str_config)
+        Config.set_display_config(self.display_config)
 
     def testValueConfigs(self):
         """ Test str with various configuration options. """
-        RangeConfig.set_display_config(
+        Config.set_display_config(
            DisplayConfig(
               strip_config=StripConfig(strip=True)
            )
@@ -200,8 +200,8 @@ class ConfigurationTestCase(unittest.TestCase):
         # so the trailing 0s are stripped.
         self.assertEqual(str(s), "< 64 KiB")
 
-        RangeConfig.set_value_config(ValueConfig(max_places=3))
-        RangeConfig.set_display_config(
+        Config.set_value_config(ValueConfig(max_places=3))
+        Config.set_display_config(
            DisplayConfig(
               strip_config=StripConfig(strip=True)
            )
@@ -209,8 +209,8 @@ class ConfigurationTestCase(unittest.TestCase):
         s = Range('23.7874', TiB)
         self.assertEqual(str(s), "> 23.787 TiB")
 
-        RangeConfig.set_value_config(ValueConfig(min_value=10))
-        RangeConfig.set_display_config(
+        Config.set_value_config(ValueConfig(min_value=10))
+        Config.set_display_config(
            DisplayConfig(
               strip_config=StripConfig(strip=True)
            )
@@ -219,8 +219,8 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(s), ("8193 B"))
 
         # if max_places is set to None, all digits are displayed
-        RangeConfig.set_value_config(ValueConfig(max_places=None))
-        RangeConfig.set_display_config(
+        Config.set_value_config(ValueConfig(max_places=None))
+        Config.set_display_config(
            DisplayConfig(
               strip_config=StripConfig(strip=True)
            )
@@ -235,8 +235,8 @@ class ConfigurationTestCase(unittest.TestCase):
         s = Range(0x10001)
         self.assertEqual(str(s), "64.0009765625 KiB")
 
-        RangeConfig.set_value_config(ValueConfig(max_places=2))
-        RangeConfig.set_display_config(
+        Config.set_value_config(ValueConfig(max_places=2))
+        Config.set_display_config(
            DisplayConfig(
               strip_config=StripConfig(strip=False)
            )
@@ -249,7 +249,7 @@ class ConfigurationTestCase(unittest.TestCase):
 
     def testStrWithSmallDeviations(self):
         """ Behavior when deviation from whole value is small. """
-        RangeConfig.set_display_config(
+        Config.set_display_config(
            DisplayConfig(
               strip_config=StripConfig(strip=True)
            )
@@ -279,16 +279,16 @@ class ComputationTestCase(unittest.TestCase):
 
     def setUp(self):
         """ Get current config. """
-        self.strict = RangeConfig.STRICT
+        self.strict = Config.STRICT
 
     def tearDown(self):
         """ Reset configuration to default. """
-        RangeConfig.STRICT = self.strict
+        Config.STRICT = self.strict
 
     def testFractionalBytes(self):
         """
         Test that error is raised on fractional bytes when EXACT is True.
         """
-        RangeConfig.STRICT = True
+        Config.STRICT = True
         with self.assertRaises(RangeFractionalResultError):
             Range(Fraction(1, 2))
