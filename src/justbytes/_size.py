@@ -47,7 +47,7 @@ from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
 from ._util.generators import next_or_last
-from ._util.generators import take_until_satisfied
+from ._util.generators import takeuntil
 
 
 class Range(object):
@@ -454,8 +454,7 @@ class Range(object):
         # requirement use the largest prefix.
         limit = units.FACTOR * Fraction(config.min_value)
         components = self.componentsList(binary_units=config.binary_units)
-        candidates = \
-           list(take_until_satisfied(lambda x: abs(x[0]) < limit, components))
+        candidates = list(takeuntil(lambda x: abs(x[0]) < limit, components))
 
         if config.exact_value:
             return next_or_last(
