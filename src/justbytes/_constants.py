@@ -31,6 +31,8 @@ import six
 
 import justbases
 
+from ._errors import RangeValueError
+
 RoundingMethods = justbases.RoundingMethods
 
 
@@ -73,12 +75,44 @@ class Units(object):
 
     _UNITS = abc.abstractproperty(doc="ordered list of units")
 
+    _MAX_EXPONENT = None
+
     @classmethod
     def UNITS(cls):
         """
         Units of this class.
         """
         return cls._UNITS[:]
+
+    @classmethod
+    def unit_for_exp(cls, exponent):
+        """
+        Get the unit for the given exponent.
+
+        :param int exponent: the exponent, 0 <= exponent < len(UNITS())
+        """
+        if exponent < 0 or exponent > cls.max_exponent():
+            raise RangeValueError(
+                exponent,
+                "exponent",
+                "no corresponding unit"
+            )
+        if exponent == 0:
+            return B
+
+        return cls._UNITS[exponent - 1]
+
+    @classmethod
+    def max_exponent(cls):
+        """
+        The maximum exponent for which there is a unit.
+
+        :returns: the maximum exponent
+        :rtype: int
+        """
+        if cls._MAX_EXPONENT is None:
+            cls._MAX_EXPONENT = len(cls._UNITS)
+        return cls._MAX_EXPONENT
 
 
 class DecimalUnits(Units):
