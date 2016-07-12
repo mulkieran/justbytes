@@ -153,7 +153,7 @@ class DivmodTestCase(unittest.TestCase):
             divmod(Range(12), Range(0))
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             divmod(Range(12), 0)
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             divmod(Range(12), Decimal('NaN'))
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
@@ -185,7 +185,7 @@ class FloordivTestCase(unittest.TestCase):
             Range(12) // Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) // 0
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             Range(12) // Decimal('NaN')
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
@@ -215,7 +215,7 @@ class ModTestCase(unittest.TestCase):
             Range(12) % Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) % 0
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             Range(12) % Decimal('NaN')
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
@@ -384,7 +384,7 @@ class TruedivTestCase(unittest.TestCase):
             Range(12) / Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) / 0
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             Range(12) / Decimal('NaN')
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))

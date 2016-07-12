@@ -24,8 +24,7 @@ from justbytes import UNITS
 
 NUMBERS_STRATEGY = strategies.one_of(
    strategies.integers(),
-   strategies.fractions().map(lambda x: x.limit_denominator(100)),
-   strategies.decimals().filter(lambda x: x.is_finite()),
+   strategies.fractions().map(lambda x: x.limit_denominator(100))
 )
 
 SIZE_STRATEGY = strategies.builds(

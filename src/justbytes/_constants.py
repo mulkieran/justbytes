@@ -23,10 +23,10 @@
      * Size units, e.g., Ki, Mi
 """
 
-from decimal import Decimal
+import abc
+
 from numbers import Rational
 
-import abc
 import six
 
 import justbases
@@ -158,6 +158,6 @@ def UNITS():
 
 ROUNDING_METHODS = RoundingMethods.METHODS
 
-PRECISE_NUMERIC_TYPES = tuple(list(six.integer_types) + [Decimal, Rational])
+PRECISE_NUMERIC_TYPES = tuple(list(six.integer_types) + [Rational])
 
 UNIT_TYPES = tuple(list(PRECISE_NUMERIC_TYPES) + [Unit])

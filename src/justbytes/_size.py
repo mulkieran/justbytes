@@ -87,10 +87,7 @@ class Range(object):
         if not isinstance(unit, UNIT_TYPES) and  not isinstance(unit, Range):
             return None
         factor = getattr(unit, 'factor', getattr(unit, 'magnitude', None))
-        try:
-            return Fraction(factor if factor is not None else unit)
-        except (ValueError, TypeError):
-            return None
+        return Fraction(factor if factor is not None else unit)
 
     def __init__(self, value=0, units=None):
         """ Initialize a new Range object.
@@ -232,7 +229,7 @@ class Range(object):
             try:
                 (div, rem) = divmod(self._magnitude, Fraction(other))
                 return (Range(div), Range(rem))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError("divmod", other)
         raise RangeNonsensicalBinOpError("divmod", other)
 
@@ -265,7 +262,7 @@ class Range(object):
         if isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude.__floordiv__(Fraction(other)))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError("floordiv", other)
         raise RangeNonsensicalBinOpError("floordiv", other)
 
@@ -310,7 +307,7 @@ class Range(object):
         if isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude % Fraction(other))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError('%', other)
         raise RangeNonsensicalBinOpError("%", other)
 
@@ -321,17 +318,14 @@ class Range(object):
             raise RangeNonsensicalBinOpError("rmod", other)
         try:
             return Range(other.magnitude % Fraction(self._magnitude))
-        except (TypeError, ValueError, ZeroDivisionError):
+        except ZeroDivisionError:
             raise RangeNonsensicalBinOpValueError("rmod", other)
 
     def __mul__(self, other):
         # self * other = mul
         # Therefore, T(mul) = Range and T(other) is a numeric type.
         if isinstance(other, PRECISE_NUMERIC_TYPES):
-            try:
-                return Range(self._magnitude * Fraction(other))
-            except (TypeError, ValueError):
-                raise RangeNonsensicalBinOpError("*", other)
+            return Range(self._magnitude * Fraction(other))
         if isinstance(other, Range):
             raise RangePowerResultError()
         raise RangeNonsensicalBinOpError("*", other)
@@ -377,7 +371,7 @@ class Range(object):
         elif isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude.__truediv__(Fraction(other)))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError("truediv", other)
         raise RangeNonsensicalBinOpError("truediv", other)
 
