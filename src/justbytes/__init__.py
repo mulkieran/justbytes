@@ -59,6 +59,7 @@
 
     * Exception classes:
        - RangeError: :class:`._errors.RangeError`
+       - RangeValueError: :class:`._errors.RangeValueError`
 
     * Range classes:
        - Range: :class:`._size.Range`
@@ -127,6 +128,7 @@ from ._config import ValueConfig
 
 # EXCEPTIONS
 from ._errors import RangeError
+from ._errors import RangeValueError
 
 # SIZE
 from ._size import Range

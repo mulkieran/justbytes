@@ -19,7 +19,7 @@
 """ Special purpose generators. """
 
 
-def take_until_satisfied(pred, seq):
+def takeuntil(pred, seq):
     """
     Like next(), but yields all values until the first matching value.
 

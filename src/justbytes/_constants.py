@@ -26,9 +26,12 @@
 from decimal import Decimal
 from numbers import Rational
 
+import abc
 import six
 
 import justbases
+
+from ._errors import RangeValueError
 
 RoundingMethods = justbases.RoundingMethods
 
@@ -60,7 +63,59 @@ class Unit(object):
 B = Unit(1, "", "")
 """ The universal unit, bytes. """
 
-class DecimalUnits(object):
+
+@six.add_metaclass(abc.ABCMeta)
+class Units(object):
+    """
+    Generic class for units.
+    """
+    # pylint: disable=too-few-public-methods
+
+    FACTOR = abc.abstractproperty(doc="factor for each unit")
+
+    _UNITS = abc.abstractproperty(doc="ordered list of units")
+
+    _MAX_EXPONENT = None
+
+    @classmethod
+    def UNITS(cls):
+        """
+        Units of this class.
+        """
+        return cls._UNITS[:]
+
+    @classmethod
+    def unit_for_exp(cls, exponent):
+        """
+        Get the unit for the given exponent.
+
+        :param int exponent: the exponent, 0 <= exponent < len(UNITS())
+        """
+        if exponent < 0 or exponent > cls.max_exponent():
+            raise RangeValueError(
+                exponent,
+                "exponent",
+                "no corresponding unit"
+            )
+        if exponent == 0:
+            return B
+
+        return cls._UNITS[exponent - 1]
+
+    @classmethod
+    def max_exponent(cls):
+        """
+        The maximum exponent for which there is a unit.
+
+        :returns: the maximum exponent
+        :rtype: int
+        """
+        if cls._MAX_EXPONENT is None:
+            cls._MAX_EXPONENT = len(cls._UNITS)
+        return cls._MAX_EXPONENT
+
+
+class DecimalUnits(Units):
     """ Class to store decimal unit constants. """
     # pylint: disable=invalid-name
     # pylint: disable=too-few-public-methods
@@ -78,12 +133,8 @@ class DecimalUnits(object):
 
     _UNITS = [KB, MB, GB, TB, PB, EB, ZB, YB]
 
-    @classmethod
-    def UNITS(cls):
-        """ Units of this class. """
-        return cls._UNITS[:]
 
-class BinaryUnits(object):
+class BinaryUnits(Units):
     """ Class to store binary unit constants. """
     # pylint: disable=too-few-public-methods
 
@@ -100,10 +151,6 @@ class BinaryUnits(object):
 
     _UNITS = [KiB, MiB, GiB, TiB, PiB, EiB, ZiB, YiB]
 
-    @classmethod
-    def UNITS(cls):
-        """ Units of this class. """
-        return cls._UNITS[:]
 
 def UNITS():
     """ All unit constants. """

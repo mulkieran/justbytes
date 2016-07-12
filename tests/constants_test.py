@@ -19,11 +19,16 @@
 """ Test for constants classes. """
 import unittest
 
+from hypothesis import given
+from hypothesis import strategies
+
 from justbytes._constants import B
 from justbytes._constants import BinaryUnits
 from justbytes._constants import DecimalUnits
 from justbytes._constants import RoundingMethods
 from justbytes._constants import UNITS
+
+from justbytes._errors import RangeValueError
 
 
 class ConstantsTestCase(unittest.TestCase):
@@ -43,3 +48,31 @@ class ConstantsTestCase(unittest.TestCase):
         self.assertTrue(set(DecimalUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(set(BinaryUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(B in UNITS())
+
+    @given(
+       strategies.integers(
+          min_value=0,
+          max_value=BinaryUnits.max_exponent()
+       ),
+       strategies.integers(
+          min_value=0,
+          max_value=DecimalUnits.max_exponent()
+       )
+    )
+    def testExpMethod(self, bexp, dexp):
+        """ Test extracting unit for a given exponent. """
+        self.assertEqual(
+           BinaryUnits.unit_for_exp(bexp).factor,
+           BinaryUnits.FACTOR ** bexp
+        )
+        self.assertEqual(
+           DecimalUnits.unit_for_exp(dexp).factor,
+           DecimalUnits.FACTOR ** dexp
+        )
+
+    def testExpExceptions(self):
+        """
+        Test that exceptions are properly raised.
+        """
+        with self.assertRaises(RangeValueError):
+            DecimalUnits.unit_for_exp(-1)
