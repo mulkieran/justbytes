@@ -43,7 +43,6 @@ from ._constants import B
 from ._constants import BinaryUnits
 from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
-from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
 from ._util.generators import next_or_last
@@ -169,18 +168,9 @@ class Range(object):
 
     def __repr__(self):
         """
-        Displaying value to arbitrary precision could be time consuming.
-
-        Instead, explicitly round to nearest integer, and display relation.
-
-        Usually, the magnitude will be an integer.
+        Use actual Fraction magnitude in result.
         """
-        (value, _) = \
-           justbases.Rationals.round_to_int(
-              self._magnitude,
-              RoundingMethods.ROUND_HALF_ZERO
-           )
-        return "Range(%s)" % value
+        return "Range(%r)" % self._magnitude
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument
