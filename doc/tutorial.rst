@@ -33,6 +33,10 @@ and also by parameters to the getString() method::
     >>> size.getString(ValueConfig(min_value=10), RangeConfig.DISPLAY_CONFIG)
     '8192 MiB'
 
+.. warning:: Avoid specifying an unbounded number of digits after the radix.
+For certain pathological values, the number of digits may be very large, and
+the computations required to calculate all those digits may be time-consuming.
+
 Arithmetic
 ----------
 Various arithmetic operations on Range objects are available::
