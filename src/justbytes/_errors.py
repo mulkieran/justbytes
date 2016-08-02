@@ -44,16 +44,16 @@ class RangeValueError(RangeError):
             :param str msg: an explanatory message
         """
         # pylint: disable=super-init-not-called
-        self._value = value
-        self._param = param
-        self._msg = msg
+        self.value = value
+        self.param = param
+        self.msg = msg
 
     def __str__(self):
-        if self._msg:
+        if self.msg:
             fmt_str = self._FMT_STR + ": %s"
-            return fmt_str % (self._value, self._param, self._msg)
+            return fmt_str % (self.value, self.param, self.msg)
         else:
-            return self._FMT_STR % (self._value, self._param)
+            return self._FMT_STR % (self.value, self.param)
 
 @add_metaclass(abc.ABCMeta)
 class RangeUnsupportedOpError(RangeError):

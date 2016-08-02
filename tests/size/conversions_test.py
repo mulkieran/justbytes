@@ -19,7 +19,6 @@
 """ Tests for operations on Range objects. """
 
 import copy
-import re
 
 import unittest
 
@@ -68,13 +67,10 @@ class ConversionTestCase(unittest.TestCase):
           strategies.sampled_from(UNITS())
        )
     )
-    @settings(max_examples=5)
+    @settings(max_examples=50)
     def testRepr(self, value):
         """ Test that repr looks right. """
-        regex = re.compile(r"Range\((?P<val>-?[0-9]+)\)")
-        match = re.match(regex, "%r" % value)
-        self.assertIsNotNone(match)
-        self.assertEqual(int(match.group('val')), int(value))
+        self.assertEqual("%r" % value, "Range(%r)" % value.magnitude)
 
     def testDeepCopy(self):
         """ Test that deepcopy is different but equal. """

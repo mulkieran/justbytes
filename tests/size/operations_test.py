@@ -112,14 +112,6 @@ class UtilityMethodsTestCase(unittest.TestCase):
         self.assertEqual(abs(s), s)
         self.assertEqual(abs(Range(-32, TiB)), Range(32, TiB))
 
-    def testOtherMethods(self):
-        """ Test miscellaneous non-operator methods. """
-
-
-        self.assertEqual(repr(Range(0)), "Range(0)")
-        self.assertEqual(repr(Range(1024)), "Range(1024)")
-        self.assertEqual(repr(Range("1024.1")), "Range(1024)")
-
 
 class AdditionTestCase(unittest.TestCase):
     """ Test addition. """
@@ -153,7 +145,7 @@ class DivmodTestCase(unittest.TestCase):
             divmod(Range(12), Range(0))
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             divmod(Range(12), 0)
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             divmod(Range(12), Decimal('NaN'))
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
@@ -185,7 +177,7 @@ class FloordivTestCase(unittest.TestCase):
             Range(12) // Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) // 0
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             Range(12) // Decimal('NaN')
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
@@ -215,7 +207,7 @@ class ModTestCase(unittest.TestCase):
             Range(12) % Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) % 0
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             Range(12) % Decimal('NaN')
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
@@ -384,7 +376,7 @@ class TruedivTestCase(unittest.TestCase):
             Range(12) / Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) / 0
-        with self.assertRaises(RangeNonsensicalBinOpValueError):
+        with self.assertRaises(RangeNonsensicalBinOpError):
             Range(12) / Decimal('NaN')
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))

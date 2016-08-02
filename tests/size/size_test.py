@@ -20,7 +20,6 @@
 
 import unittest
 
-from decimal import Decimal
 from fractions import Fraction
 
 from justbytes import Range
@@ -104,11 +103,11 @@ class DisplayTestCase(unittest.TestCase):
            (Fraction(512, 1), MiB)
         )
         self.assertEqual(
-           s.components(ValueConfig(min_value=Decimal("0.1"))),
+           s.components(ValueConfig(min_value=Fraction(1, 10))),
            (Fraction(1, 2), GiB)
         )
         self.assertEqual(
-           s.components(ValueConfig(min_value=Decimal(1))),
+           s.components(ValueConfig(min_value=1)),
            (Fraction(512, 1), MiB)
         )
 
@@ -181,7 +180,7 @@ class ConfigurationTestCase(unittest.TestCase):
 
         # a fractional quantity is shown if the value deviates
         # from the whole number of units by more than 1%
-        s = Range(16384 - (Decimal(1024)/100 + 1))
+        s = Range(16384 - (Fraction(1024)/100 + 1))
         self.assertEqual(str(s), "< 15.99 KiB")
 
         # test a very large quantity with no associated abbreviation or prefix
@@ -255,7 +254,7 @@ class ConfigurationTestCase(unittest.TestCase):
            )
         )
 
-        eps = Decimal(1024)/100/2 # 1/2 of 1% of 1024
+        eps = 1024 * Fraction(1, 100) * Fraction(1, 2)
 
         # deviation is less than 1/2 of 1% of 1024
         s = Range(16384 - (eps - 1))

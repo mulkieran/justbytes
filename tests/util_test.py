@@ -25,7 +25,7 @@ from hypothesis import settings
 from hypothesis import strategies
 
 from justbytes._util.generators import next_or_last
-from justbytes._util.generators import take_until_satisfied
+from justbytes._util.generators import takeuntil
 
 
 class NextTestCase(unittest.TestCase):
@@ -58,7 +58,7 @@ class NextTestCase(unittest.TestCase):
 
 class TakeTestCase(unittest.TestCase):
     """
-    Test take_until_satisfied.
+    Test takeuntil.
     """
 
     @given(strategies.lists(strategies.integers()))
@@ -68,7 +68,7 @@ class TakeTestCase(unittest.TestCase):
         Test results when none are sastifactory.
         """
         self.assertEqual(
-           list(take_until_satisfied(lambda x: False, value)),
+           list(takeuntil(lambda x: False, value)),
            value
         )
 
@@ -79,6 +79,6 @@ class TakeTestCase(unittest.TestCase):
         Test results when all are satisfactory.
         """
         self.assertEqual(
-           list(take_until_satisfied(lambda x: True, value)),
+           list(takeuntil(lambda x: True, value)),
            value[:1]
         )

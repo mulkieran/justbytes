@@ -43,11 +43,10 @@ from ._constants import B
 from ._constants import BinaryUnits
 from ._constants import DecimalUnits
 from ._constants import PRECISE_NUMERIC_TYPES
-from ._constants import RoundingMethods
 from ._constants import UNIT_TYPES
 
 from ._util.generators import next_or_last
-from ._util.generators import take_until_satisfied
+from ._util.generators import takeuntil
 
 
 class Range(object):
@@ -87,10 +86,7 @@ class Range(object):
         if not isinstance(unit, UNIT_TYPES) and  not isinstance(unit, Range):
             return None
         factor = getattr(unit, 'factor', getattr(unit, 'magnitude', None))
-        try:
-            return Fraction(factor if factor is not None else unit)
-        except (ValueError, TypeError):
-            return None
+        return Fraction(factor if factor is not None else unit)
 
     def __init__(self, value=0, units=None):
         """ Initialize a new Range object.
@@ -169,18 +165,9 @@ class Range(object):
 
     def __repr__(self):
         """
-        Displaying value to arbitrary precision could be time consuming.
-
-        Instead, explicitly round to nearest integer, and display relation.
-
-        Usually, the magnitude will be an integer.
+        Use actual Fraction magnitude in result.
         """
-        (value, _) = \
-           justbases.Rationals.round_to_int(
-              self._magnitude,
-              RoundingMethods.ROUND_HALF_ZERO
-           )
-        return "Range(%s)" % value
+        return "Range(%r)" % self._magnitude
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument
@@ -232,7 +219,7 @@ class Range(object):
             try:
                 (div, rem) = divmod(self._magnitude, Fraction(other))
                 return (Range(div), Range(rem))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError("divmod", other)
         raise RangeNonsensicalBinOpError("divmod", other)
 
@@ -265,7 +252,7 @@ class Range(object):
         if isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude.__floordiv__(Fraction(other)))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError("floordiv", other)
         raise RangeNonsensicalBinOpError("floordiv", other)
 
@@ -310,7 +297,7 @@ class Range(object):
         if isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude % Fraction(other))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError('%', other)
         raise RangeNonsensicalBinOpError("%", other)
 
@@ -321,17 +308,14 @@ class Range(object):
             raise RangeNonsensicalBinOpError("rmod", other)
         try:
             return Range(other.magnitude % Fraction(self._magnitude))
-        except (TypeError, ValueError, ZeroDivisionError):
+        except ZeroDivisionError:
             raise RangeNonsensicalBinOpValueError("rmod", other)
 
     def __mul__(self, other):
         # self * other = mul
         # Therefore, T(mul) = Range and T(other) is a numeric type.
         if isinstance(other, PRECISE_NUMERIC_TYPES):
-            try:
-                return Range(self._magnitude * Fraction(other))
-            except (TypeError, ValueError):
-                raise RangeNonsensicalBinOpError("*", other)
+            return Range(self._magnitude * Fraction(other))
         if isinstance(other, Range):
             raise RangePowerResultError()
         raise RangeNonsensicalBinOpError("*", other)
@@ -377,7 +361,7 @@ class Range(object):
         elif isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude.__truediv__(Fraction(other)))
-            except (TypeError, ValueError, ZeroDivisionError):
+            except ZeroDivisionError:
                 raise RangeNonsensicalBinOpValueError("truediv", other)
         raise RangeNonsensicalBinOpError("truediv", other)
 
@@ -454,8 +438,7 @@ class Range(object):
         # requirement use the largest prefix.
         limit = units.FACTOR * Fraction(config.min_value)
         components = self.componentsList(binary_units=config.binary_units)
-        candidates = \
-           list(take_until_satisfied(lambda x: abs(x[0]) < limit, components))
+        candidates = list(takeuntil(lambda x: abs(x[0]) < limit, components))
 
         if config.exact_value:
             return next_or_last(

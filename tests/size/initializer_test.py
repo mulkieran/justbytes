@@ -60,7 +60,6 @@ class InitializerTestCase(unittest.TestCase):
        strategies.one_of(
           strategies.integers(),
           strategies.fractions(),
-          strategies.decimals().filter(lambda x: x.is_finite()),
           strategies.builds(
              str,
              strategies.decimals().filter(lambda x: x.is_finite())
@@ -70,7 +69,6 @@ class InitializerTestCase(unittest.TestCase):
           strategies.sampled_from(UNITS()),
           strategies.builds(Range, strategies.fractions()),
           strategies.fractions(),
-          strategies.decimals().filter(lambda x: x.is_finite())
        )
     )
     @settings(max_examples=50)
