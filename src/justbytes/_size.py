@@ -20,9 +20,9 @@
 
     Contains a few documented methods and a number of __*__ methods
     implementing arithmetic operations. Precise numeric types
-    such as int and Decimal may also occur in some arithmetic expressions,
-    but all occurrances of floating point numbers in arithmetic expressions
-    will cause an exception to be raised.
+    such as int and Fraction may also occur in some arithmetic expressions,
+    but all occurrances of floating point and Decimal numbers in arithmetic
+    expressions will cause an exception to be raised.
 """
 
 from fractions import Fraction
