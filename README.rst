@@ -1,5 +1,6 @@
 .. image:: https://secure.travis-ci.org/mulkieran/justbytes.png?branch=master
    :target: http://travis-ci.org/mulkieran/justbytes
+.. image:: https://coveralls.io/repos/mulkieran/justbytes/badge.svg?branch=master&service=github :target: https://coveralls.io/github/mulkieran/justbytes?branch=master 
 
 Justbytes
 ========
