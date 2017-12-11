@@ -75,7 +75,7 @@ class ConversionTestCase(unittest.TestCase):
     )
     def testPrecision(self, s, u):
         """ Test precision of conversion. """
-        factor = (u and int(u)) or int(B)
+        factor = int(u) if u else int(B)
         self.assertEqual(s.convertTo(u) * factor, int(s))
 
 class ComponentsTestCase(unittest.TestCase):
