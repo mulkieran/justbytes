@@ -101,8 +101,7 @@ class Range(object):
 
             The units number must be a precise numeric type.
         """
-        if isinstance(value, six.string_types) or \
-           isinstance(value, PRECISE_NUMERIC_TYPES):
+        if isinstance(value, (PRECISE_NUMERIC_TYPES, six.string_types)):
             try:
                 units = B if units is None else units
                 factor = self._get_unit_value(units)
@@ -445,8 +444,7 @@ class Range(object):
                lambda x: self._as_single_number(x[0], config)[1] == 0,
                reversed(candidates)
             )
-        else:
-            return candidates[-1]
+        return candidates[-1]
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
