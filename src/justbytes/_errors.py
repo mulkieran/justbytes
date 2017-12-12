@@ -52,8 +52,7 @@ class RangeValueError(RangeError):
         if self.msg:
             fmt_str = self._FMT_STR + ": %s"
             return fmt_str % (self.value, self.param, self.msg)
-        else:
-            return self._FMT_STR % (self.value, self.param)
+        return self._FMT_STR % (self.value, self.param)
 
 @add_metaclass(abc.ABCMeta)
 class RangeUnsupportedOpError(RangeError):

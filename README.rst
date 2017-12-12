@@ -58,10 +58,10 @@ Rational, where a numeric value is appropriate.
 
 Floating Point Numbers
 ----------------------
-It is not possible to use floating point numbers in computations with Ranges.
-Where a fractional quantity is desired, use Decimal objects instead of floats.
-Thus, Range(0) * 1.2 raises an exception, but Range(0) * Decimal("1.2") is
-acceptable.
+It is not possible to use floating point numbers or Decimal in computations
+with Ranges. Where a fractional quantity is desired, use Fraction objects.
+Thus, Range(0) * 1.2 and Range(0) * Decimal("1.2") raise an exception, but
+Range(0) * Fraction("1.2") is acceptable.
 
 Computing the Representation of a Range
 ---------------------------------------
@@ -94,9 +94,9 @@ for all non-fractional prefixes. Fractional prefixes are not defined.
 Constructing Ranges Programatically
 ----------------------------------
 New Range objects can be constructed from Range objects, numeric values, e.g.,
-int or Decimal, or strings which represent such numeric values.
+int or Fraction, or strings which represent such numeric values.
 strings may be used to represent fractional quantities, e.g., "1.2", but
-floats are disallowed.
+floats and Decimals are disallowed.
 
 The constructor takes an optional units specifier, which defaults to bytes
 for all numeric values, and to None for Range objects. The type of the

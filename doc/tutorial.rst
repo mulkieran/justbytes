@@ -16,7 +16,7 @@ Displaying
 Display it using the internal representation which shows the number of bytes::
 
     >>> size
-    Range(8589934592)
+    Range(Fraction(8589934592, 1))
 
 Display it using the string representation which uses units::
 
@@ -26,11 +26,20 @@ Display it using the string representation which uses units::
 The string representation is configurable through the default configuration
 and also by parameters to the getString() method::
 
-    >>> size.getString(RangeConfig.VALUE_CONFIG, RangeConfig.DISPLAY_CONFIG)
+
+    >>> import justbases
+    >>> display_impl = justbases.String
+    >>> config = StringConfig(ValueConfig(), DisplayConfig(), display_impl)
+    >>> size.getString(config)
     '8 GiB'
-    >>> size.getString(RangeConfig.VALUE_CONFIG, DisplayConfig(strip_config=StripConfig(strip_whole=False))) 
+    >>> strip = StripConfig(strip_whole=False)
+    >>> display = DisplayConfig(strip_config=strip)
+    >>> config = StringConfig(ValueConfig(), display, display_impl)
+    >>> size.getString(config)
     '8.00 GiB'
-    >>> size.getString(ValueConfig(min_value=10), RangeConfig.DISPLAY_CONFIG)
+    >>> value = ValueConfig(min_value=10)
+    >>> config = StringConfig(value, DisplayConfig(), display_impl)
+    >>> size.getString(config)
     '8192 MiB'
 
 .. warning:: Avoid specifying an unbounded number of digits after the radix.
@@ -46,7 +55,8 @@ Various arithmetic operations on Range objects are available::
     >>> str(size * Fraction(1, 2))
     '4 GiB'
 
-Floats and non-numbers like infinity are not allowed in these computations.
+Floats, Decimals, and non-numbers like infinity are not allowed in these
+computations.
 
 Some arithmetic operations work with two Range operands::
 
@@ -64,7 +74,7 @@ Miscellaneous Examples
 Sometimes it is desirable to get the components of the string output rather
 than the whole string value::
 
-    >>> size.getStringInfo(RangeConfig.VALUE_CONFIG)
+    >>> size.getStringInfo(ValueConfig())
     (Radix(True,[8],[0, 0],[],10), 0, GiB)
 
 For information about the Radix type see the justbases package.
@@ -83,12 +93,14 @@ The final list indicates the repeating values after the radix.
 
 Round to get whole byte values, if desired::
 
+    >>> size / 3
+    Range(Fraction(8589934592, 3))
     >>> (size / 3).roundTo(B, ROUND_DOWN)
-    Range(2863311530)
+    Range(Fraction(2863311530, 1))
 
 Display in selected units::
 
-    >>> size.getString(ValueConfig(unit=YiB), RangeConfig.DISPLAY_CONFIG)
+    >>> size.getString(StringConfig(ValueConfig(unit=YiB), DisplayConfig(), display_impl))
     '> 0.00 YiB'
 
 

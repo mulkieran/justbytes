@@ -20,9 +20,9 @@
 
     Contains a few documented methods and a number of __*__ methods
     implementing arithmetic operations. Precise numeric types
-    such as int and Decimal may also occur in some arithmetic expressions,
-    but all occurrances of floating point numbers in arithmetic expressions
-    will cause an exception to be raised.
+    such as int and Fraction may also occur in some arithmetic expressions,
+    but all occurrances of floating point and Decimal numbers in arithmetic
+    expressions will cause an exception to be raised.
 """
 
 from fractions import Fraction
@@ -101,8 +101,7 @@ class Range(object):
 
             The units number must be a precise numeric type.
         """
-        if isinstance(value, six.string_types) or \
-           isinstance(value, PRECISE_NUMERIC_TYPES):
+        if isinstance(value, (PRECISE_NUMERIC_TYPES, six.string_types)):
             try:
                 units = B if units is None else units
                 factor = self._get_unit_value(units)
@@ -445,8 +444,7 @@ class Range(object):
                lambda x: self._as_single_number(x[0], config)[1] == 0,
                reversed(candidates)
             )
-        else:
-            return candidates[-1]
+        return candidates[-1]
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
