@@ -27,8 +27,6 @@ import abc
 
 from numbers import Rational
 
-import six
-
 import justbases
 
 from ._errors import RangeValueError
@@ -36,7 +34,7 @@ from ._errors import RangeValueError
 RoundingMethods = justbases.RoundingMethods
 
 
-class Unit(object):
+class Unit():
     """ Class to encapsulate unit information. """
     # pylint: disable=too-few-public-methods
 
@@ -64,8 +62,7 @@ B = Unit(1, "", "")
 """ The universal unit, bytes. """
 
 
-@six.add_metaclass(abc.ABCMeta)
-class Units(object):
+class Units(metaclass=abc.ABCMeta):
     """
     Generic class for units.
     """
@@ -158,6 +155,6 @@ def UNITS():
 
 ROUNDING_METHODS = RoundingMethods.METHODS
 
-PRECISE_NUMERIC_TYPES = tuple(list(six.integer_types) + [Rational])
+PRECISE_NUMERIC_TYPES = (int, Rational)
 
 UNIT_TYPES = tuple(list(PRECISE_NUMERIC_TYPES) + [Unit])

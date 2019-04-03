@@ -27,8 +27,6 @@
 
 from fractions import Fraction
 
-import six
-
 import justbases
 
 from ._config import Config
@@ -49,7 +47,7 @@ from ._util.generators import next_or_last
 from ._util.generators import takeuntil
 
 
-class Range(object):
+class Range():
     """ Class for instantiating Range objects. """
 
     _BYTES_SYMBOL = "B"
@@ -101,7 +99,7 @@ class Range(object):
 
             The units number must be a precise numeric type.
         """
-        if isinstance(value, (PRECISE_NUMERIC_TYPES, six.string_types)):
+        if isinstance(value, (PRECISE_NUMERIC_TYPES, str)):
             try:
                 units = B if units is None else units
                 factor = self._get_unit_value(units)
@@ -285,6 +283,7 @@ class Range(object):
             raise RangeNonsensicalBinOpError("<", other)
         return self._magnitude < other.magnitude
 
+    # pylint: disable=raising-format-tuple
     def __mod__(self, other):
         # other * div + mod = self
         # Therefore, T(mod) = Range

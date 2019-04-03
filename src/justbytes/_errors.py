@@ -20,12 +20,8 @@
 
 import abc
 
-from six import add_metaclass
-
-@add_metaclass(abc.ABCMeta)
-class RangeError(Exception):
+class RangeError(Exception, metaclass=abc.ABCMeta):
     """ Generic Range error. """
-    pass
 
 
 class RangeValueError(RangeError):
@@ -54,15 +50,11 @@ class RangeValueError(RangeError):
             return fmt_str % (self.value, self.param, self.msg)
         return self._FMT_STR % (self.value, self.param)
 
-@add_metaclass(abc.ABCMeta)
-class RangeUnsupportedOpError(RangeError):
+class RangeUnsupportedOpError(RangeError, metaclass=abc.ABCMeta):
     """ Error when executing unsupported operation on Range. """
-    pass
 
-@add_metaclass(abc.ABCMeta)
-class RangeNonsensicalOpError(RangeUnsupportedOpError):
+class RangeNonsensicalOpError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
     """ Error when requesting an operation that doesn't make sense. """
-    pass
 
 class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
     """ Error when requesting a binary operation with a nonsense value. """
@@ -99,12 +91,10 @@ class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
     def __str__(self):
         return self._FMT_STR % (self._operator, type(self._other).__name__)
 
-@add_metaclass(abc.ABCMeta)
-class RangeUnrepresentableResultError(RangeUnsupportedOpError):
+class RangeUnrepresentableResultError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
     """ Error when requesting an operation that yields units that cannot
         be represented with Range, e.g., when multiplying a Range by a Range.
     """
-    pass
 
 class RangePowerResultError(RangeUnrepresentableResultError):
     """ Error when requesting an operation that would yield a byte power. """

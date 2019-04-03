@@ -80,7 +80,7 @@ class DisplayConfig(justbases.DisplayConfig):
         )
 
 
-class ValueConfig(object):
+class ValueConfig():
     """ Configuration for __str__ method.
 
         If max_places is set to None, all non-zero digits after the
@@ -177,7 +177,7 @@ class ValueConfig(object):
     __repr__ = __str__
 
 
-class StringConfig(object):
+class StringConfig():
     """ Configuration for :class:`Range` class. """
     # pylint: disable=too-few-public-methods
 
@@ -200,7 +200,7 @@ class StringConfig(object):
         self.DISPLAY_CONFIG = display_config
 
 
-class Config(object):
+class Config():
     """
     The super top-level configuration class for ranges.
     """

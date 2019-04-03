@@ -47,17 +47,14 @@ setuptools.setup(
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Libraries',
         'Topic :: System :: Hardware',
         'Topic :: System :: Operating System Kernels :: Linux',
     ],
     install_requires = [
         'justbases>0.07,<=0.9',
-        'six'
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages("src"),

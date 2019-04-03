@@ -3,10 +3,16 @@ sudo: false
 os:
   - linux
 
+language: python
+
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
 branches:
   only:
     - master
-language: python
 
 env:
   matrix:
@@ -16,8 +22,3 @@ env:
 
 script:
     - make -f Makefile $TASK
-
-python:
-  - "2.7"
-  - "3.4"
-  - "pypy"
