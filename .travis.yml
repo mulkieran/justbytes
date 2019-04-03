@@ -1,7 +1,4 @@
-sudo: false
-
-os:
-  - linux
+os: linux
 
 language: python
 
@@ -15,10 +12,9 @@ branches:
     - master
 
 env:
-  matrix:
-    - TASK=lint
-    - TASK=test
-    - TASK=coverage
+  - TASK=lint
+  - TASK=test
+  - TASK=coverage
 
 script:
     - make -f Makefile $TASK
