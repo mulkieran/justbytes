@@ -1,18 +1,17 @@
-# Copyright (C) 2015  Red Hat, Inc.
+# Copyright (C) 2015 - 2019 Red Hat, Inc.
 #
-# This copyrighted material is made available to anyone wishing to use,
-# modify, copy, or redistribute it subject to the terms and conditions of
-# the GNU General Public License v.2, or (at your option) any later version.
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY expressed or implied, including the implied warranties of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-# Public License for more details.  You should have received a copy of the
-# GNU General Public License along with this program; if not, write to the
-# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.  Any Red Hat trademarks that are incorporated in the
-# source code or documentation are not subject to the GNU General Public
-# License and may only be used or replicated with the express permission of
-# Red Hat, Inc.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; If not, see <http://www.gnu.org/licenses/>.
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
@@ -27,8 +26,6 @@ import abc
 
 from numbers import Rational
 
-import six
-
 import justbases
 
 from ._errors import RangeValueError
@@ -36,7 +33,7 @@ from ._errors import RangeValueError
 RoundingMethods = justbases.RoundingMethods
 
 
-class Unit(object):
+class Unit():
     """ Class to encapsulate unit information. """
     # pylint: disable=too-few-public-methods
 
@@ -64,8 +61,7 @@ B = Unit(1, "", "")
 """ The universal unit, bytes. """
 
 
-@six.add_metaclass(abc.ABCMeta)
-class Units(object):
+class Units(metaclass=abc.ABCMeta):
     """
     Generic class for units.
     """
@@ -158,6 +154,6 @@ def UNITS():
 
 ROUNDING_METHODS = RoundingMethods.METHODS
 
-PRECISE_NUMERIC_TYPES = tuple(list(six.integer_types) + [Rational])
+PRECISE_NUMERIC_TYPES = (int, Rational)
 
 UNIT_TYPES = tuple(list(PRECISE_NUMERIC_TYPES) + [Unit])

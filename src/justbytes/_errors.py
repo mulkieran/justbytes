@@ -1,18 +1,17 @@
-# Copyright (C) 2015  Red Hat, Inc.
+# Copyright (C) 2015 - 2019 Red Hat, Inc.
 #
-# This copyrighted material is made available to anyone wishing to use,
-# modify, copy, or redistribute it subject to the terms and conditions of
-# the GNU General Public License v.2, or (at your option) any later version.
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY expressed or implied, including the implied warranties of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-# Public License for more details.  You should have received a copy of the
-# GNU General Public License along with this program; if not, write to the
-# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.  Any Red Hat trademarks that are incorporated in the
-# source code or documentation are not subject to the GNU General Public
-# License and may only be used or replicated with the express permission of
-# Red Hat, Inc.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; If not, see <http://www.gnu.org/licenses/>.
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
@@ -20,12 +19,8 @@
 
 import abc
 
-from six import add_metaclass
-
-@add_metaclass(abc.ABCMeta)
-class RangeError(Exception):
+class RangeError(Exception, metaclass=abc.ABCMeta):
     """ Generic Range error. """
-    pass
 
 
 class RangeValueError(RangeError):
@@ -54,15 +49,11 @@ class RangeValueError(RangeError):
             return fmt_str % (self.value, self.param, self.msg)
         return self._FMT_STR % (self.value, self.param)
 
-@add_metaclass(abc.ABCMeta)
-class RangeUnsupportedOpError(RangeError):
+class RangeUnsupportedOpError(RangeError, metaclass=abc.ABCMeta):
     """ Error when executing unsupported operation on Range. """
-    pass
 
-@add_metaclass(abc.ABCMeta)
-class RangeNonsensicalOpError(RangeUnsupportedOpError):
+class RangeNonsensicalOpError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
     """ Error when requesting an operation that doesn't make sense. """
-    pass
 
 class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
     """ Error when requesting a binary operation with a nonsense value. """
@@ -99,12 +90,10 @@ class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
     def __str__(self):
         return self._FMT_STR % (self._operator, type(self._other).__name__)
 
-@add_metaclass(abc.ABCMeta)
-class RangeUnrepresentableResultError(RangeUnsupportedOpError):
+class RangeUnrepresentableResultError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
     """ Error when requesting an operation that yields units that cannot
         be represented with Range, e.g., when multiplying a Range by a Range.
     """
-    pass
 
 class RangePowerResultError(RangeUnrepresentableResultError):
     """ Error when requesting an operation that would yield a byte power. """

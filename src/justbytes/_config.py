@@ -1,18 +1,17 @@
-# Copyright (C) 2015-2016  Red Hat, Inc.
+# Copyright (C) 2015 - 2019 Red Hat, Inc.
 #
-# This copyrighted material is made available to anyone wishing to use,
-# modify, copy, or redistribute it subject to the terms and conditions of
-# the GNU General Public License v.2, or (at your option) any later version.
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY expressed or implied, including the implied warranties of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-# Public License for more details.  You should have received a copy of the
-# GNU General Public License along with this program; if not, write to the
-# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.  Any Red Hat trademarks that are incorporated in the
-# source code or documentation are not subject to the GNU General Public
-# License and may only be used or replicated with the express permission of
-# Red Hat, Inc.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; If not, see <http://www.gnu.org/licenses/>.
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
@@ -80,7 +79,7 @@ class DisplayConfig(justbases.DisplayConfig):
         )
 
 
-class ValueConfig(object):
+class ValueConfig():
     """ Configuration for __str__ method.
 
         If max_places is set to None, all non-zero digits after the
@@ -177,7 +176,7 @@ class ValueConfig(object):
     __repr__ = __str__
 
 
-class StringConfig(object):
+class StringConfig():
     """ Configuration for :class:`Range` class. """
     # pylint: disable=too-few-public-methods
 
@@ -200,7 +199,7 @@ class StringConfig(object):
         self.DISPLAY_CONFIG = display_config
 
 
-class Config(object):
+class Config():
     """
     The super top-level configuration class for ranges.
     """

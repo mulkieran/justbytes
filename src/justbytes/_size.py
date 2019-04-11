@@ -1,18 +1,17 @@
-# Copyright (C) 2015  Red Hat, Inc.
+# Copyright (C) 2015 - 2019 Red Hat, Inc.
 #
-# This copyrighted material is made available to anyone wishing to use,
-# modify, copy, or redistribute it subject to the terms and conditions of
-# the GNU General Public License v.2, or (at your option) any later version.
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY expressed or implied, including the implied warranties of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
-# Public License for more details.  You should have received a copy of the
-# GNU General Public License along with this program; if not, write to the
-# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.  Any Red Hat trademarks that are incorporated in the
-# source code or documentation are not subject to the GNU General Public
-# License and may only be used or replicated with the express permission of
-# Red Hat, Inc.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; If not, see <http://www.gnu.org/licenses/>.
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
@@ -26,8 +25,6 @@
 """
 
 from fractions import Fraction
-
-import six
 
 import justbases
 
@@ -49,7 +46,7 @@ from ._util.generators import next_or_last
 from ._util.generators import takeuntil
 
 
-class Range(object):
+class Range():
     """ Class for instantiating Range objects. """
 
     _BYTES_SYMBOL = "B"
@@ -101,7 +98,7 @@ class Range(object):
 
             The units number must be a precise numeric type.
         """
-        if isinstance(value, (PRECISE_NUMERIC_TYPES, six.string_types)):
+        if isinstance(value, (PRECISE_NUMERIC_TYPES, str)):
             try:
                 units = B if units is None else units
                 factor = self._get_unit_value(units)
@@ -285,6 +282,7 @@ class Range(object):
             raise RangeNonsensicalBinOpError("<", other)
         return self._magnitude < other.magnitude
 
+    # pylint: disable=raising-format-tuple
     def __mod__(self, other):
         # other * div + mod = self
         # Therefore, T(mod) = Range
