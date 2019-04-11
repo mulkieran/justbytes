@@ -19,42 +19,43 @@
 import os
 import sys
 import setuptools
+
 if sys.version_info[0] < 3:
     from codecs import open
+
 
 def local_file(name):
     return os.path.relpath(os.path.join(os.path.dirname(__file__), name))
 
+
 README = local_file("README.rst")
 
 with open(local_file("src/justbytes/version.py")) as o:
-        exec(o.read())
+    exec(o.read())
 
 setuptools.setup(
-    name='justbytes',
+    name="justbytes",
     version=__version__,
-    url='http://pythonhosted.org/justbytes/',
-    author='Anne Mulhern',
-    author_email='amulhern@redhat.com',
-    description='computing with and displaying bytes',
-    long_description=open(README, encoding='utf-8').read(),
-    platforms=['Linux'],
-    license='LGPLv2+',
+    url="http://pythonhosted.org/justbytes/",
+    author="Anne Mulhern",
+    author_email="amulhern@redhat.com",
+    description="computing with and displaying bytes",
+    long_description=open(README, encoding="utf-8").read(),
+    platforms=["Linux"],
+    license="LGPLv2+",
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Topic :: Software Development :: Libraries',
-        'Topic :: System :: Hardware',
-        'Topic :: System :: Operating System Kernels :: Linux',
+        "Development Status :: 2 - Pre-Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+        "Operating System :: POSIX :: Linux",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: System :: Hardware",
+        "Topic :: System :: Operating System Kernels :: Linux",
     ],
-    install_requires = [
-        'justbases>=0.13'
-    ],
+    install_requires=["justbases>=0.13"],
     package_dir={"": "src"},
     packages=setuptools.find_packages("src"),
-    )
+)

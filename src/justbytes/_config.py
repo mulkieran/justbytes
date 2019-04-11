@@ -32,6 +32,7 @@ class BaseConfig(justbases.BaseConfig):
 
     Override defaults of justbases.BaseConfig.
     """
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, use_prefix=False, use_subscript=False):
@@ -43,17 +44,19 @@ class BaseConfig(justbases.BaseConfig):
         """
 
         super(BaseConfig, self).__init__(
-           use_prefix=use_prefix,
-           use_subscript=use_subscript
+            use_prefix=use_prefix, use_subscript=use_subscript
         )
+
 
 DigitsConfig = justbases.DigitsConfig
 StripConfig = justbases.StripConfig
+
 
 class DisplayConfig(justbases.DisplayConfig):
     """
     DisplayConfig overrides justbases.DisplayConfig's defaults.
     """
+
     # pylint: disable=too-few-public-methods
 
     def __init__(
@@ -61,7 +64,7 @@ class DisplayConfig(justbases.DisplayConfig):
         show_approx_str=True,
         base_config=BaseConfig(),
         digits_config=DigitsConfig(),
-        strip_config=StripConfig()
+        strip_config=StripConfig(),
     ):
         """
         Intializer.
@@ -72,14 +75,14 @@ class DisplayConfig(justbases.DisplayConfig):
         :param StripConfig strip_config: the strip config
         """
         super(DisplayConfig, self).__init__(
-           show_approx_str=show_approx_str,
-           base_config=base_config,
-           digits_config=digits_config,
-           strip_config=strip_config
+            show_approx_str=show_approx_str,
+            base_config=base_config,
+            digits_config=digits_config,
+            strip_config=strip_config,
         )
 
 
-class ValueConfig():
+class ValueConfig:
     """ Configuration for __str__ method.
 
         If max_places is set to None, all non-zero digits after the
@@ -94,27 +97,30 @@ class ValueConfig():
         If min_value is 0.1, then 0.75 GiB is preferred to 768 MiB,
         but 0.05 GiB is still displayed as 51.2 MiB.
     """
+
     # pylint: disable=too-few-public-methods
 
-    _FMT_STR = ", ".join([
-       "base=%(base)s",
-       "binary_units=%(binary_units)s",
-       "exact_value=%(exact_value)s",
-       "max_places=%(max_places)s",
-       "min_value=%(min_value)s",
-       "rounding_method=%(rounding_method)s",
-       "unit=%(unit)s"
-    ])
+    _FMT_STR = ", ".join(
+        [
+            "base=%(base)s",
+            "binary_units=%(binary_units)s",
+            "exact_value=%(exact_value)s",
+            "max_places=%(max_places)s",
+            "min_value=%(min_value)s",
+            "rounding_method=%(rounding_method)s",
+            "unit=%(unit)s",
+        ]
+    )
 
     def __init__(
-       self,
-       max_places=2,
-       min_value=1,
-       binary_units=True,
-       exact_value=False,
-       unit=None,
-       base=10,
-       rounding_method=RoundingMethods.ROUND_HALF_ZERO
+        self,
+        max_places=2,
+        min_value=1,
+        binary_units=True,
+        exact_value=False,
+        unit=None,
+        base=10,
+        rounding_method=RoundingMethods.ROUND_HALF_ZERO,
     ):
         """ Initializer.
 
@@ -130,25 +136,16 @@ class ValueConfig():
         """
         # pylint: disable=too-many-arguments
         if max_places is not None and max_places < 0:
-            raise RangeValueError(
-               max_places,
-               "max_places",
-               "must be an int at least 0"
-            )
+            raise RangeValueError(max_places, "max_places", "must be an int at least 0")
 
-        if min_value < 0 or \
-           not isinstance(min_value, PRECISE_NUMERIC_TYPES):
+        if min_value < 0 or not isinstance(min_value, PRECISE_NUMERIC_TYPES):
             raise RangeValueError(
-               min_value,
-               "min_value",
-               "must be a precise positive numeric value."
+                min_value, "min_value", "must be a precise positive numeric value."
             )
 
         if unit is not None and unit not in UNITS():
             raise RangeValueError(
-               unit,
-               "unit",
-               "must be one of %s" % ", ".join(str(x) for x in UNITS())
+                unit, "unit", "must be one of %s" % ", ".join(str(x) for x in UNITS())
             )
 
         if base < 2:
@@ -164,20 +161,22 @@ class ValueConfig():
 
     def __str__(self):
         values = {
-           'base' : self.base,
-           'binary_units' : self.binary_units,
-           'exact_value' : self.exact_value,
-           'max_places' : self.max_places,
-           'min_value' : self.min_value,
-           'rounding_method' : self.rounding_method,
-           'unit' : self.unit
+            "base": self.base,
+            "binary_units": self.binary_units,
+            "exact_value": self.exact_value,
+            "max_places": self.max_places,
+            "min_value": self.min_value,
+            "rounding_method": self.rounding_method,
+            "unit": self.unit,
         }
         return "ValueConfig(%s)" % (self._FMT_STR % values)
+
     __repr__ = __str__
 
 
-class StringConfig():
+class StringConfig:
     """ Configuration for :class:`Range` class. """
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, value_config, display_config, display_impl):
@@ -199,27 +198,24 @@ class StringConfig():
         self.DISPLAY_CONFIG = display_config
 
 
-class Config():
+class Config:
     """
     The super top-level configuration class for ranges.
     """
 
-    STRING_CONFIG = \
-       StringConfig(ValueConfig(), DisplayConfig(), justbases.String)
+    STRING_CONFIG = StringConfig(ValueConfig(), DisplayConfig(), justbases.String)
 
     STRICT = False
 
     @classmethod
-    def set_display_impl(cls, impl): # pragma: no cover
+    def set_display_impl(cls, impl):  # pragma: no cover
         """
         Set display implementation.
 
         :param type impl: the display implementation class
         """
         cls.STRING_CONFIG = StringConfig(
-           cls.STRING_CONFIG.VALUE_CONFIG,
-           cls.STRING_CONFIG.DISPLAY_CONFIG,
-           impl
+            cls.STRING_CONFIG.VALUE_CONFIG, cls.STRING_CONFIG.DISPLAY_CONFIG, impl
         )
 
     @classmethod
@@ -230,9 +226,7 @@ class Config():
         :param DisplayConfig config: a configuration object
         """
         cls.STRING_CONFIG = StringConfig(
-           cls.STRING_CONFIG.VALUE_CONFIG,
-           config,
-           cls.STRING_CONFIG.DISPLAY_IMPL_CLASS
+            cls.STRING_CONFIG.VALUE_CONFIG, config, cls.STRING_CONFIG.DISPLAY_IMPL_CLASS
         )
 
     @classmethod
@@ -243,7 +237,7 @@ class Config():
         :param :class:`ValueConfig` config: a configuration object
         """
         cls.STRING_CONFIG = StringConfig(
-           config,
-           cls.STRING_CONFIG.DISPLAY_CONFIG,
-           cls.STRING_CONFIG.DISPLAY_IMPL_CLASS
+            config,
+            cls.STRING_CONFIG.DISPLAY_CONFIG,
+            cls.STRING_CONFIG.DISPLAY_IMPL_CLASS,
         )

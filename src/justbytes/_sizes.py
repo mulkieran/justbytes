@@ -19,4 +19,4 @@
 from ._size import Range
 
 
-AI = Range(0) # pragma: no cover
+AI = Range(0)  # pragma: no cover

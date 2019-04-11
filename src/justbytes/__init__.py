@@ -84,6 +84,7 @@
 from ._constants import B
 
 from ._constants import DecimalUnits as _DecimalUnits
+
 KB = _DecimalUnits.KB
 MB = _DecimalUnits.MB
 GB = _DecimalUnits.GB
@@ -94,6 +95,7 @@ ZB = _DecimalUnits.ZB
 YB = _DecimalUnits.YB
 
 from ._constants import BinaryUnits as _BinaryUnits
+
 KiB = _BinaryUnits.KiB
 MiB = _BinaryUnits.MiB
 GiB = _BinaryUnits.GiB
@@ -107,6 +109,7 @@ from ._constants import UNITS
 
 # ROUNDING CONSTANTS
 from ._constants import RoundingMethods as _RoundingMethods
+
 ROUND_DOWN = _RoundingMethods.ROUND_DOWN
 ROUND_HALF_DOWN = _RoundingMethods.ROUND_HALF_DOWN
 ROUND_HALF_UP = _RoundingMethods.ROUND_HALF_UP

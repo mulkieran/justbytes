@@ -22,18 +22,12 @@ from justbytes import Range
 from justbytes import UNITS
 
 NUMBERS_STRATEGY = strategies.one_of(
-   strategies.integers(),
-   strategies.fractions().map(lambda x: x.limit_denominator(100))
+    strategies.integers(),
+    strategies.fractions().map(lambda x: x.limit_denominator(100)),
 )
 
 SIZE_STRATEGY = strategies.builds(
-   Range,
-   strategies.one_of(
-      NUMBERS_STRATEGY,
-      strategies.builds(
-         str,
-         NUMBERS_STRATEGY
-      )
-   ),
-   strategies.sampled_from(UNITS())
+    Range,
+    strategies.one_of(NUMBERS_STRATEGY, strategies.builds(str, NUMBERS_STRATEGY)),
+    strategies.sampled_from(UNITS()),
 )

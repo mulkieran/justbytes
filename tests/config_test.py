@@ -33,6 +33,7 @@ from justbytes._errors import RangeValueError
 
 class ConfigTestCase(unittest.TestCase):
     """ Exercise methods of output configuration classes. """
+
     # pylint: disable=too-few-public-methods
 
     def testValueConfigObject(self):
@@ -55,6 +56,7 @@ class ConfigTestCase(unittest.TestCase):
 
 class RangeTestCase(unittest.TestCase):
     """ Test Range configuration. """
+
     # pylint: disable=too-few-public-methods
 
     def setUp(self):
@@ -65,12 +67,7 @@ class RangeTestCase(unittest.TestCase):
         Config.STRING_CONFIG.DISPLAY_CONFIG = self.display_config
         Config.STRING_CONFIG.VALUE_CONFIG = self.str_config
 
-    @given(
-       strategies.builds(
-          DisplayConfig,
-          show_approx_str=strategies.booleans()
-       )
-    )
+    @given(strategies.builds(DisplayConfig, show_approx_str=strategies.booleans()))
     @settings(max_examples=30)
     def testSettingDisplayConfig(self, config):
         """ Test that new str config is the correct one. """
@@ -78,14 +75,14 @@ class RangeTestCase(unittest.TestCase):
         self.assertEqual(str(config), str(Config.STRING_CONFIG.DISPLAY_CONFIG))
 
     @given(
-       strategies.builds(
-          ValueConfig,
-          binary_units=strategies.booleans(),
-          max_places=strategies.integers().filter(lambda x: x >= 0),
-          min_value=strategies.fractions().filter(lambda x: x >= 0),
-          exact_value=strategies.booleans(),
-          unit=strategies.sampled_from(UNITS())
-       )
+        strategies.builds(
+            ValueConfig,
+            binary_units=strategies.booleans(),
+            max_places=strategies.integers().filter(lambda x: x >= 0),
+            min_value=strategies.fractions().filter(lambda x: x >= 0),
+            exact_value=strategies.booleans(),
+            unit=strategies.sampled_from(UNITS()),
+        )
     )
     @settings(max_examples=30)
     def testSettingValueConfig(self, config):

@@ -68,10 +68,8 @@ class ConstructionTestCase(unittest.TestCase):
 
     def testFraction(self):
         """ Test creating Range with Fraction. """
-        self.assertEqual(
-           Range(Fraction(1024, 2), KiB),
-           Range(Fraction(1, 2), MiB)
-        )
+        self.assertEqual(Range(Fraction(1024, 2), KiB), Range(Fraction(1, 2), MiB))
+
 
 class DisplayTestCase(unittest.TestCase):
     """ Test formatting Range for display. """
@@ -84,7 +82,7 @@ class DisplayTestCase(unittest.TestCase):
         s = Range("26.55", MiB)
         self.assertEqual(str(s), "26.55 MiB")
 
-        s = Range('12.687', TiB)
+        s = Range("12.687", TiB)
         self.assertEqual(str(s), "< 12.69 TiB")
 
     def testMinValue(self):
@@ -92,38 +90,33 @@ class DisplayTestCase(unittest.TestCase):
         s = Range(9, MiB)
         self.assertEqual(s.components(), (Fraction(9, 1), MiB))
         self.assertEqual(
-           s.components(ValueConfig(min_value=10)),
-           (Fraction(9216, 1), KiB)
+            s.components(ValueConfig(min_value=10)), (Fraction(9216, 1), KiB)
         )
 
         s = Range("0.5", GiB)
         self.assertEqual(
-           s.components(ValueConfig(min_value=1)),
-           (Fraction(512, 1), MiB)
+            s.components(ValueConfig(min_value=1)), (Fraction(512, 1), MiB)
         )
         self.assertEqual(
-           s.components(ValueConfig(min_value=Fraction(1, 10))),
-           (Fraction(1, 2), GiB)
+            s.components(ValueConfig(min_value=Fraction(1, 10))), (Fraction(1, 2), GiB)
         )
         self.assertEqual(
-           s.components(ValueConfig(min_value=1)),
-           (Fraction(512, 1), MiB)
+            s.components(ValueConfig(min_value=1)), (Fraction(512, 1), MiB)
         )
 
         # when min_value is 10 and single digit on left of decimal, display
         # with smaller unit.
-        s = Range('7.18', KiB)
+        s = Range("7.18", KiB)
         self.assertEqual(s.components(ValueConfig(min_value=10))[1], B)
-        s = Range('9.68', TiB)
+        s = Range("9.68", TiB)
         self.assertEqual(s.components(ValueConfig(min_value=10))[1], GiB)
-        s = Range('4.29', MiB)
+        s = Range("4.29", MiB)
         self.assertEqual(s.components(ValueConfig(min_value=10))[1], KiB)
 
         # when min value is 100 and two digits on left of decimal
-        s = Range('14', MiB)
+        s = Range("14", MiB)
         self.assertEqual(
-           s.components(ValueConfig(min_value=100)),
-           (Fraction(14 * 1024, 1), KiB)
+            s.components(ValueConfig(min_value=100)), (Fraction(14 * 1024, 1), KiB)
         )
 
     def testExceptionValues(self):
@@ -142,6 +135,7 @@ class DisplayTestCase(unittest.TestCase):
         s = Range(1000)
         self.assertEqual(s.components(ValueConfig(binary_units=False)), (1, KB))
 
+
 class ConfigurationTestCase(unittest.TestCase):
     """ Test setting configuration for display. """
 
@@ -157,11 +151,7 @@ class ConfigurationTestCase(unittest.TestCase):
 
     def testValueConfigs(self):
         """ Test str with various configuration options. """
-        Config.set_display_config(
-           DisplayConfig(
-              strip_config=StripConfig(strip=True)
-           )
-        )
+        Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
 
         # exactly 4 Pi
         s = Range(0x10000000000000)
@@ -170,7 +160,7 @@ class ConfigurationTestCase(unittest.TestCase):
         s = Range(300, MiB)
         self.assertEqual(str(s), "300 MiB")
 
-        s = Range('12.6998', TiB)
+        s = Range("12.6998", TiB)
         self.assertEqual(str(s), "< 12.7 TiB")
 
         # byte values close to multiples of 2 are shown without trailing zeros
@@ -179,15 +169,15 @@ class ConfigurationTestCase(unittest.TestCase):
 
         # a fractional quantity is shown if the value deviates
         # from the whole number of units by more than 1%
-        s = Range(16384 - (Fraction(1024)/100 + 1))
+        s = Range(16384 - (Fraction(1024) / 100 + 1))
         self.assertEqual(str(s), "< 15.99 KiB")
 
         # test a very large quantity with no associated abbreviation or prefix
-        s = Range(1024**9)
+        s = Range(1024 ** 9)
         self.assertEqual(str(s), "1024 YiB")
-        s = Range(1024**9 - 1)
+        s = Range(1024 ** 9 - 1)
         self.assertEqual(str(s), "< 1024 YiB")
-        s = Range(1024**10)
+        s = Range(1024 ** 10)
         self.assertEqual(str(s), "1048576 YiB")
 
         s = Range(0xfffffffffffff)
@@ -199,34 +189,21 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(s), "< 64 KiB")
 
         Config.set_value_config(ValueConfig(max_places=3))
-        Config.set_display_config(
-           DisplayConfig(
-              strip_config=StripConfig(strip=True)
-           )
-        )
-        s = Range('23.7874', TiB)
+        Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
+        s = Range("23.7874", TiB)
         self.assertEqual(str(s), "> 23.787 TiB")
 
         Config.set_value_config(ValueConfig(min_value=10))
-        Config.set_display_config(
-           DisplayConfig(
-              strip_config=StripConfig(strip=True)
-           )
-        )
+        Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
         s = Range(8193)
         self.assertEqual(str(s), ("8193 B"))
 
         # if max_places is set to None, all digits are displayed
         Config.set_value_config(ValueConfig(max_places=None))
-        Config.set_display_config(
-           DisplayConfig(
-              strip_config=StripConfig(strip=True)
-           )
-        )
+        Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
         s = Range(0xfffffffffffff)
         self.assertEqual(
-           str(s),
-           "3.99999999999999911182158029987476766109466552734375 PiB"
+            str(s), "3.99999999999999911182158029987476766109466552734375 PiB"
         )
         s = Range(0x10000)
         self.assertEqual(str(s), ("64 KiB"))
@@ -234,12 +211,8 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(s), "64.0009765625 KiB")
 
         Config.set_value_config(ValueConfig(max_places=2))
-        Config.set_display_config(
-           DisplayConfig(
-              strip_config=StripConfig(strip=False)
-           )
-        )
-        s = Range(1024**9 + 1)
+        Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=False)))
+        s = Range(1024 ** 9 + 1)
         self.assertEqual(str(s), "> 1024.00 YiB")
 
         s = Range(0xfffff)
@@ -247,11 +220,7 @@ class ConfigurationTestCase(unittest.TestCase):
 
     def testStrWithSmallDeviations(self):
         """ Behavior when deviation from whole value is small. """
-        Config.set_display_config(
-           DisplayConfig(
-              strip_config=StripConfig(strip=True)
-           )
-        )
+        Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
 
         eps = 1024 * Fraction(1, 100) * Fraction(1, 2)
 

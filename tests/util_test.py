@@ -39,8 +39,8 @@ class NextTestCase(unittest.TestCase):
         Test results when the predicate is always True.
         """
         self.assertEqual(
-           next_or_last(lambda x: True, value, default),
-           value[0] if value != [] else default
+            next_or_last(lambda x: True, value, default),
+            value[0] if value != [] else default,
         )
 
     @given(strategies.lists(strategies.integers()), strategies.integers())
@@ -50,8 +50,8 @@ class NextTestCase(unittest.TestCase):
         Test results when the predicate is always False.
         """
         self.assertEqual(
-           next_or_last(lambda x: False, value, default),
-           value[-1] if value != [] else default
+            next_or_last(lambda x: False, value, default),
+            value[-1] if value != [] else default,
         )
 
 
@@ -66,10 +66,7 @@ class TakeTestCase(unittest.TestCase):
         """
         Test results when none are sastifactory.
         """
-        self.assertEqual(
-           list(takeuntil(lambda x: False, value)),
-           value
-        )
+        self.assertEqual(list(takeuntil(lambda x: False, value)), value)
 
     @given(strategies.lists(strategies.integers()))
     @settings(max_examples=10)
@@ -77,7 +74,4 @@ class TakeTestCase(unittest.TestCase):
         """
         Test results when all are satisfactory.
         """
-        self.assertEqual(
-           list(takeuntil(lambda x: True, value)),
-           value[:1]
-        )
+        self.assertEqual(list(takeuntil(lambda x: True, value)), value[:1])

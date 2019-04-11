@@ -33,8 +33,9 @@ from ._errors import RangeValueError
 RoundingMethods = justbases.RoundingMethods
 
 
-class Unit():
+class Unit:
     """ Class to encapsulate unit information. """
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, factor, prefix, abbr):
@@ -44,18 +45,17 @@ class Unit():
 
     def __str__(self):
         return self.abbr + "B"
+
     __repr__ = __str__
 
     # pylint: disable=protected-access
     factor = property(lambda s: s._factor, doc="numeric multiple of bytes")
-    abbr = property(
-       lambda s: s._abbr,
-       doc="abbreviation for unit, precedes 'B'"
-    )
+    abbr = property(lambda s: s._abbr, doc="abbreviation for unit, precedes 'B'")
     prefix = property(lambda s: s._prefix, doc="prefix for 'bytes'")
 
     def __int__(self):
         return self.factor
+
 
 B = Unit(1, "", "")
 """ The universal unit, bytes. """
@@ -65,6 +65,7 @@ class Units(metaclass=abc.ABCMeta):
     """
     Generic class for units.
     """
+
     # pylint: disable=too-few-public-methods
 
     FACTOR = abc.abstractproperty(doc="factor for each unit")
@@ -88,11 +89,7 @@ class Units(metaclass=abc.ABCMeta):
         :param int exponent: the exponent, 0 <= exponent < len(UNITS())
         """
         if exponent < 0 or exponent > cls.max_exponent():
-            raise RangeValueError(
-                exponent,
-                "exponent",
-                "no corresponding unit"
-            )
+            raise RangeValueError(exponent, "exponent", "no corresponding unit")
         if exponent == 0:
             return B
 
@@ -113,6 +110,7 @@ class Units(metaclass=abc.ABCMeta):
 
 class DecimalUnits(Units):
     """ Class to store decimal unit constants. """
+
     # pylint: disable=invalid-name
     # pylint: disable=too-few-public-methods
 
@@ -132,6 +130,7 @@ class DecimalUnits(Units):
 
 class BinaryUnits(Units):
     """ Class to store binary unit constants. """
+
     # pylint: disable=too-few-public-methods
 
     FACTOR = 2 ** 10
@@ -151,6 +150,7 @@ class BinaryUnits(Units):
 def UNITS():
     """ All unit constants. """
     return [B] + BinaryUnits.UNITS() + DecimalUnits.UNITS()
+
 
 ROUNDING_METHODS = RoundingMethods.METHODS
 
