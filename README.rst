@@ -2,7 +2,7 @@
    :target: http://travis-ci.org/mulkieran/justbytes
 
 Justbytes
-========
+=========
 
 Justbytes is a module for handling computation with
 address ranges expressed in bytes. Its principle feature is a Range class from
@@ -77,7 +77,7 @@ This representation is exposed to clients of the library, which may use it
 in any way.
 
 Displaying Ranges
-----------------
+-----------------
 The Range class also has standard methods for the representation of Range
 objects as str objects.
 
@@ -92,7 +92,7 @@ The size module supplies a set of named prefixes for both SI and binary units,
 for all non-fractional prefixes. Fractional prefixes are not defined.
 
 Constructing Ranges Programatically
-----------------------------------
+-----------------------------------
 New Range objects can be constructed from Range objects, numeric values, e.g.,
 int or Fraction, or strings which represent such numeric values.
 strings may be used to represent fractional quantities, e.g., "1.2", but
