@@ -38,6 +38,7 @@ setuptools.setup(
     author_email='amulhern@redhat.com',
     description='computing with and displaying bytes',
     long_description=open(README, encoding='utf-8').read(),
+    long_description_content_type="text/x-rst",
     platforms=['Linux'],
     license='LGPLv2+',
     classifiers=[
