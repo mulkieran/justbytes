@@ -226,7 +226,9 @@ class RoundingTestCase(unittest.TestCase):
         rounded = s.roundTo(unit, rounding)
 
         if (isinstance(unit, Range) and unit.magnitude == 0) or (
-            not isinstance(unit, Range) and int(unit) == 0
+            # pylint: disable=bad-continuation
+            not isinstance(unit, Range)
+            and int(unit) == 0
         ):
             self.assertEqual(rounded, Range(0))
             return

@@ -45,15 +45,13 @@ class UtilityMethodsTestCase(unittest.TestCase):
 
         # **
         with self.assertRaises(RangeNonsensicalBinOpError):
-            s ** Range(
-                2
-            )  # pylint: disable=expression-not-assigned, pointless-statement
+            # pylint: disable=expression-not-assigned, pointless-statement
+            s ** Range(2)
         with self.assertRaises(RangePowerResultError):
             s ** 2  # pylint: disable=pointless-statement
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2 ** Range(
-                0
-            )  # pylint: disable=expression-not-assigned, pointless-statement
+            # pylint: disable=expression-not-assigned, pointless-statement
+            2 ** Range(0)
 
     def testBinaryOperatorsBoolean(self):
         """ Test binary operators with a boolean result. """

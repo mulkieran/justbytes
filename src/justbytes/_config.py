@@ -58,6 +58,7 @@ class DisplayConfig(justbases.DisplayConfig):
     # pylint: disable=too-few-public-methods
 
     def __init__(
+        # pylint: disable=bad-continuation
         self,
         show_approx_str=True,
         base_config=BaseConfig(),
@@ -111,6 +112,7 @@ class ValueConfig:
     )
 
     def __init__(
+        # pylint: disable=bad-continuation
         self,
         max_places=2,
         min_value=1,
