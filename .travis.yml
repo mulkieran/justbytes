@@ -1,16 +1,10 @@
 ---
 os: linux
-
 language: python
-
-python:
-  - "3.4"
-  - "3.5"
-  - "3.6"
+python: 3.7
 
 branches:
-  only:
-    - master
+  only: master
 
 env:
   - TASK=fmt-travis
