@@ -36,3 +36,13 @@ docs:
 .PHONY: yamllint
 yamllint:
 	yamllint --strict .travis.yml
+
+.PHONY: fmt
+fmt:
+	isort --recursive check.py setup.py src tests
+	black .
+
+.PHONY: fmt-travis
+fmt-travis:
+	isort --recursive --diff --check-only check.py setup.py src tests
+	black . --check

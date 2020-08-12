@@ -17,27 +17,24 @@
 
 """ Tests for operations on Range objects. """
 
+# isort: STDLIB
 import copy
+import unittest
 from decimal import Decimal
 from fractions import Fraction
 
-import unittest
+# isort: THIRDPARTY
+from hypothesis import given, settings
+from tests.utils import NUMBERS_STRATEGY, SIZE_STRATEGY
 
-from hypothesis import given
-from hypothesis import settings
+# isort: LOCAL
+from justbytes import B, GiB, MiB, Range, TiB
+from justbytes._errors import (
+    RangeNonsensicalBinOpError,
+    RangeNonsensicalBinOpValueError,
+    RangePowerResultError,
+)
 
-from justbytes import Range
-from justbytes import B
-from justbytes import MiB
-from justbytes import GiB
-from justbytes import TiB
-
-from justbytes._errors import RangeNonsensicalBinOpError
-from justbytes._errors import RangeNonsensicalBinOpValueError
-from justbytes._errors import RangePowerResultError
-
-from tests.utils import NUMBERS_STRATEGY
-from tests.utils import SIZE_STRATEGY
 
 class UtilityMethodsTestCase(unittest.TestCase):
     """ Test operator methods and other methods with an '_'. """
@@ -48,11 +45,15 @@ class UtilityMethodsTestCase(unittest.TestCase):
 
         # **
         with self.assertRaises(RangeNonsensicalBinOpError):
-            s ** Range(2) # pylint: disable=expression-not-assigned, pointless-statement
+            s ** Range(
+                2
+            )  # pylint: disable=expression-not-assigned, pointless-statement
         with self.assertRaises(RangePowerResultError):
-            s ** 2 # pylint: disable=pointless-statement
+            s ** 2  # pylint: disable=pointless-statement
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2 ** Range(0) # pylint: disable=expression-not-assigned, pointless-statement
+            2 ** Range(
+                0
+            )  # pylint: disable=expression-not-assigned, pointless-statement
 
     def testBinaryOperatorsBoolean(self):
         """ Test binary operators with a boolean result. """
@@ -60,34 +61,34 @@ class UtilityMethodsTestCase(unittest.TestCase):
         # <
         self.assertTrue(Range(0, MiB) < Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) < 1 # pylint: disable=expression-not-assigned
+            Range(0) < 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=misplaced-comparison-constant
-            1 < Range(32, TiB) # pylint: disable=expression-not-assigned
+            1 < Range(32, TiB)  # pylint: disable=expression-not-assigned
 
         # <=
         self.assertTrue(Range(0, MiB) <= Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) <= 1 # pylint: disable=expression-not-assigned
+            Range(0) <= 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=misplaced-comparison-constant
-            1 <= Range(32, TiB) # pylint: disable=expression-not-assigned
+            1 <= Range(32, TiB)  # pylint: disable=expression-not-assigned
 
         # >
         self.assertTrue(Range(32, MiB) > Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(32) > 1 # pylint: disable=expression-not-assigned
+            Range(32) > 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=misplaced-comparison-constant
-            1 > Range(0, TiB) # pylint: disable=expression-not-assigned
+            1 > Range(0, TiB)  # pylint: disable=expression-not-assigned
 
         # >=
         self.assertTrue(Range(32, MiB) >= Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(32) >= 1 # pylint: disable=expression-not-assigned
+            Range(32) >= 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=misplaced-comparison-constant
-            1 >= Range(0, TiB) # pylint: disable=expression-not-assigned
+            1 >= Range(0, TiB)  # pylint: disable=expression-not-assigned
 
         # !=
         self.assertTrue(Range(32, MiB) != Range(32, GiB))
@@ -145,7 +146,7 @@ class DivmodTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             divmod(Range(12), 0)
         with self.assertRaises(RangeNonsensicalBinOpError):
-            divmod(Range(12), Decimal('NaN'))
+            divmod(Range(12), Decimal("NaN"))
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
@@ -177,7 +178,7 @@ class FloordivTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) // 0
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) // Decimal('NaN')
+            Range(12) // Decimal("NaN")
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
@@ -207,7 +208,7 @@ class ModTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) % 0
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) % Decimal('NaN')
+            Range(12) % Decimal("NaN")
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
@@ -233,7 +234,7 @@ class MultiplicationTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             Range(0) * Decimal("NaN")
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) * 'str'
+            Range(0) * "str"
 
     @given(SIZE_STRATEGY, NUMBERS_STRATEGY)
     @settings(max_examples=10)
@@ -274,7 +275,7 @@ class RfloordivTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(0).__rfloordiv__(Range(12))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12).__rfloordiv__(Decimal('NaN'))
+            Range(12).__rfloordiv__(Decimal("NaN"))
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
@@ -296,7 +297,7 @@ class RmodTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(0).__rmod__(Range(12))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12).__rmod__(Decimal('NaN'))
+            Range(12).__rmod__(Decimal("NaN"))
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
@@ -334,7 +335,7 @@ class RtruedivTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(0).__rtruediv__(Range(12))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12).__rtruediv__(Decimal('NaN'))
+            Range(12).__rtruediv__(Decimal("NaN"))
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
@@ -376,7 +377,7 @@ class TruedivTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) / 0
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) / Decimal('NaN')
+            Range(12) / Decimal("NaN")
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
@@ -426,9 +427,9 @@ class ArithmeticPropertiesTestCase(unittest.TestCase):
     """
 
     @given(
-       SIZE_STRATEGY,
-       NUMBERS_STRATEGY.filter(lambda n: not isinstance(n, Decimal)),
-       NUMBERS_STRATEGY.filter(lambda n: not isinstance(n, Decimal))
+        SIZE_STRATEGY,
+        NUMBERS_STRATEGY.filter(lambda n: not isinstance(n, Decimal)),
+        NUMBERS_STRATEGY.filter(lambda n: not isinstance(n, Decimal)),
     )
     @settings(max_examples=10)
     def testDistributivity1(self, s, n, m):

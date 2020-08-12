@@ -24,29 +24,25 @@
     expressions will cause an exception to be raised.
 """
 
+# isort: STDLIB
 from fractions import Fraction
 
+# isort: FIRSTPARTY
 import justbases
 
 from ._config import Config
-
-from ._errors import RangeFractionalResultError
-from ._errors import RangeNonsensicalBinOpError
-from ._errors import RangeNonsensicalBinOpValueError
-from ._errors import RangePowerResultError
-from ._errors import RangeValueError
-
-from ._constants import B
-from ._constants import BinaryUnits
-from ._constants import DecimalUnits
-from ._constants import PRECISE_NUMERIC_TYPES
-from ._constants import UNIT_TYPES
-
-from ._util.generators import next_or_last
-from ._util.generators import takeuntil
+from ._constants import PRECISE_NUMERIC_TYPES, UNIT_TYPES, B, BinaryUnits, DecimalUnits
+from ._errors import (
+    RangeFractionalResultError,
+    RangeNonsensicalBinOpError,
+    RangeNonsensicalBinOpValueError,
+    RangePowerResultError,
+    RangeValueError,
+)
+from ._util.generators import next_or_last, takeuntil
 
 
-class Range():
+class Range:
     """ Class for instantiating Range objects. """
 
     _BYTES_SYMBOL = "B"
@@ -64,10 +60,7 @@ class Range():
         :rtype: Radix * int
         """
         return justbases.Radices.from_rational(
-           value,
-           config.base,
-           config.max_places,
-           config.rounding_method
+            value, config.base, config.max_places, config.rounding_method
         )
 
     @classmethod
@@ -80,9 +73,9 @@ class Range():
         :returns: None if not convertable, else numeric value
         :rtype: Fraction or NoneType
         """
-        if not isinstance(unit, UNIT_TYPES) and  not isinstance(unit, Range):
+        if not isinstance(unit, UNIT_TYPES) and not isinstance(unit, Range):
             return None
-        factor = getattr(unit, 'factor', getattr(unit, 'magnitude', None))
+        factor = getattr(unit, "factor", getattr(unit, "magnitude", None))
         return Fraction(factor if factor is not None else unit)
 
     def __init__(self, value=0, units=None):
@@ -111,11 +104,9 @@ class Range():
         elif isinstance(value, Range):
             if units is not None:
                 raise RangeValueError(
-                   units,
-                   "units",
-                   "meaningless when Range value is passed"
+                    units, "units", "meaningless when Range value is passed"
                 )
-            magnitude = value.magnitude # pylint: disable=no-member
+            magnitude = value.magnitude  # pylint: disable=no-member
         else:
             raise RangeValueError(value, "value")
 
@@ -174,6 +165,7 @@ class Range():
 
     def __int__(self):
         return int(self._magnitude)
+
     __trunc__ = __int__
 
     def __hash__(self):
@@ -198,6 +190,7 @@ class Range():
         if not isinstance(other, Range):
             raise RangeNonsensicalBinOpError("+", other)
         return Range(self._magnitude + other.magnitude)
+
     __radd__ = __add__
 
     def __divmod__(self, other):
@@ -233,8 +226,7 @@ class Range():
             raise RangeNonsensicalBinOpValueError("rdivmod", other)
 
     def __eq__(self, other):
-        return isinstance(other, Range) and \
-           self._magnitude == other.magnitude
+        return isinstance(other, Range) and self._magnitude == other.magnitude
 
     def __floordiv__(self, other):
         # other * floor + rem = self
@@ -290,12 +282,12 @@ class Range():
             try:
                 return Range(self._magnitude % other.magnitude)
             except ZeroDivisionError:
-                raise RangeNonsensicalBinOpValueError('%', other)
+                raise RangeNonsensicalBinOpValueError("%", other)
         if isinstance(other, PRECISE_NUMERIC_TYPES):
             try:
                 return Range(self._magnitude % Fraction(other))
             except ZeroDivisionError:
-                raise RangeNonsensicalBinOpValueError('%', other)
+                raise RangeNonsensicalBinOpValueError("%", other)
         raise RangeNonsensicalBinOpError("%", other)
 
     def __rmod__(self, other):
@@ -316,6 +308,7 @@ class Range():
         if isinstance(other, Range):
             raise RangePowerResultError()
         raise RangeNonsensicalBinOpError("*", other)
+
     __rmul__ = __mul__
 
     def __pow__(self, other):
@@ -330,8 +323,7 @@ class Range():
         raise RangeNonsensicalBinOpError("rpow", other)
 
     def __ne__(self, other):
-        return not isinstance(other, Range) or \
-           self._magnitude != other.magnitude
+        return not isinstance(other, Range) or self._magnitude != other.magnitude
 
     def __sub__(self, other):
         # self - other = sub
@@ -392,9 +384,7 @@ class Range():
 
         if factor <= 0:
             raise RangeValueError(
-               factor,
-               "factor",
-               "can not convert to non-positive unit %s"
+                factor, "factor", "can not convert to non-positive unit %s"
             )
 
         return self._magnitude / factor
@@ -439,8 +429,8 @@ class Range():
 
         if config.exact_value:
             return next_or_last(
-               lambda x: self._as_single_number(x[0], config)[1] == 0,
-               reversed(candidates)
+                lambda x: self._as_single_number(x[0], config)[1] == 0,
+                reversed(candidates),
             )
         return candidates[-1]
 
@@ -482,7 +472,7 @@ class Range():
         (lower, upper) = bounds
         if lower is not None and upper is not None:
             if lower > upper:
-                raise RangeValueError(bounds, 'bounds')
+                raise RangeValueError(bounds, "bounds")
 
         if lower is not None and res < lower:
             return lower

@@ -17,7 +17,9 @@
 
 """ Exception types used by the justbytes class. """
 
+# isort: STDLIB
 import abc
+
 
 class RangeError(Exception, metaclass=abc.ABCMeta):
     """ Generic Range error. """
@@ -49,11 +51,14 @@ class RangeValueError(RangeError):
             return fmt_str % (self.value, self.param, self.msg)
         return self._FMT_STR % (self.value, self.param)
 
+
 class RangeUnsupportedOpError(RangeError, metaclass=abc.ABCMeta):
     """ Error when executing unsupported operation on Range. """
 
+
 class RangeNonsensicalOpError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
     """ Error when requesting an operation that doesn't make sense. """
+
 
 class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
     """ Error when requesting a binary operation with a nonsense value. """
@@ -73,8 +78,10 @@ class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
     def __str__(self):
         return self._FMT_STR % (self._operator, self._other)
 
+
 class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
     """ Error when requesting a binary operation that doesn't make sense. """
+
     _FMT_STR = "nonsensical operand types for %s: 'Range' and '%s'"
 
     def __init__(self, operator, other):
@@ -90,16 +97,19 @@ class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
     def __str__(self):
         return self._FMT_STR % (self._operator, type(self._other).__name__)
 
+
 class RangeUnrepresentableResultError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
     """ Error when requesting an operation that yields units that cannot
         be represented with Range, e.g., when multiplying a Range by a Range.
     """
 
+
 class RangePowerResultError(RangeUnrepresentableResultError):
     """ Error when requesting an operation that would yield a byte power. """
 
     def __str__(self):
-        return  "requested operation result requires non-unit power of bytes"
+        return "requested operation result requires non-unit power of bytes"
+
 
 class RangeFractionalResultError(RangeUnrepresentableResultError):
     """ Error when Range construction is strict. """
