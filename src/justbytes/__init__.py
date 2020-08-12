@@ -78,7 +78,6 @@
             raise e
 """
 # pylint: disable=invalid-name
-# pylint: disable=wrong-import-position
 
 from ._config import (
     BaseConfig,

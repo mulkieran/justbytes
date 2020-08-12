@@ -106,7 +106,7 @@ class Range:
                 raise RangeValueError(
                     units, "units", "meaningless when Range value is passed"
                 )
-            magnitude = value.magnitude  # pylint: disable=no-member
+            magnitude = value.magnitude
         else:
             raise RangeValueError(value, "value")
 
@@ -435,7 +435,6 @@ class Range:
         return candidates[-1]
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
-        # pylint: disable=line-too-long
         """ Rounds to unit specified as a named constant or a Range.
 
             :param unit: a unit specifier
