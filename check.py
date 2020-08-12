@@ -1,11 +1,20 @@
 #!/usr/bin/python
 
+"""
+Invoke pylint with pre-selected-options.
+"""
+
 # isort: STDLIB
 import argparse
 import subprocess
 import sys
 
 arg_map = {
+    "check.py": [
+        "--reports=no",
+        "--disable=I",
+        "--msg-template='{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}'",
+    ],
     "src/justbytes": [
         "--reports=no",
         "--disable=I",
@@ -49,6 +58,9 @@ def get_command(namespace):
 
 
 def main():
+    """
+    Run the linter on a single directory or file.
+    """
     args = get_parser().parse_args()
     return subprocess.call(get_command(args), stdout=sys.stdout)
 
