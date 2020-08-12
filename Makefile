@@ -32,3 +32,7 @@ upload-release:
 .PHONY: docs
 docs:
 	cd doc/_build/html; zip -r ../../../docs *
+
+.PHONY: yamllint
+yamllint:
+	yamllint --strict .travis.yml
