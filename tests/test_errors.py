@@ -16,13 +16,17 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """ Test for error classes. """
+# isort: STDLIB
 import unittest
 
-from justbytes._errors import RangeFractionalResultError
-from justbytes._errors import RangeNonsensicalBinOpError
-from justbytes._errors import RangeNonsensicalBinOpValueError
-from justbytes._errors import RangePowerResultError
-from justbytes._errors import RangeValueError
+# isort: LOCAL
+from justbytes._errors import (
+    RangeFractionalResultError,
+    RangeNonsensicalBinOpError,
+    RangeNonsensicalBinOpValueError,
+    RangePowerResultError,
+    RangeValueError,
+)
 
 
 class ErrorTestCase(unittest.TestCase):

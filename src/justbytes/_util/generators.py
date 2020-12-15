@@ -30,6 +30,7 @@ def takeuntil(pred, seq):
         if pred(x):
             break
 
+
 def next_or_last(pred, seq, default=None):
     """
     Return the first element that matches the predicate or the last element in
@@ -45,6 +46,6 @@ def next_or_last(pred, seq, default=None):
         if pred(x):
             return x
     try:
-        return x # pylint: disable=undefined-loop-variable
+        return x  # pylint: disable=undefined-loop-variable
     except NameError:
         return default

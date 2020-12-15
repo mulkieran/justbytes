@@ -16,24 +16,19 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """ Utilities for testing. """
+# isort: THIRDPARTY
 from hypothesis import strategies
 
-from justbytes import Range
-from justbytes import UNITS
+# isort: LOCAL
+from justbytes import UNITS, Range
 
 NUMBERS_STRATEGY = strategies.one_of(
-   strategies.integers(),
-   strategies.fractions().map(lambda x: x.limit_denominator(100))
+    strategies.integers(),
+    strategies.fractions().map(lambda x: x.limit_denominator(100)),
 )
 
 SIZE_STRATEGY = strategies.builds(
-   Range,
-   strategies.one_of(
-      NUMBERS_STRATEGY,
-      strategies.builds(
-         str,
-         NUMBERS_STRATEGY
-      )
-   ),
-   strategies.sampled_from(UNITS())
+    Range,
+    strategies.one_of(NUMBERS_STRATEGY, strategies.builds(str, NUMBERS_STRATEGY)),
+    strategies.sampled_from(UNITS()),
 )

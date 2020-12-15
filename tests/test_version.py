@@ -16,8 +16,10 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """ Test for version information. """
+# isort: STDLIB
 import unittest
 
+# isort: LOCAL
 import justbytes
 
 
@@ -26,4 +28,4 @@ class VersionTestCase(unittest.TestCase):
 
     def testValue(self):
         """ That value is reasonable. """
-        self.assertEqual(justbytes.__version__, '0.14')
+        self.assertEqual(justbytes.__version__, "0.14")

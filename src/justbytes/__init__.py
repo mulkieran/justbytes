@@ -80,10 +80,34 @@
 # pylint: disable=invalid-name
 # pylint: disable=wrong-import-position
 
-# UNIT CONSTANTS
-from ._constants import B
+# CONFIGURATION
+from ._config import (
+    BaseConfig,
+    Config,
+    DigitsConfig,
+    DisplayConfig,
+    StringConfig,
+    StripConfig,
+    ValueConfig,
+)
 
+# ROUNDING CONSTANTS
+# UNIT CONSTANTS
+from ._constants import ROUNDING_METHODS, UNITS, B
+from ._constants import BinaryUnits as _BinaryUnits
 from ._constants import DecimalUnits as _DecimalUnits
+from ._constants import RoundingMethods as _RoundingMethods
+
+# EXCEPTIONS
+from ._errors import RangeError, RangeValueError
+
+# SIZE
+from ._size import Range
+from ._sizes import AI
+
+# VERSION
+from .version import __version__
+
 KB = _DecimalUnits.KB
 MB = _DecimalUnits.MB
 GB = _DecimalUnits.GB
@@ -93,7 +117,6 @@ EB = _DecimalUnits.EB
 ZB = _DecimalUnits.ZB
 YB = _DecimalUnits.YB
 
-from ._constants import BinaryUnits as _BinaryUnits
 KiB = _BinaryUnits.KiB
 MiB = _BinaryUnits.MiB
 GiB = _BinaryUnits.GiB
@@ -103,35 +126,10 @@ EiB = _BinaryUnits.EiB
 ZiB = _BinaryUnits.ZiB
 YiB = _BinaryUnits.YiB
 
-from ._constants import UNITS
 
-# ROUNDING CONSTANTS
-from ._constants import RoundingMethods as _RoundingMethods
 ROUND_DOWN = _RoundingMethods.ROUND_DOWN
 ROUND_HALF_DOWN = _RoundingMethods.ROUND_HALF_DOWN
 ROUND_HALF_UP = _RoundingMethods.ROUND_HALF_UP
 ROUND_HALF_ZERO = _RoundingMethods.ROUND_HALF_ZERO
 ROUND_TO_ZERO = _RoundingMethods.ROUND_TO_ZERO
 ROUND_UP = _RoundingMethods.ROUND_UP
-
-from ._constants import ROUNDING_METHODS
-
-# CONFIGURATION
-from ._config import BaseConfig
-from ._config import Config
-from ._config import DigitsConfig
-from ._config import DisplayConfig
-from ._config import StringConfig
-from ._config import StripConfig
-from ._config import ValueConfig
-
-# EXCEPTIONS
-from ._errors import RangeError
-from ._errors import RangeValueError
-
-# SIZE
-from ._size import Range
-from ._sizes import AI
-
-# VERSION
-from .version import __version__
