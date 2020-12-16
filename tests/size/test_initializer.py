@@ -17,19 +17,16 @@
 
 """ Tests for Range initialization. """
 
+# isort: STDLIB
+import unittest
 from decimal import Decimal
 from fractions import Fraction
 
-import unittest
+# isort: THIRDPARTY
+from hypothesis import given, settings, strategies
 
-from hypothesis import given
-from hypothesis import settings
-from hypothesis import strategies
-
-from justbytes import B
-from justbytes import Range
-from justbytes import UNITS
-
+# isort: LOCAL
+from justbytes import UNITS, B, Range
 from justbytes._errors import RangeValueError
 
 
@@ -43,7 +40,7 @@ class InitializerTestCase(unittest.TestCase):
         with self.assertRaises(RangeValueError):
             Range("1.2.3")
         with self.assertRaises(RangeValueError):
-            Range(Decimal('NaN'))
+            Range(Decimal("NaN"))
 
         s = Range(0)
         with self.assertRaises(RangeValueError):
@@ -56,19 +53,18 @@ class InitializerTestCase(unittest.TestCase):
             Range(1, Decimal("NaN"))
 
     @given(
-       strategies.one_of(
-          strategies.integers(),
-          strategies.fractions(),
-          strategies.builds(
-             str,
-             strategies.decimals().filter(lambda x: x.is_finite())
-          )
-       ),
-       strategies.one_of(
-          strategies.sampled_from(UNITS()),
-          strategies.builds(Range, strategies.fractions()),
-          strategies.fractions(),
-       )
+        strategies.one_of(
+            strategies.integers(),
+            strategies.fractions(),
+            strategies.builds(
+                str, strategies.decimals().filter(lambda x: x.is_finite())
+            ),
+        ),
+        strategies.one_of(
+            strategies.sampled_from(UNITS()),
+            strategies.builds(Range, strategies.fractions()),
+            strategies.fractions(),
+        ),
     )
     @settings(max_examples=50)
     def testInitialization(self, s, u):

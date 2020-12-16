@@ -16,17 +16,14 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """ Test for constants classes. """
+# isort: STDLIB
 import unittest
 
-from hypothesis import given
-from hypothesis import strategies
+# isort: THIRDPARTY
+from hypothesis import given, strategies
 
-from justbytes._constants import B
-from justbytes._constants import BinaryUnits
-from justbytes._constants import DecimalUnits
-from justbytes._constants import RoundingMethods
-from justbytes._constants import UNITS
-
+# isort: LOCAL
+from justbytes._constants import UNITS, B, BinaryUnits, DecimalUnits, RoundingMethods
 from justbytes._errors import RangeValueError
 
 
@@ -49,24 +46,16 @@ class ConstantsTestCase(unittest.TestCase):
         self.assertTrue(B in UNITS())
 
     @given(
-       strategies.integers(
-          min_value=0,
-          max_value=BinaryUnits.max_exponent()
-       ),
-       strategies.integers(
-          min_value=0,
-          max_value=DecimalUnits.max_exponent()
-       )
+        strategies.integers(min_value=0, max_value=BinaryUnits.max_exponent()),
+        strategies.integers(min_value=0, max_value=DecimalUnits.max_exponent()),
     )
     def testExpMethod(self, bexp, dexp):
         """ Test extracting unit for a given exponent. """
         self.assertEqual(
-           BinaryUnits.unit_for_exp(bexp).factor,
-           BinaryUnits.FACTOR ** bexp
+            BinaryUnits.unit_for_exp(bexp).factor, BinaryUnits.FACTOR ** bexp
         )
         self.assertEqual(
-           DecimalUnits.unit_for_exp(dexp).factor,
-           DecimalUnits.FACTOR ** dexp
+            DecimalUnits.unit_for_exp(dexp).factor, DecimalUnits.FACTOR ** dexp
         )
 
     def testExpExceptions(self):

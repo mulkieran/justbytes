@@ -17,16 +17,16 @@
 
 """ Tests for operations on Range objects. """
 
+# isort: STDLIB
 import copy
-
 import unittest
 
-from hypothesis import given
-from hypothesis import settings
-from hypothesis import strategies
+# isort: THIRDPARTY
+from hypothesis import given, settings, strategies
 
-from justbytes import Range
-from justbytes import UNITS
+# isort: LOCAL
+from justbytes import UNITS, Range
+
 
 class ConversionTestCase(unittest.TestCase):
     """ Test conversions. """
@@ -42,10 +42,7 @@ class ConversionTestCase(unittest.TestCase):
         self.assertTrue(bool(Range(1)))
         self.assertTrue(Range(1).__bool__())
 
-    @given(
-       strategies.integers(),
-       strategies.sampled_from(UNITS())
-    )
+    @given(strategies.integers(), strategies.sampled_from(UNITS()))
     @settings(max_examples=5)
     def testInt(self, s, u):
         """ Test integer conversions. """
@@ -60,11 +57,9 @@ class ConversionTestCase(unittest.TestCase):
             float(Range(0))
 
     @given(
-       strategies.builds(
-          Range,
-          strategies.integers(),
-          strategies.sampled_from(UNITS())
-       )
+        strategies.builds(
+            Range, strategies.integers(), strategies.sampled_from(UNITS())
+        )
     )
     @settings(max_examples=50)
     def testRepr(self, value):
