@@ -44,22 +44,12 @@ from justbytes import (
     ValueConfig,
 )
 from justbytes._constants import UNITS, BinaryUnits, DecimalUnits
-from justbytes._errors import RangeValueError
 
-from tests.utils import SIZE_STRATEGY  # isort:skip
+from tests.test_hypothesis.test_size.utils import SIZE_STRATEGY  # isort:skip
 
 
 class ConversionTestCase(unittest.TestCase):
     """ Test conversion methods. """
-
-    def testException(self):
-        """ Test exceptions. """
-        with self.assertRaises(RangeValueError):
-            Range(0).convertTo(-2)
-        with self.assertRaises(RangeValueError):
-            Range(0).convertTo(0)
-        with self.assertRaises(RangeValueError):
-            Range(512).convertTo(1.4)
 
     @given(
         strategies.builds(Range, strategies.integers()),
@@ -172,19 +162,6 @@ class DigitsConfigTestCase(unittest.TestCase):
             else:
                 self.assertTrue(all(r in string.ascii_lowercase for r in letters))
 
-    def testExceptions(self):
-        """
-        Test exceptions.
-        """
-        with self.assertRaises(RangeValueError):
-            Range(0).getString(
-                StringConfig(
-                    ValueConfig(base=100),
-                    Config.STRING_CONFIG.DISPLAY_CONFIG,
-                    Config.STRING_CONFIG.DISPLAY_IMPL_CLASS,
-                )
-            )
-
 
 class RoundingTestCase(unittest.TestCase):
     """ Test rounding methods. """
@@ -272,13 +249,3 @@ class RoundingTestCase(unittest.TestCase):
                     self.assertEqual(rounded, floor)
                 else:
                     self.assertEqual(rounded, ceiling)
-
-    def testExceptions(self):
-        """ Test raising exceptions when rounding. """
-        with self.assertRaises(RangeValueError):
-            Range(0).roundTo(Range(-1, B), rounding=ROUND_HALF_UP)
-        with self.assertRaises(RangeValueError):
-            Range(512).roundTo(1.4, rounding=ROUND_HALF_UP)
-        with self.assertRaises(RangeValueError):
-            s = Range(512)
-            s.roundTo(512, rounding=ROUND_HALF_UP, bounds=(Range(0), Range(-1)))

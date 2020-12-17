@@ -21,11 +21,8 @@
 import copy
 import unittest
 
-# isort: THIRDPARTY
-from hypothesis import given, settings, strategies
-
 # isort: LOCAL
-from justbytes import UNITS, Range
+from justbytes import Range
 
 
 class ConversionTestCase(unittest.TestCase):
@@ -42,12 +39,6 @@ class ConversionTestCase(unittest.TestCase):
         self.assertTrue(bool(Range(1)))
         self.assertTrue(Range(1).__bool__())
 
-    @given(strategies.integers(), strategies.sampled_from(UNITS()))
-    @settings(max_examples=5)
-    def testInt(self, s, u):
-        """ Test integer conversions. """
-        self.assertEqual(int(Range(s, u)), s * int(u))
-
     def testFloat(self):
         """ Test float conversion.
 
@@ -55,16 +46,6 @@ class ConversionTestCase(unittest.TestCase):
         """
         with self.assertRaises(TypeError):
             float(Range(0))
-
-    @given(
-        strategies.builds(
-            Range, strategies.integers(), strategies.sampled_from(UNITS())
-        )
-    )
-    @settings(max_examples=50)
-    def testRepr(self, value):
-        """ Test that repr looks right. """
-        self.assertEqual("%r" % value, "Range(%r)" % value.magnitude)
 
     def testDeepCopy(self):
         """ Test that deepcopy is different but equal. """

@@ -19,38 +19,17 @@
 
 # isort: STDLIB
 import unittest
-from decimal import Decimal
 from fractions import Fraction
 
 # isort: THIRDPARTY
 from hypothesis import given, settings, strategies
 
 # isort: LOCAL
-from justbytes import UNITS, B, Range
-from justbytes._errors import RangeValueError
+from justbytes import UNITS, Range
 
 
 class InitializerTestCase(unittest.TestCase):
     """ Test conversions. """
-
-    def testExceptions(self):
-        """ Test exceptions. """
-        with self.assertRaises(RangeValueError):
-            Range(1.23)
-        with self.assertRaises(RangeValueError):
-            Range("1.2.3")
-        with self.assertRaises(RangeValueError):
-            Range(Decimal("NaN"))
-
-        s = Range(0)
-        with self.assertRaises(RangeValueError):
-            Range(s, B)
-
-        with self.assertRaises(RangeValueError):
-            Range(1, 1.2)
-
-        with self.assertRaises(RangeValueError):
-            Range(1, Decimal("NaN"))
 
     @given(
         strategies.one_of(

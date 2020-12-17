@@ -25,30 +25,6 @@ from hypothesis import given, settings, strategies
 # isort: LOCAL
 from justbytes._config import Config, DisplayConfig, ValueConfig
 from justbytes._constants import UNITS
-from justbytes._errors import RangeValueError
-
-
-class ConfigTestCase(unittest.TestCase):
-    """ Exercise methods of output configuration classes. """
-
-    # pylint: disable=too-few-public-methods
-
-    def testValueConfigObject(self):
-        """ Miscellaneous tests for string configuration. """
-        self.assertIsInstance(str(Config.STRING_CONFIG.VALUE_CONFIG), str)
-
-    def testException(self):
-        """ Test exceptions. """
-        with self.assertRaises(RangeValueError):
-            ValueConfig(min_value=-1)
-        with self.assertRaises(RangeValueError):
-            ValueConfig(min_value=3.2)
-        with self.assertRaises(RangeValueError):
-            ValueConfig(unit=2)
-        with self.assertRaises(RangeValueError):
-            ValueConfig(base=1)
-        with self.assertRaises(RangeValueError):
-            ValueConfig(max_places=-1)
 
 
 class RangeTestCase(unittest.TestCase):
