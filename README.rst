@@ -131,3 +131,10 @@ Alternative Packages
 If you are interested in computing in Python with physical, rather than
 logical, quantities, you should consult the pint package:
 http://pint.readthedocs.org.
+
+Packaging
+---------
+Downstream packagers, if incorporating testing into their packaging, are
+encouraged to use only the tests in the test_deterministic module, to
+avoid testing failures that may arise due to the non-deterministic behavior
+of Hypothesis tests.
