@@ -1,5 +1,5 @@
-justbytes 0.15 (UNRELEASED)
-===========================
+justbytes 0.15
+==============
 
 Recommended Python interpreter: 3.8.6
 Recommended tox version: 3.15.2
@@ -11,4 +11,5 @@ YAML linter: yamllint (1.25.0)
   https://github.com/stratis-storage/justbytes/pull/61
 
 - Tidies and Maintenance:
+  https://github.com/stratis-storage/justbytes/pull/62
   https://github.com/stratis-storage/justbytes/pull/60
