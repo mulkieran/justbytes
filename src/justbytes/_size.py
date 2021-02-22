@@ -79,7 +79,8 @@ class Range:
         return Fraction(factor if factor is not None else unit)
 
     def __init__(self, value=0, units=None):
-        """Initialize a new Range object.
+        """
+        Initialize a new Range object.
 
         :param value: a size value, default is 0
         :type value: Range, or any finite numeric type (possibly as str)
@@ -369,7 +370,8 @@ class Range:
     __rdiv__ = __rtruediv__
 
     def convertTo(self, spec=None):
-        """Return the size in the units indicated by the specifier.
+        """
+        Return the size in the units indicated by the specifier.
 
         :param spec: a units specifier
         :type spec: a units specifier or :class:`Range`
@@ -390,7 +392,8 @@ class Range:
         return self._magnitude / factor
 
     def componentsList(self, binary_units=True):
-        """Yield a representation of this size for every unit,
+        """
+        Yield a representation of this size for every unit,
         decomposed into a Fraction value and a unit specifier
         tuple.
 
@@ -402,7 +405,8 @@ class Range:
             yield (self.convertTo(unit), unit)
 
     def components(self, config=Config.STRING_CONFIG.VALUE_CONFIG):
-        """Return a representation of this size, decomposed into a
+        """
+        Return a representation of this size, decomposed into a
         Fraction value and a unit specifier tuple.
 
         :param ValueConfig config: configuration
@@ -436,7 +440,8 @@ class Range:
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
-        """Rounds to unit specified as a named constant or a Range.
+        """
+        Rounds to unit specified as a named constant or a Range.
 
         :param unit: a unit specifier
         :type unit: any non-negative :class:`Range` or element in :func:`._constants.UNITS`

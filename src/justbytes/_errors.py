@@ -26,7 +26,8 @@ class RangeError(Exception, metaclass=abc.ABCMeta):
 
 
 class RangeValueError(RangeError):
-    """Raised when a parameter has an unacceptable value.
+    """
+    Raised when a parameter has an unacceptable value.
 
     May also be raised when the parameter has an unacceptable type.
     """
@@ -34,7 +35,8 @@ class RangeValueError(RangeError):
     _FMT_STR = "value '%s' for parameter %s is unacceptable"
 
     def __init__(self, value, param, msg=None):
-        """Initializer.
+        """
+        Initializer.
 
         :param object value: the value
         :param str param: the parameter
@@ -66,7 +68,8 @@ class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
     _FMT_STR = "nonsensical value for for %s: '%s'"
 
     def __init__(self, operator, other):
-        """Initializer.
+        """
+        Initializer.
 
         :param str operator: the operator
         :param object other: the other argument
@@ -85,7 +88,8 @@ class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
     _FMT_STR = "nonsensical operand types for %s: 'Range' and '%s'"
 
     def __init__(self, operator, other):
-        """Initializer.
+        """
+        Initializer.
 
         :param str operator: the operator
         :param object other: the other argument
@@ -99,7 +103,8 @@ class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
 
 
 class RangeUnrepresentableResultError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
-    """Error when requesting an operation that yields units that cannot
+    """
+    Error when requesting an operation that yields units that cannot
     be represented with Range, e.g., when multiplying a Range by a Range.
     """
 

@@ -79,7 +79,8 @@ class DisplayConfig(justbases.DisplayConfig):
 
 
 class ValueConfig:
-    """Configuration for __str__ method.
+    """
+    Configuration for __str__ method.
 
     If max_places is set to None, all non-zero digits after the
     decimal point will be shown.  Otherwise, max_places digits will
@@ -118,7 +119,8 @@ class ValueConfig:
         base=10,
         rounding_method=RoundingMethods.ROUND_HALF_ZERO,
     ):
-        """Initializer.
+        """
+        Initializer.
 
         :param max_places: number of decimal places to use, default is 2
         :type max_places: an integer type or NoneType
