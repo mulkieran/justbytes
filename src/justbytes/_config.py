@@ -79,19 +79,19 @@ class DisplayConfig(justbases.DisplayConfig):
 
 
 class ValueConfig:
-    """ Configuration for __str__ method.
+    """Configuration for __str__ method.
 
-        If max_places is set to None, all non-zero digits after the
-        decimal point will be shown.  Otherwise, max_places digits will
-        be shown.
+    If max_places is set to None, all non-zero digits after the
+    decimal point will be shown.  Otherwise, max_places digits will
+    be shown.
 
-        min_value sets the smallest value allowed.
-        If min_value is 10, then single digits on the lhs of
-        the decimal will be avoided if possible. In that case,
-        9216 KiB is preferred to 9 MiB. However, 1 B has no alternative.
-        If min_value is 1, however, 9 MiB is preferred.
-        If min_value is 0.1, then 0.75 GiB is preferred to 768 MiB,
-        but 0.05 GiB is still displayed as 51.2 MiB.
+    min_value sets the smallest value allowed.
+    If min_value is 10, then single digits on the lhs of
+    the decimal will be avoided if possible. In that case,
+    9216 KiB is preferred to 9 MiB. However, 1 B has no alternative.
+    If min_value is 1, however, 9 MiB is preferred.
+    If min_value is 0.1, then 0.75 GiB is preferred to 768 MiB,
+    but 0.05 GiB is still displayed as 51.2 MiB.
     """
 
     # pylint: disable=too-few-public-methods
@@ -118,17 +118,17 @@ class ValueConfig:
         base=10,
         rounding_method=RoundingMethods.ROUND_HALF_ZERO,
     ):
-        """ Initializer.
+        """Initializer.
 
-            :param max_places: number of decimal places to use, default is 2
-            :type max_places: an integer type or NoneType
-            :param min_value: Lower bound for value, default is 1.
-            :type min_value: A precise numeric type: int or Decimal
-            :param bool binary_units: binary units if True, else SI
-            :param bool exact_value: uses largest units that allow exact value
-            :param unit: use the specified unit, overrides other options
-            :param base: numeric base
-            :param rounding_method: one of RoundingMethods.METHODS()
+        :param max_places: number of decimal places to use, default is 2
+        :type max_places: an integer type or NoneType
+        :param min_value: Lower bound for value, default is 1.
+        :type min_value: A precise numeric type: int or Decimal
+        :param bool binary_units: binary units if True, else SI
+        :param bool exact_value: uses largest units that allow exact value
+        :param unit: use the specified unit, overrides other options
+        :param base: numeric base
+        :param rounding_method: one of RoundingMethods.METHODS()
         """
         # pylint: disable=too-many-arguments
         if max_places is not None and max_places < 0:

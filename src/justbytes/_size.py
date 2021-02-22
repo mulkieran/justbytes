@@ -79,17 +79,17 @@ class Range:
         return Fraction(factor if factor is not None else unit)
 
     def __init__(self, value=0, units=None):
-        """ Initialize a new Range object.
+        """Initialize a new Range object.
 
-            :param value: a size value, default is 0
-            :type value: Range, or any finite numeric type (possibly as str)
-            :param units: the units of the size, default is None
-            :type units: any of the publicly defined units constants or a Range
-            :raises RangeValueError: on bad parameters
+        :param value: a size value, default is 0
+        :type value: Range, or any finite numeric type (possibly as str)
+        :param units: the units of the size, default is None
+        :type units: any of the publicly defined units constants or a Range
+        :raises RangeValueError: on bad parameters
 
-            Must pass None as units argument if value has type Range.
+        Must pass None as units argument if value has type Range.
 
-            The units number must be a precise numeric type.
+        The units number must be a precise numeric type.
         """
         if isinstance(value, (PRECISE_NUMERIC_TYPES, str)):
             try:
@@ -369,13 +369,13 @@ class Range:
     __rdiv__ = __rtruediv__
 
     def convertTo(self, spec=None):
-        """ Return the size in the units indicated by the specifier.
+        """Return the size in the units indicated by the specifier.
 
-            :param spec: a units specifier
-            :type spec: a units specifier or :class:`Range`
-            :returns: a numeric value in the units indicated by the specifier
-            :rtype: :class:`fractions.Fraction`
-            :raises RangeValueError: if unit specifier is non-positive
+        :param spec: a units specifier
+        :type spec: a units specifier or :class:`Range`
+        :returns: a numeric value in the units indicated by the specifier
+        :rtype: :class:`fractions.Fraction`
+        :raises RangeValueError: if unit specifier is non-positive
         """
         spec = B if spec is None else spec
         factor = self._get_unit_value(spec)
@@ -390,11 +390,11 @@ class Range:
         return self._magnitude / factor
 
     def componentsList(self, binary_units=True):
-        """ Yield a representation of this size for every unit,
-            decomposed into a Fraction value and a unit specifier
-            tuple.
+        """Yield a representation of this size for every unit,
+        decomposed into a Fraction value and a unit specifier
+        tuple.
 
-            :param bool binary_units: binary units if True, else SI
+        :param bool binary_units: binary units if True, else SI
         """
         units = BinaryUnits if binary_units else DecimalUnits
 
@@ -402,17 +402,17 @@ class Range:
             yield (self.convertTo(unit), unit)
 
     def components(self, config=Config.STRING_CONFIG.VALUE_CONFIG):
-        """ Return a representation of this size, decomposed into a
-            Fraction value and a unit specifier tuple.
+        """Return a representation of this size, decomposed into a
+        Fraction value and a unit specifier tuple.
 
-            :param ValueConfig config: configuration
+        :param ValueConfig config: configuration
 
-            :returns: a pair of a decimal value and a unit
-            :rtype: tuple of Fraction and unit
-            :raises RangeValueError: if min_value is not usable
+        :returns: a pair of a decimal value and a unit
+        :rtype: tuple of Fraction and unit
+        :raises RangeValueError: if min_value is not usable
 
-            The meaning of the parameters is the same as for
-            :class:`._config.ValueConfig`.
+        The meaning of the parameters is the same as for
+        :class:`._config.ValueConfig`.
         """
         units = BinaryUnits if config.binary_units else DecimalUnits
 
@@ -436,24 +436,24 @@ class Range:
 
     def roundTo(self, unit, rounding, bounds=(None, None)):
         # pylint: disable=line-too-long
-        """ Rounds to unit specified as a named constant or a Range.
+        """Rounds to unit specified as a named constant or a Range.
 
-            :param unit: a unit specifier
-            :type unit: any non-negative :class:`Range` or element in :func:`._constants.UNITS`
-            :param rounding: rounding mode to use
-            :type rounding: a field of :class:`._constants.RoundingMethods`
-            :param bounds: lower and upper bounds on the value
-            :type bounds: tuple of (Range or NoneType) * (Range or NoneType)
-            :returns: appropriately rounded Range
-            :rtype: :class:`Range`
-            :raises RangeValueError: on unusable arguments
+        :param unit: a unit specifier
+        :type unit: any non-negative :class:`Range` or element in :func:`._constants.UNITS`
+        :param rounding: rounding mode to use
+        :type rounding: a field of :class:`._constants.RoundingMethods`
+        :param bounds: lower and upper bounds on the value
+        :type bounds: tuple of (Range or NoneType) * (Range or NoneType)
+        :returns: appropriately rounded Range
+        :rtype: :class:`Range`
+        :raises RangeValueError: on unusable arguments
 
-            If unit is Range(0), returns Range(0).
+        If unit is Range(0), returns Range(0).
 
-            Note that rounding may be in the opposite direction of the rounding
-            method, e.g., when the rounding method is ROUND_DOWN but the current
-            value is below the lower bound the ultimate direction of the
-            rounding will be up.
+        Note that rounding may be in the opposite direction of the rounding
+        method, e.g., when the rounding method is ROUND_DOWN but the current
+        value is below the lower bound the ultimate direction of the
+        rounding will be up.
         """
         factor = self._get_unit_value(unit)
         if factor is None:
