@@ -29,9 +29,10 @@ class ConversionTestCase(unittest.TestCase):
     """ Test conversions. """
 
     def testBool(self):
-        """ Test conversion to bool.
+        """
+        Test conversion to bool.
 
-            Note that bool calls __bool__() in Python 3, __nonzero__ in Python2.
+        Note that bool calls __bool__() in Python 3, __nonzero__ in Python2.
         """
         self.assertFalse(bool(Range(0)))
         self.assertFalse(Range(0).__bool__())
@@ -40,9 +41,10 @@ class ConversionTestCase(unittest.TestCase):
         self.assertTrue(Range(1).__bool__())
 
     def testFloat(self):
-        """ Test float conversion.
+        """
+        Test float conversion.
 
-            Converting a Range to a float should require some effort.
+        Converting a Range to a float should require some effort.
         """
         with self.assertRaises(TypeError):
             float(Range(0))
