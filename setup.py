@@ -39,6 +39,9 @@ README = local_file("README.rst")
 with open(local_file("src/justbytes/version.py")) as o:
     exec(o.read())  # pylint: disable=exec-used
 
+with open(local_file("README.rst"), encoding="utf-8") as o:
+    long_description = o.read()
+
 setuptools.setup(
     name="justbytes",
     version=__version__,  # pylint: disable=undefined-variable
@@ -46,7 +49,7 @@ setuptools.setup(
     author="Anne Mulhern",
     author_email="amulhern@redhat.com",
     description="computing with and displaying bytes",
-    long_description=open(README, encoding="utf-8").read(),
+    long_description=long_description,
     long_description_content_type="text/x-rst",
     platforms=["Linux"],
     license="LGPLv2+",
