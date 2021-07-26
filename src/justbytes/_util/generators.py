@@ -25,9 +25,9 @@ def takeuntil(pred, seq):
     :param bool pred: a predicate, return False if the value is not satisfactory
     :param seq: a sequence of values
     """
-    for x in seq:
-        yield x
-        if pred(x):
+    for elem in seq:
+        yield elem
+        if pred(elem):
             break
 
 
@@ -42,10 +42,10 @@ def next_or_last(pred, seq, default=None):
     :param seq: a sequence of values
     :param default: returned if seq is empty, default is None
     """
-    for x in seq:
-        if pred(x):
-            return x
+    for elem in seq:
+        if pred(elem):
+            return elem
     try:
-        return x  # pylint: disable=undefined-loop-variable
+        return elem  # pylint: disable=undefined-loop-variable
     except NameError:
         return default

@@ -123,7 +123,7 @@ class Range:
         """
         return self._magnitude
 
-    def getStringInfo(self, config):
+    def getStringInfo(self, config):  # pylint: disable=invalid-name
         """
         Return a representation of the size.
 
@@ -135,7 +135,7 @@ class Range:
         (result, relation) = self._as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config):
+    def getString(self, config):  # pylint: disable=invalid-name
         """
         Return a string representation of the size.
 
@@ -369,7 +369,7 @@ class Range:
 
     __rdiv__ = __rtruediv__
 
-    def convertTo(self, spec=None):
+    def convertTo(self, spec=None):  # pylint: disable=invalid-name
         """
         Return the size in the units indicated by the specifier.
 
@@ -391,7 +391,7 @@ class Range:
 
         return self._magnitude / factor
 
-    def componentsList(self, binary_units=True):
+    def componentsList(self, binary_units=True):  # pylint: disable=invalid-name
         """
         Yield a representation of this size for every unit,
         decomposed into a Fraction value and a unit specifier
@@ -438,7 +438,9 @@ class Range:
             )
         return candidates[-1]
 
-    def roundTo(self, unit, rounding, bounds=(None, None)):
+    def roundTo(
+        self, unit, rounding, bounds=(None, None)
+    ):  # pylint: disable=invalid-name
         # pylint: disable=line-too-long
         """
         Rounds to unit specified as a named constant or a Range.

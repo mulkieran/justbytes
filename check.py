@@ -23,7 +23,6 @@ arg_map = {
     "src/justbytes": [
         "--reports=no",
         "--disable=I",
-        "--disable=invalid-name",
         "--msg-template='{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}'",
     ],
     "tests": [
