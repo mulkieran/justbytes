@@ -29,7 +29,7 @@ from justbytes._errors import RangeValueError
 class InitializerTestCase(unittest.TestCase):
     """ Test conversions. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test exceptions. """
         with self.assertRaises(RangeValueError):
             Range(1.23)
@@ -38,9 +38,9 @@ class InitializerTestCase(unittest.TestCase):
         with self.assertRaises(RangeValueError):
             Range(Decimal("NaN"))
 
-        s = Range(0)
+        size = Range(0)
         with self.assertRaises(RangeValueError):
-            Range(s, B)
+            Range(size, B)
 
         with self.assertRaises(RangeValueError):
             Range(1, 1.2)

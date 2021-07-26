@@ -33,21 +33,21 @@ from justbytes._errors import (
 class UtilityMethodsTestCase(unittest.TestCase):
     """ Test operator methods and other methods with an '_'. """
 
-    def testBinaryOperatorsRange(self):
+    def test_binary_operators_range(self):
         """ Test binary operators with a possible Range result. """
-        s = Range(2, GiB)
+        size = Range(2, GiB)
 
         # **
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=expression-not-assigned, pointless-statement
-            s ** Range(2)
+            size ** Range(2)
         with self.assertRaises(RangePowerResultError):
-            s ** 2  # pylint: disable=pointless-statement
+            size ** 2  # pylint: disable=pointless-statement
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=expression-not-assigned, pointless-statement
             2 ** Range(0)
 
-    def testBinaryOperatorsBoolean(self):
+    def test_binary_operators_boolean(self):
         """ Test binary operators with a boolean result. """
 
         # <
@@ -91,9 +91,9 @@ class UtilityMethodsTestCase(unittest.TestCase):
         self.assertEqual(Range(1) or True, Range(1))
         self.assertEqual(False or Range(5, MiB), Range(5, MiB))
 
-    def testUnaryOperators(self):
+    def test_unary_operators(self):
         """ Test unary operators. """
-        s = Range(2, GiB)
+        size = Range(2, GiB)
 
         # unary +/-
         self.assertEqual(-(Range(32)), Range(-32))
@@ -101,14 +101,14 @@ class UtilityMethodsTestCase(unittest.TestCase):
         self.assertEqual(+(Range(-32)), Range(-32))
 
         # abs
-        self.assertEqual(abs(s), s)
+        self.assertEqual(abs(size), size)
         self.assertEqual(abs(Range(-32, TiB)), Range(32, TiB))
 
 
 class AdditionTestCase(unittest.TestCase):
     """ Test addition. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Any non-size other raises an exception. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -120,7 +120,7 @@ class AdditionTestCase(unittest.TestCase):
 class DivmodTestCase(unittest.TestCase):
     """ Test divmod. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -138,7 +138,7 @@ class DivmodTestCase(unittest.TestCase):
 class FloordivTestCase(unittest.TestCase):
     """ Test floordiv. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -156,7 +156,7 @@ class FloordivTestCase(unittest.TestCase):
 class ModTestCase(unittest.TestCase):
     """ Test mod. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -174,7 +174,7 @@ class ModTestCase(unittest.TestCase):
 class MultiplicationTestCase(unittest.TestCase):
     """ Test multiplication. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Range others are unrepresentable. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangePowerResultError):
@@ -188,7 +188,7 @@ class MultiplicationTestCase(unittest.TestCase):
 class RdivmodTestCase(unittest.TestCase):
     """ Test rdivmod. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -202,7 +202,7 @@ class RdivmodTestCase(unittest.TestCase):
 class RfloordivTestCase(unittest.TestCase):
     """ Test rfloordiv. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -216,7 +216,7 @@ class RfloordivTestCase(unittest.TestCase):
 class RmodTestCase(unittest.TestCase):
     """ Test rmod. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -232,7 +232,7 @@ class RmodTestCase(unittest.TestCase):
 class RsubTestCase(unittest.TestCase):
     """ Test rsub. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Any non-size other raises an exception. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -242,7 +242,7 @@ class RsubTestCase(unittest.TestCase):
 class RtruedivTestCase(unittest.TestCase):
     """ Test rtruediv. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -258,7 +258,7 @@ class RtruedivTestCase(unittest.TestCase):
 class SubtractionTestCase(unittest.TestCase):
     """ Test subtraction. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Any non-size other raises an exception. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
@@ -270,7 +270,7 @@ class SubtractionTestCase(unittest.TestCase):
 class TruedivTestCase(unittest.TestCase):
     """ Test truediv. """
 
-    def testExceptions(self):
+    def test_exceptions(self):
         """ Test that exceptions are thrown. """
         # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):

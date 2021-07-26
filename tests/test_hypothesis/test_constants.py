@@ -33,7 +33,7 @@ class ConstantsTestCase(unittest.TestCase):
         strategies.integers(min_value=0, max_value=BinaryUnits.max_exponent()),
         strategies.integers(min_value=0, max_value=DecimalUnits.max_exponent()),
     )
-    def testExpMethod(self, bexp, dexp):
+    def test_exp_method(self, bexp, dexp):
         """ Test extracting unit for a given exponent. """
         self.assertEqual(
             BinaryUnits.unit_for_exp(bexp).factor, BinaryUnits.FACTOR ** bexp

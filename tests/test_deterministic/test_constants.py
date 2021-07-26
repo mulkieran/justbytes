@@ -27,22 +27,22 @@ from justbytes._errors import RangeValueError
 class ConstantsTestCase(unittest.TestCase):
     """ Exercise methods of constants classes. """
 
-    def testRoundingObjects(self):
+    def test_rounding_objects(self):
         """ Miscellaneous tests for rounding constants. """
         self.assertIsInstance(str(RoundingMethods.ROUND_DOWN), str)
 
-    def testUnitsObjects(self):
+    def test_units_objects(self):
         """ Miscellaneous tests for units constants. """
         self.assertIsInstance(str(DecimalUnits.KB), str)
         self.assertIsNotNone(DecimalUnits.KB.prefix)
 
-    def testUnitsMethod(self):
+    def test_units_method(self):
         """ Test that all units constansts are in UNITS(). """
         self.assertTrue(set(DecimalUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(set(BinaryUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(B in UNITS())
 
-    def testExpExceptions(self):
+    def test_exp_exceptions(self):
         """
         Test that exceptions are properly raised.
         """
