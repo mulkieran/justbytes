@@ -10,12 +10,12 @@ coverage:
 
 .PHONY: fmt
 fmt:
-	isort --recursive check.py setup.py src tests --skip src/justbytes/__init__.py
+	isort check.py setup.py src tests --skip src/justbytes/__init__.py
 	black .
 
 .PHONY: fmt-travis
 fmt-travis:
-	isort --recursive --diff --check-only check.py setup.py src tests --skip src/justbytes/__init__.py
+	isort --diff --check-only check.py setup.py src tests --skip src/justbytes/__init__.py
 	black . --check
 
 .PHONY: test
