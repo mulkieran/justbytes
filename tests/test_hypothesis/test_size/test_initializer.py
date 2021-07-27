@@ -46,9 +46,9 @@ class InitializerTestCase(unittest.TestCase):
         ),
     )
     @settings(max_examples=50)
-    def testInitialization(self, s, u):
+    def test_initialization(self, size, unit):
         """ Test the initializer. """
-        factor = getattr(u, "factor", getattr(u, "magnitude", None))
+        factor = getattr(unit, "factor", getattr(unit, "magnitude", None))
         if factor is None:
-            factor = Fraction(u)
-        self.assertEqual(Range(s, u).magnitude, Fraction(s) * factor)
+            factor = Fraction(unit)
+        self.assertEqual(Range(size, unit).magnitude, Fraction(size) * factor)

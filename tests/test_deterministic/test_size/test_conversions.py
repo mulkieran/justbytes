@@ -28,7 +28,7 @@ from justbytes import Range
 class ConversionTestCase(unittest.TestCase):
     """ Test conversions. """
 
-    def testBool(self):
+    def test_bool(self):
         """
         Test conversion to bool.
 
@@ -40,7 +40,7 @@ class ConversionTestCase(unittest.TestCase):
         self.assertTrue(bool(Range(1)))
         self.assertTrue(Range(1).__bool__())
 
-    def testFloat(self):
+    def test_float(self):
         """
         Test float conversion.
 
@@ -49,10 +49,10 @@ class ConversionTestCase(unittest.TestCase):
         with self.assertRaises(TypeError):
             float(Range(0))
 
-    def testDeepCopy(self):
+    def test_deep_copy(self):
         """ Test that deepcopy is different but equal. """
-        s1 = Range(0)
-        s2 = copy.deepcopy(s1)
-        self.assertEqual(s1, s2)
-        s1._magnitude += 1
-        self.assertNotEqual(s1, s2)
+        size_1 = Range(0)
+        size_2 = copy.deepcopy(size_1)
+        self.assertEqual(size_1, size_2)
+        size_1._magnitude += 1
+        self.assertNotEqual(size_1, size_2)

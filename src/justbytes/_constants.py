@@ -76,14 +76,14 @@ class Units(metaclass=abc.ABCMeta):
     _MAX_EXPONENT = None
 
     @classmethod
-    def UNITS(cls):
+    def UNITS(cls):  # pylint: disable=invalid-name
         """
         Units of this class.
         """
         return cls._UNITS[:]
 
     @classmethod
-    def unit_for_exp(cls, exponent):
+    def unit_for_exp(cls, exponent):  # pylint: disable=invalid-name
         """
         Get the unit for the given exponent.
 
@@ -148,7 +148,7 @@ class BinaryUnits(Units):
     _UNITS = [KiB, MiB, GiB, TiB, PiB, EiB, ZiB, YiB]
 
 
-def UNITS():
+def UNITS():  # pylint: disable=invalid-name
     """ All unit constants. """
     return [B] + BinaryUnits.UNITS() + DecimalUnits.UNITS()
 

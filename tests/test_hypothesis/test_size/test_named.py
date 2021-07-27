@@ -59,10 +59,10 @@ class ConversionTestCase(unittest.TestCase):
             strategies.builds(Range, strategies.integers(min_value=1)),
         ),
     )
-    def testPrecision(self, s, u):
+    def test_precision(self, size, unit):
         """ Test precision of conversion. """
-        factor = int(u) if u else int(B)
-        self.assertEqual(s.convertTo(u) * factor, int(s))
+        factor = int(unit) if unit else int(B)
+        self.assertEqual(size.convertTo(unit) * factor, int(size))
 
 
 class ComponentsTestCase(unittest.TestCase):
@@ -80,21 +80,21 @@ class ComponentsTestCase(unittest.TestCase):
         ),
     )
     @settings(max_examples=200)
-    def testResults(self, s, config):
+    def test_results(self, size, config):
         """ Test component results. """
-        (m, u) = s.components(config)
-        self.assertEqual(m * int(u), s.magnitude)
-        if u == B:
+        (magnitude, unit) = size.components(config)
+        self.assertEqual(magnitude * int(unit), size.magnitude)
+        if unit == B:
             return
 
         if config.unit is None:
             if config.binary_units:
-                self.assertIn(u, BinaryUnits.UNITS())
+                self.assertIn(unit, BinaryUnits.UNITS())
             else:
-                self.assertIn(u, DecimalUnits.UNITS())
-            self.assertTrue(abs(m) >= config.min_value)
+                self.assertIn(unit, DecimalUnits.UNITS())
+            self.assertTrue(abs(magnitude) >= config.min_value)
         else:
-            self.assertEqual(u, config.unit)
+            self.assertEqual(unit, config.unit)
 
 
 class DisplayConfigTestCase(unittest.TestCase):
@@ -114,7 +114,7 @@ class DisplayConfigTestCase(unittest.TestCase):
         strategies.integers(min_value=2, max_value=16),
     )
     @settings(max_examples=100)
-    def testConfig(self, a_size, config, base):
+    def test_config(self, a_size, config, base):
         """
         Test properties of configuration.
         """
@@ -143,7 +143,7 @@ class DigitsConfigTestCase(unittest.TestCase):
         ),
     )
     @settings(max_examples=50)
-    def testConfig(self, a_size, config):
+    def test_config(self, a_size, config):
         """
         Test some basic configurations.
         """
@@ -178,14 +178,14 @@ class RoundingTestCase(unittest.TestCase):
             strategies.one_of(strategies.none(), SIZE_STRATEGY),
         ),
     )
-    def testBounds(self, s, unit, rounding, bounds):
+    def test_bounds(self, size, unit, rounding, bounds):
         """
         Test that result is between the specified bounds,
         assuming that the bounds are legal.
         """
         (lower, upper) = bounds
         assume(lower is None or upper is None or lower <= upper)
-        rounded = s.roundTo(unit, rounding, bounds)
+        rounded = size.roundTo(unit, rounding, bounds)
         self.assertTrue(lower is None or lower <= rounded)
         self.assertTrue(upper is None or upper >= rounded)
 
@@ -198,10 +198,10 @@ class RoundingTestCase(unittest.TestCase):
         strategies.sampled_from(ROUNDING_METHODS()),
     )
     @example(Range(32), Range(0), ROUND_DOWN)
-    def testResults(self, s, unit, rounding):
+    def test_results(self, size, unit, rounding):
         """ Test roundTo results. """
         # pylint: disable=too-many-branches
-        rounded = s.roundTo(unit, rounding)
+        rounded = size.roundTo(unit, rounding)
 
         if (isinstance(unit, Range) and unit.magnitude == 0) or (
             not isinstance(unit, Range) and int(unit) == 0
@@ -209,15 +209,15 @@ class RoundingTestCase(unittest.TestCase):
             self.assertEqual(rounded, Range(0))
             return
 
-        converted = s.convertTo(unit)
+        converted = size.convertTo(unit)
         if converted.denominator == 1:
-            self.assertEqual(rounded, s)
+            self.assertEqual(rounded, size)
             return
 
         factor = getattr(unit, "magnitude", None) or int(unit)
-        (q, r) = divmod(converted.numerator, converted.denominator)
-        ceiling = Range((q + 1) * factor)
-        floor = Range(q * factor)
+        (quotient, remainder) = divmod(converted.numerator, converted.denominator)
+        ceiling = Range((quotient + 1) * factor)
+        floor = Range(quotient * factor)
         if rounding is ROUND_UP:
             self.assertEqual(rounded, ceiling)
             return
@@ -227,13 +227,13 @@ class RoundingTestCase(unittest.TestCase):
             return
 
         if rounding is ROUND_TO_ZERO:
-            if s > Range(0):
+            if size > Range(0):
                 self.assertEqual(rounded, floor)
             else:
                 self.assertEqual(rounded, ceiling)
             return
 
-        remainder = abs(Fraction(r, converted.denominator))
+        remainder = abs(Fraction(remainder, converted.denominator))
         half = Fraction(1, 2)
         if remainder > half:
             self.assertEqual(rounded, ceiling)
@@ -245,7 +245,7 @@ class RoundingTestCase(unittest.TestCase):
             elif rounding is ROUND_HALF_DOWN:
                 self.assertEqual(rounded, floor)
             else:
-                if s > Range(0):
+                if size > Range(0):
                     self.assertEqual(rounded, floor)
                 else:
                     self.assertEqual(rounded, ceiling)

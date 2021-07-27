@@ -29,11 +29,11 @@ class ConfigTestCase(unittest.TestCase):
 
     # pylint: disable=too-few-public-methods
 
-    def testValueConfigObject(self):
+    def test_value_config_object(self):
         """ Miscellaneous tests for string configuration. """
         self.assertIsInstance(str(Config.STRING_CONFIG.VALUE_CONFIG), str)
 
-    def testException(self):
+    def test_exception(self):
         """ Test exceptions. """
         with self.assertRaises(RangeValueError):
             ValueConfig(min_value=-1)

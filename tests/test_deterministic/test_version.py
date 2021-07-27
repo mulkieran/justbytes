@@ -26,6 +26,6 @@ import justbytes
 class VersionTestCase(unittest.TestCase):
     """ Test version. """
 
-    def testValue(self):
+    def test_value(self):
         """ That value is reasonable. """
         self.assertEqual(justbytes.__version__, "0.15")

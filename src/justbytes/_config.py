@@ -17,6 +17,8 @@
 
 """ Configuration of the justbytes package. """
 
+# pylint: disable=invalid-name
+
 # isort: FIRSTPARTY
 import justbases
 
