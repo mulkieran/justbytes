@@ -25,19 +25,19 @@ from justbytes._errors import RangeValueError
 
 
 class ConstantsTestCase(unittest.TestCase):
-    """ Exercise methods of constants classes. """
+    """Exercise methods of constants classes."""
 
     def test_rounding_objects(self):
-        """ Miscellaneous tests for rounding constants. """
+        """Miscellaneous tests for rounding constants."""
         self.assertIsInstance(str(RoundingMethods.ROUND_DOWN), str)
 
     def test_units_objects(self):
-        """ Miscellaneous tests for units constants. """
+        """Miscellaneous tests for units constants."""
         self.assertIsInstance(str(DecimalUnits.KB), str)
         self.assertIsNotNone(DecimalUnits.KB.prefix)
 
     def test_units_method(self):
-        """ Test that all units constansts are in UNITS(). """
+        """Test that all units constansts are in UNITS()."""
         self.assertTrue(set(DecimalUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(set(BinaryUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(B in UNITS())

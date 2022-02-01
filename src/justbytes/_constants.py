@@ -35,7 +35,7 @@ RoundingMethods = justbases.RoundingMethods
 
 
 class Unit:
-    """ Class to encapsulate unit information. """
+    """Class to encapsulate unit information."""
 
     # pylint: disable=too-few-public-methods
 
@@ -110,7 +110,7 @@ class Units(metaclass=abc.ABCMeta):
 
 
 class DecimalUnits(Units):
-    """ Class to store decimal unit constants. """
+    """Class to store decimal unit constants."""
 
     # pylint: disable=invalid-name
     # pylint: disable=too-few-public-methods
@@ -130,7 +130,7 @@ class DecimalUnits(Units):
 
 
 class BinaryUnits(Units):
-    """ Class to store binary unit constants. """
+    """Class to store binary unit constants."""
 
     # pylint: disable=too-few-public-methods
 
@@ -149,7 +149,7 @@ class BinaryUnits(Units):
 
 
 def UNITS():  # pylint: disable=invalid-name
-    """ All unit constants. """
+    """All unit constants."""
     return [B] + BinaryUnits.UNITS() + DecimalUnits.UNITS()
 
 

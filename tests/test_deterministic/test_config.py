@@ -25,16 +25,16 @@ from justbytes._errors import RangeValueError
 
 
 class ConfigTestCase(unittest.TestCase):
-    """ Exercise methods of output configuration classes. """
+    """Exercise methods of output configuration classes."""
 
     # pylint: disable=too-few-public-methods
 
     def test_value_config_object(self):
-        """ Miscellaneous tests for string configuration. """
+        """Miscellaneous tests for string configuration."""
         self.assertIsInstance(str(Config.STRING_CONFIG.VALUE_CONFIG), str)
 
     def test_exception(self):
-        """ Test exceptions. """
+        """Test exceptions."""
         with self.assertRaises(RangeValueError):
             ValueConfig(min_value=-1)
         with self.assertRaises(RangeValueError):

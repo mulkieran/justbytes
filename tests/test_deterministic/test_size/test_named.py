@@ -26,10 +26,10 @@ from justbytes._errors import RangeValueError
 
 
 class ConversionTestCase(unittest.TestCase):
-    """ Test conversion methods. """
+    """Test conversion methods."""
 
     def test_exception(self):
-        """ Test exceptions. """
+        """Test exceptions."""
         with self.assertRaises(RangeValueError):
             Range(0).convertTo(-2)
         with self.assertRaises(RangeValueError):
@@ -58,10 +58,10 @@ class DigitsConfigTestCase(unittest.TestCase):
 
 
 class RoundingTestCase(unittest.TestCase):
-    """ Test rounding methods. """
+    """Test rounding methods."""
 
     def test_exceptions(self):
-        """ Test raising exceptions when rounding. """
+        """Test raising exceptions when rounding."""
         with self.assertRaises(RangeValueError):
             Range(0).roundTo(Range(-1, B), rounding=ROUND_HALF_UP)
         with self.assertRaises(RangeValueError):

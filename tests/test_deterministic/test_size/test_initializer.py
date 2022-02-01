@@ -27,10 +27,10 @@ from justbytes._errors import RangeValueError
 
 
 class InitializerTestCase(unittest.TestCase):
-    """ Test conversions. """
+    """Test conversions."""
 
     def test_exceptions(self):
-        """ Test exceptions. """
+        """Test exceptions."""
         with self.assertRaises(RangeValueError):
             Range(1.23)
         with self.assertRaises(RangeValueError):

@@ -27,14 +27,14 @@ from justbytes._constants import BinaryUnits, DecimalUnits
 
 
 class ConstantsTestCase(unittest.TestCase):
-    """ Exercise methods of constants classes. """
+    """Exercise methods of constants classes."""
 
     @given(
         strategies.integers(min_value=0, max_value=BinaryUnits.max_exponent()),
         strategies.integers(min_value=0, max_value=DecimalUnits.max_exponent()),
     )
     def test_exp_method(self, bexp, dexp):
-        """ Test extracting unit for a given exponent. """
+        """Test extracting unit for a given exponent."""
         self.assertEqual(
             BinaryUnits.unit_for_exp(bexp).factor, BinaryUnits.FACTOR ** bexp
         )

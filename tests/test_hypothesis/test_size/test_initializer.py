@@ -29,7 +29,7 @@ from justbytes import UNITS, Range
 
 
 class InitializerTestCase(unittest.TestCase):
-    """ Test conversions. """
+    """Test conversions."""
 
     @given(
         strategies.one_of(
@@ -47,7 +47,7 @@ class InitializerTestCase(unittest.TestCase):
     )
     @settings(max_examples=50)
     def test_initialization(self, size, unit):
-        """ Test the initializer. """
+        """Test the initializer."""
         factor = getattr(unit, "factor", getattr(unit, "magnitude", None))
         if factor is None:
             factor = Fraction(unit)
