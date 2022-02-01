@@ -26,7 +26,7 @@ from justbytes import Range
 
 
 class ConversionTestCase(unittest.TestCase):
-    """ Test conversions. """
+    """Test conversions."""
 
     def test_bool(self):
         """
@@ -50,7 +50,7 @@ class ConversionTestCase(unittest.TestCase):
             float(Range(0))
 
     def test_deep_copy(self):
-        """ Test that deepcopy is different but equal. """
+        """Test that deepcopy is different but equal."""
         size_1 = Range(0)
         size_2 = copy.deepcopy(size_1)
         self.assertEqual(size_1, size_2)

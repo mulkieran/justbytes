@@ -30,25 +30,25 @@ from justbytes._errors import (
 
 
 class ErrorTestCase(unittest.TestCase):
-    """ Exercise methods of error classes. """
+    """Exercise methods of error classes."""
 
     def test_range_value_error(self):
-        """ Miscellaneous tests for the method. """
+        """Miscellaneous tests for the method."""
         self.assertIsInstance(str(RangeValueError("junk", "junk", "junk")), str)
         self.assertIsInstance(str(RangeValueError("junk", "junk")), str)
 
     def test_range_fractional_result_error(self):
-        """ Miscellaneous tests for the method. """
+        """Miscellaneous tests for the method."""
         self.assertIsInstance(str(RangeFractionalResultError()), str)
 
     def test_range_nonsensical_bin_op_error(self):
-        """ Miscellaneous tests for the method. """
+        """Miscellaneous tests for the method."""
         self.assertIsInstance(str(RangeNonsensicalBinOpError("+", 2)), str)
 
     def test_range_nonsensical_bin_op_value_error(self):
-        """ Miscellaneous tests for the method. """
+        """Miscellaneous tests for the method."""
         self.assertIsInstance(str(RangeNonsensicalBinOpValueError("+", 2)), str)
 
     def test_range_power_result_error(self):
-        """ Miscellaneous tests for the method. """
+        """Miscellaneous tests for the method."""
         self.assertIsInstance(str(RangePowerResultError()), str)

@@ -34,166 +34,166 @@ from tests.test_hypothesis.test_size.utils import SIZE_STRATEGY  # isort:skip
 
 
 class AdditionTestCase(unittest.TestCase):
-    """ Test addition. """
+    """Test addition."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_addition(self, size_1, size_2):
-        """ Test addition. """
+        """Test addition."""
         self.assertEqual(size_1 + size_2, Range(size_1.magnitude + size_2.magnitude))
 
 
 class DivmodTestCase(unittest.TestCase):
-    """ Test divmod. """
+    """Test divmod."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
     def test_divmod_with_range(self, size_1, size_2):
-        """ Test divmod with a size. """
+        """Test divmod with a size."""
         (div, rem) = divmod(size_1.magnitude, size_2.magnitude)
         self.assertEqual(divmod(size_1, size_2), (div, Range(rem)))
 
     @given(SIZE_STRATEGY, NUMBERS_STRATEGY.filter(lambda x: x != 0))
     @settings(max_examples=10)
     def test_divmod_with_number(self, size_1, size_2):
-        """ Test divmod with a number. """
+        """Test divmod with a number."""
         (div, rem) = divmod(size_1.magnitude, Fraction(size_2))
         self.assertEqual(divmod(size_1, size_2), (Range(div), Range(rem)))
 
 
 class FloordivTestCase(unittest.TestCase):
-    """ Test floordiv. """
+    """Test floordiv."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
     def test_floordiv_with_range(self, size_1, size_2):
-        """ Test floordiv with a size. """
+        """Test floordiv with a size."""
         self.assertEqual(size_1 // size_2, size_1.magnitude // size_2.magnitude)
 
     @given(SIZE_STRATEGY, NUMBERS_STRATEGY.filter(lambda x: x != 0))
     @settings(max_examples=10)
     def test_floordiv_with_number(self, size_1, size_2):
-        """ Test floordiv with a number. """
+        """Test floordiv with a number."""
         self.assertEqual(size_1 // size_2, Range(size_1.magnitude // Fraction(size_2)))
 
 
 class ModTestCase(unittest.TestCase):
-    """ Test mod. """
+    """Test mod."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
     def test_mod_with_range(self, size_1, size_2):
-        """ Test mod with a size. """
+        """Test mod with a size."""
         self.assertEqual(size_1 % size_2, Range(size_1.magnitude % size_2.magnitude))
 
     @given(SIZE_STRATEGY, NUMBERS_STRATEGY.filter(lambda x: x != 0))
     @settings(max_examples=10)
     def test_mod_with_number(self, size_1, size_2):
-        """ Test mod with a number. """
+        """Test mod with a number."""
         self.assertEqual(size_1 % size_2, Range(size_1.magnitude % Fraction(size_2)))
 
 
 class MultiplicationTestCase(unittest.TestCase):
-    """ Test multiplication. """
+    """Test multiplication."""
 
     @given(SIZE_STRATEGY, NUMBERS_STRATEGY)
     @settings(max_examples=10)
     def test_multiplication(self, size, num):
-        """ Test multiplication. """
+        """Test multiplication."""
         self.assertEqual(size * num, Range(Fraction(num) * size.magnitude))
 
 
 class RdivmodTestCase(unittest.TestCase):
-    """ Test rdivmod. """
+    """Test rdivmod."""
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_rdivmod_with_range(self, size_1, size_2):
-        """ Test divmod with a size. """
+        """Test divmod with a size."""
         (div, rem) = divmod(size_2.magnitude, size_1.magnitude)
         self.assertEqual(size_1.__rdivmod__(size_2), (div, Range(rem)))
 
 
 class RfloordivTestCase(unittest.TestCase):
-    """ Test rfloordiv. """
+    """Test rfloordiv."""
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_ffloordiv_with_range(self, size_1, size_2):
-        """ Test floordiv with a size. """
+        """Test floordiv with a size."""
         self.assertEqual(
             size_1.__rfloordiv__(size_2), size_2.magnitude // size_1.magnitude
         )
 
 
 class RmodTestCase(unittest.TestCase):
-    """ Test rmod. """
+    """Test rmod."""
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_rmod_with_range(self, size_1, size_2):
-        """ Test rmod with a size. """
+        """Test rmod with a size."""
         self.assertEqual(
             size_1.__rmod__(size_2), Range(size_2.magnitude % size_1.magnitude)
         )
 
 
 class RsubTestCase(unittest.TestCase):
-    """ Test rsub. """
+    """Test rsub."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_rsub(self, size_1, size_2):
-        """ Test __rsub__. """
+        """Test __rsub__."""
         self.assertEqual(
             size_1.__rsub__(size_2), Range(size_2.magnitude - size_1.magnitude)
         )
 
 
 class RtruedivTestCase(unittest.TestCase):
-    """ Test rtruediv. """
+    """Test rtruediv."""
 
     @given(SIZE_STRATEGY.filter(lambda x: x != Range(0)), SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_truediv_with_range(self, size_1, size_2):
-        """ Test truediv with a size. """
+        """Test truediv with a size."""
         self.assertEqual(
             size_1.__rtruediv__(size_2), size_2.magnitude / size_1.magnitude
         )
 
 
 class SubtractionTestCase(unittest.TestCase):
-    """ Test subtraction. """
+    """Test subtraction."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY)
     @settings(max_examples=10)
     def test_subtraction(self, size_1, size_2):
-        """ Test subtraction. """
+        """Test subtraction."""
         self.assertEqual(size_1 - size_2, Range(size_1.magnitude - size_2.magnitude))
 
 
 class TruedivTestCase(unittest.TestCase):
-    """ Test truediv. """
+    """Test truediv."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY.filter(lambda x: x != Range(0)))
     @settings(max_examples=10)
     def test_truediv_with_range(self, size_1, size_2):
-        """ Test truediv with a size. """
+        """Test truediv with a size."""
         self.assertEqual(size_1 / size_2, size_1.magnitude / size_2.magnitude)
 
     @given(SIZE_STRATEGY, NUMBERS_STRATEGY.filter(lambda x: x != 0))
     def test_truediv_with_number(self, size_1, size_2):
-        """ Test truediv with a number. """
+        """Test truediv with a number."""
         self.assertEqual(size_1 / size_2, Range(size_1.magnitude / Fraction(size_2)))
 
 
 class UnaryOperatorsTestCase(unittest.TestCase):
-    """ Test unary operators. """
+    """Test unary operators."""
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY)
     @settings(max_examples=5)
     def test_hash(self, size_1, size_2):
-        """ Test that hash has the necessary property for hash table lookup. """
+        """Test that hash has the necessary property for hash table lookup."""
         size_3 = copy.deepcopy(size_1)
         self.assertTrue(hash(size_1) == hash(size_3))
         self.assertTrue(size_1 != size_2 or hash(size_1) == hash(size_2))
@@ -201,19 +201,19 @@ class UnaryOperatorsTestCase(unittest.TestCase):
     @given(SIZE_STRATEGY)
     @settings(max_examples=5)
     def test_abs(self, size):
-        """ Test absolute value. """
+        """Test absolute value."""
         self.assertEqual(abs(size), Range(abs(size.magnitude)))
 
     @given(SIZE_STRATEGY)
     @settings(max_examples=5)
     def test_neg(self, size):
-        """ Test negation. """
+        """Test negation."""
         self.assertEqual(-size, Range(-size.magnitude))
 
     @given(SIZE_STRATEGY)
     @settings(max_examples=5)
     def test_pos(self, size):
-        """ Test positive. """
+        """Test positive."""
         self.assertEqual(+size, size)
 
 

@@ -28,12 +28,12 @@ from justbytes import UNITS, Range
 
 
 class ConversionTestCase(unittest.TestCase):
-    """ Test conversions. """
+    """Test conversions."""
 
     @given(strategies.integers(), strategies.sampled_from(UNITS()))
     @settings(max_examples=5)
     def test_int(self, size, unit):
-        """ Test integer conversions. """
+        """Test integer conversions."""
         self.assertEqual(int(Range(size, unit)), size * int(unit))
 
     @given(
@@ -43,5 +43,5 @@ class ConversionTestCase(unittest.TestCase):
     )
     @settings(max_examples=50)
     def test_repr(self, value):
-        """ Test that repr looks right. """
+        """Test that repr looks right."""
         self.assertEqual("%r" % value, "Range(%r)" % value.magnitude)

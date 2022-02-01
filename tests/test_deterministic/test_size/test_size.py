@@ -39,21 +39,21 @@ from justbytes._errors import RangeFractionalResultError, RangeValueError
 
 
 class ConstructionTestCase(unittest.TestCase):
-    """ Test construction of Range objects. """
+    """Test construction of Range objects."""
 
     def test_zero(self):
-        """ Test construction with 0 as decimal. """
+        """Test construction with 0 as decimal."""
         zero = Range(0)
         self.assertEqual(zero, Range("0.0"))
 
     def test_negative(self):
-        """ Test construction of negative sizes. """
+        """Test construction of negative sizes."""
         size = Range(-500, MiB)
         self.assertEqual(size.components(), (Fraction(-500, 1), MiB))
         self.assertEqual(size.convertTo(B), -524288000)
 
     def test_constructor(self):
-        """ Test error checking in constructo. """
+        """Test error checking in constructo."""
         with self.assertRaises(RangeValueError):
             Range("1.1.1", KiB)
         self.assertEqual(Range(Range(0)), Range(0))
@@ -63,19 +63,19 @@ class ConstructionTestCase(unittest.TestCase):
             Range(B)
 
     def test_no_units_in_string(self):
-        """ Test construction w/ no units specified. """
+        """Test construction w/ no units specified."""
         self.assertEqual(Range("1024"), Range(1, KiB))
 
     def test_fraction(self):
-        """ Test creating Range with Fraction. """
+        """Test creating Range with Fraction."""
         self.assertEqual(Range(Fraction(1024, 2), KiB), Range(Fraction(1, 2), MiB))
 
 
 class DisplayTestCase(unittest.TestCase):
-    """ Test formatting Range for display. """
+    """Test formatting Range for display."""
 
     def test_str(self):
-        """ Test construction of display components. """
+        """Test construction of display components."""
         size = Range("12.68", TiB)
         self.assertEqual(str(size), "12.68 TiB")
 
@@ -86,7 +86,7 @@ class DisplayTestCase(unittest.TestCase):
         self.assertEqual(str(size), "< 12.69 TiB")
 
     def test_min_value(self):
-        """ Test behavior on min_value parameter. """
+        """Test behavior on min_value parameter."""
         size = Range(9, MiB)
         self.assertEqual(size.components(), (Fraction(9, 1), MiB))
         self.assertEqual(
@@ -121,37 +121,37 @@ class DisplayTestCase(unittest.TestCase):
         )
 
     def test_exception_values(self):
-        """ Test that exceptions are properly raised on bad params. """
+        """Test that exceptions are properly raised on bad params."""
         size = Range(500)
         with self.assertRaises(RangeValueError):
             size.components(ValueConfig(min_value=-1))
 
     def test_rounding_to_bytes(self):
-        """ Test that second part is B when rounding to bytes. """
+        """Test that second part is B when rounding to bytes."""
         size = Range(500)
         self.assertEqual(size.components()[1], B)
 
     def test_si_units(self):
-        """ Test binary_units param. """
+        """Test binary_units param."""
         size = Range(1000)
         self.assertEqual(size.components(ValueConfig(binary_units=False)), (1, KB))
 
 
 class ConfigurationTestCase(unittest.TestCase):
-    """ Test setting configuration for display. """
+    """Test setting configuration for display."""
 
     def setUp(self):
-        """ Get current config. """
+        """Get current config."""
         self.str_config = Config.STRING_CONFIG.VALUE_CONFIG
         self.display_config = Config.STRING_CONFIG.DISPLAY_CONFIG
 
     def tearDown(self):
-        """ Reset configuration to default. """
+        """Reset configuration to default."""
         Config.set_value_config(self.str_config)
         Config.set_display_config(self.display_config)
 
     def test_value_configs(self):
-        """ Test str with various configuration options. """
+        """Test str with various configuration options."""
         Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
 
         # exactly 4 Pi
@@ -220,7 +220,7 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(size), "< 1024.00 KiB")
 
     def test_str_with_small_deviations(self):
-        """ Behavior when deviation from whole value is small. """
+        """Behavior when deviation from whole value is small."""
         Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=True)))
 
         eps = 1024 * Fraction(1, 100) * Fraction(1, 2)
@@ -243,14 +243,14 @@ class ConfigurationTestCase(unittest.TestCase):
 
 
 class ComputationTestCase(unittest.TestCase):
-    """ Test setting configuration for computation. """
+    """Test setting configuration for computation."""
 
     def setUp(self):
-        """ Get current config. """
+        """Get current config."""
         self.strict = Config.STRICT
 
     def tearDown(self):
-        """ Reset configuration to default. """
+        """Reset configuration to default."""
         Config.STRICT = self.strict
 
     def test_fractional_bytes(self):

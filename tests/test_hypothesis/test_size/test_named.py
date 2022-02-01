@@ -49,7 +49,7 @@ from tests.test_hypothesis.test_size.utils import SIZE_STRATEGY  # isort:skip
 
 
 class ConversionTestCase(unittest.TestCase):
-    """ Test conversion methods. """
+    """Test conversion methods."""
 
     @given(
         strategies.builds(Range, strategies.integers()),
@@ -60,13 +60,13 @@ class ConversionTestCase(unittest.TestCase):
         ),
     )
     def test_precision(self, size, unit):
-        """ Test precision of conversion. """
+        """Test precision of conversion."""
         factor = int(unit) if unit else int(B)
         self.assertEqual(size.convertTo(unit) * factor, int(size))
 
 
 class ComponentsTestCase(unittest.TestCase):
-    """ Test components method. """
+    """Test components method."""
 
     @given(
         SIZE_STRATEGY,
@@ -81,7 +81,7 @@ class ComponentsTestCase(unittest.TestCase):
     )
     @settings(max_examples=200)
     def test_results(self, size, config):
-        """ Test component results. """
+        """Test component results."""
         (magnitude, unit) = size.components(config)
         self.assertEqual(magnitude * int(unit), size.magnitude)
         if unit == B:
@@ -164,7 +164,7 @@ class DigitsConfigTestCase(unittest.TestCase):
 
 
 class RoundingTestCase(unittest.TestCase):
-    """ Test rounding methods. """
+    """Test rounding methods."""
 
     @given(
         SIZE_STRATEGY,
@@ -199,7 +199,7 @@ class RoundingTestCase(unittest.TestCase):
     )
     @example(Range(32), Range(0), ROUND_DOWN)
     def test_results(self, size, unit, rounding):
-        """ Test roundTo results. """
+        """Test roundTo results."""
         # pylint: disable=too-many-branches
         rounded = size.roundTo(unit, rounding)
 

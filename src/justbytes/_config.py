@@ -175,7 +175,7 @@ class ValueConfig:
 
 
 class StringConfig:
-    """ Configuration for :class:`Range` class. """
+    """Configuration for :class:`Range` class."""
 
     # pylint: disable=too-few-public-methods
 

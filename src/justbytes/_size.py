@@ -43,7 +43,7 @@ from ._util.generators import next_or_last, takeuntil
 
 
 class Range:
-    """ Class for instantiating Range objects. """
+    """Class for instantiating Range objects."""
 
     _BYTES_SYMBOL = "B"
 

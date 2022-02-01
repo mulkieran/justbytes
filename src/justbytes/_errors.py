@@ -22,7 +22,7 @@ import abc
 
 
 class RangeError(Exception, metaclass=abc.ABCMeta):
-    """ Generic Range error. """
+    """Generic Range error."""
 
 
 class RangeValueError(RangeError):
@@ -55,15 +55,15 @@ class RangeValueError(RangeError):
 
 
 class RangeUnsupportedOpError(RangeError, metaclass=abc.ABCMeta):
-    """ Error when executing unsupported operation on Range. """
+    """Error when executing unsupported operation on Range."""
 
 
 class RangeNonsensicalOpError(RangeUnsupportedOpError, metaclass=abc.ABCMeta):
-    """ Error when requesting an operation that doesn't make sense. """
+    """Error when requesting an operation that doesn't make sense."""
 
 
 class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
-    """ Error when requesting a binary operation with a nonsense value. """
+    """Error when requesting a binary operation with a nonsense value."""
 
     _FMT_STR = "nonsensical value for for %s: '%s'"
 
@@ -83,7 +83,7 @@ class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
 
 
 class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
-    """ Error when requesting a binary operation that doesn't make sense. """
+    """Error when requesting a binary operation that doesn't make sense."""
 
     _FMT_STR = "nonsensical operand types for %s: 'Range' and '%s'"
 
@@ -110,14 +110,14 @@ class RangeUnrepresentableResultError(RangeUnsupportedOpError, metaclass=abc.ABC
 
 
 class RangePowerResultError(RangeUnrepresentableResultError):
-    """ Error when requesting an operation that would yield a byte power. """
+    """Error when requesting an operation that would yield a byte power."""
 
     def __str__(self):
         return "requested operation result requires non-unit power of bytes"
 
 
 class RangeFractionalResultError(RangeUnrepresentableResultError):
-    """ Error when Range construction is strict. """
+    """Error when Range construction is strict."""
 
     def __str__(self):
         return "requested operation result has a fractional quantity of bytes"
