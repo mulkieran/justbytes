@@ -36,8 +36,8 @@ class ConstantsTestCase(unittest.TestCase):
     def test_exp_method(self, bexp, dexp):
         """Test extracting unit for a given exponent."""
         self.assertEqual(
-            BinaryUnits.unit_for_exp(bexp).factor, BinaryUnits.FACTOR ** bexp
+            BinaryUnits.unit_for_exp(bexp).factor, BinaryUnits.FACTOR**bexp
         )
         self.assertEqual(
-            DecimalUnits.unit_for_exp(dexp).factor, DecimalUnits.FACTOR ** dexp
+            DecimalUnits.unit_for_exp(dexp).factor, DecimalUnits.FACTOR**dexp
         )
