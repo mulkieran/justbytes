@@ -42,7 +42,7 @@ class UtilityMethodsTestCase(unittest.TestCase):
             # pylint: disable=expression-not-assigned, pointless-statement
             size ** Range(2)
         with self.assertRaises(RangePowerResultError):
-            size ** 2  # pylint: disable=pointless-statement
+            size**2  # pylint: disable=pointless-statement
         with self.assertRaises(RangeNonsensicalBinOpError):
             # pylint: disable=expression-not-assigned, pointless-statement
             2 ** Range(0)

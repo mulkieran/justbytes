@@ -174,11 +174,11 @@ class ConfigurationTestCase(unittest.TestCase):
         self.assertEqual(str(size), "< 15.99 KiB")
 
         # test a very large quantity with no associated abbreviation or prefix
-        size = Range(1024 ** 9)
+        size = Range(1024**9)
         self.assertEqual(str(size), "1024 YiB")
-        size = Range(1024 ** 9 - 1)
+        size = Range(1024**9 - 1)
         self.assertEqual(str(size), "< 1024 YiB")
-        size = Range(1024 ** 10)
+        size = Range(1024**10)
         self.assertEqual(str(size), "1048576 YiB")
 
         size = Range(0xFFFFFFFFFFFFF)
@@ -213,7 +213,7 @@ class ConfigurationTestCase(unittest.TestCase):
 
         Config.set_value_config(ValueConfig(max_places=2))
         Config.set_display_config(DisplayConfig(strip_config=StripConfig(strip=False)))
-        size = Range(1024 ** 9 + 1)
+        size = Range(1024**9 + 1)
         self.assertEqual(str(size), "> 1024.00 YiB")
 
         size = Range(0xFFFFF)
