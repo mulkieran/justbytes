@@ -44,4 +44,4 @@ class ConversionTestCase(unittest.TestCase):
     @settings(max_examples=50)
     def test_repr(self, value):
         """Test that repr looks right."""
-        self.assertEqual("%r" % value, "Range(%r)" % value.magnitude)
+        self.assertEqual(f"{value}", "Range({value.magnitude})")
