@@ -145,7 +145,7 @@ class ValueConfig:
 
         if unit is not None and unit not in UNITS():
             raise RangeValueError(
-                unit, "unit", "must be one of %s" % ", ".join(str(x) for x in UNITS())
+                unit, "unit", f"must be one of {', '.join(str(x) for x in UNITS())}"
             )
 
         if base < 2:
@@ -169,7 +169,7 @@ class ValueConfig:
             "rounding_method": self.rounding_method,
             "unit": self.unit,
         }
-        return "ValueConfig(%s)" % (self._FMT_STR % values)
+        return f"ValueConfig({self._FMT_STR % values})"
 
     __repr__ = __str__
 

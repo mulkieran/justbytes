@@ -159,6 +159,7 @@ class ModTestCase(unittest.TestCase):
     def test_exceptions(self):
         """Test that exceptions are thrown."""
         # pylint: disable=expression-not-assigned
+        # pylint: disable=consider-using-f-string
         with self.assertRaises(RangeNonsensicalBinOpError):
             2048 % Range(12, B)
         with self.assertRaises(RangeNonsensicalBinOpError):
