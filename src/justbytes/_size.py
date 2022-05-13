@@ -146,7 +146,7 @@ class Range:
         """
         (result, relation, units) = self.getStringInfo(config.VALUE_CONFIG)
         number = config.DISPLAY_IMPL.xform(result, relation)
-        return "%s %s" % (number, units.abbr + self._BYTES_SYMBOL)
+        return f"{number} {units.abbr + self._BYTES_SYMBOL}"
 
     def __str__(self):
         return self.getString(Config.STRING_CONFIG)
@@ -155,7 +155,7 @@ class Range:
         """
         Use actual Fraction magnitude in result.
         """
-        return "Range(%r)" % self._magnitude
+        return f"Range({self._magnitude !r})"
 
     def __deepcopy__(self, memo):
         # pylint: disable=unused-argument
