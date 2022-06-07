@@ -158,7 +158,7 @@ class ModTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             2048 % Range(12, B)
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) % "str"
+            Range(12) % "str"  # pylint: disable=consider-using-f-string
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) % Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
