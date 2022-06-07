@@ -55,7 +55,6 @@ class UtilityMethodsTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             Range(0) < 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
-            # pylint: disable=misplaced-comparison-constant
             1 < Range(32, TiB)  # pylint: disable=expression-not-assigned
 
         # <=
@@ -63,7 +62,6 @@ class UtilityMethodsTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             Range(0) <= 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
-            # pylint: disable=misplaced-comparison-constant
             1 <= Range(32, TiB)  # pylint: disable=expression-not-assigned
 
         # >
@@ -71,7 +69,6 @@ class UtilityMethodsTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             Range(32) > 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
-            # pylint: disable=misplaced-comparison-constant
             1 > Range(0, TiB)  # pylint: disable=expression-not-assigned
 
         # >=
@@ -79,7 +76,6 @@ class UtilityMethodsTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             Range(32) >= 1  # pylint: disable=expression-not-assigned
         with self.assertRaises(RangeNonsensicalBinOpError):
-            # pylint: disable=misplaced-comparison-constant
             1 >= Range(0, TiB)  # pylint: disable=expression-not-assigned
 
         # !=
@@ -162,7 +158,7 @@ class ModTestCase(unittest.TestCase):
         with self.assertRaises(RangeNonsensicalBinOpError):
             2048 % Range(12, B)
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) % "str"
+            Range(12) % "str"  # pylint: disable=consider-using-f-string
         with self.assertRaises(RangeNonsensicalBinOpValueError):
             Range(12) % Range(0)
         with self.assertRaises(RangeNonsensicalBinOpValueError):
