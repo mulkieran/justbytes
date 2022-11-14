@@ -4,7 +4,7 @@ TOX=tox
 lint:
 	pylint setup.py
 	pylint src/justbytes
-	pylint tests
+	pylint tests --disable=unnecessary-dunder-call
 
 .PHONY: coverage
 coverage:
