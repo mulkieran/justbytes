@@ -1,10 +1,12 @@
-TOX=tox
-
 .PHONY: lint
 lint:
 	pylint setup.py
 	pylint src/justbytes
 	pylint tests --disable=unnecessary-dunder-call
+
+.PHONY: test
+test:
+	python3 -m unittest discover --verbose tests
 
 .PHONY: coverage
 coverage:
@@ -21,10 +23,6 @@ fmt:
 fmt-travis:
 	isort --diff --check-only setup.py src tests --skip src/justbytes/__init__.py
 	black . --check
-
-.PHONY: test
-test:
-	$(TOX) -c tox.ini -e test
 
 PYREVERSE_OPTS = --output=pdf
 .PHONY: view
