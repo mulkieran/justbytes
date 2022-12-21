@@ -1,6 +1,5 @@
 recursive-include src/justbytes *.py
 recursive-include doc *.rst *.py *.html
 recursive-include tests *.py
-include tox.ini
 include LICENSE README.rst
 include setup.py
