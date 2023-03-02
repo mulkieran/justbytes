@@ -52,7 +52,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     platforms=["Linux"],
-    license="LGPLv2+",
+    license="LGPL-2.1-or-later",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
