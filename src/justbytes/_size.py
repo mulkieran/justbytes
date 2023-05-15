@@ -39,7 +39,7 @@ from ._errors import (
     RangePowerResultError,
     RangeValueError,
 )
-from ._util.generators import next_or_last, takeuntil
+from ._generators import next_or_last, takeuntil
 
 
 class Range:

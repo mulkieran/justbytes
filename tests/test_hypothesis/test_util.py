@@ -24,7 +24,7 @@ import unittest
 from hypothesis import given, settings, strategies
 
 # isort: LOCAL
-from justbytes._util.generators import next_or_last, takeuntil
+from justbytes._generators import next_or_last, takeuntil
 
 
 class NextTestCase(unittest.TestCase):
