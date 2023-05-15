@@ -33,10 +33,6 @@ view:
 	mv classes_justbytes.pdf _pyreverse
 	mv packages_justbytes.pdf _pyreverse
 
-.PHONY: archive
-archive:
-	git archive --output=./justbytes.tar.gz HEAD
-
 .PHONY: docs
 docs:
 	cd doc/_build/html; zip -r ../../../docs *
