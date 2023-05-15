@@ -1,5 +1,13 @@
-justbytes 0.15.1 (UNRELEASED)
-=============================
+justbytes 0.15.2
+================
+Recommended development distro: Fedora 38
+
+- Tidies and Maintenance:
+  https://github.com/stratis-storage/justbytes/pull/92
+
+
+justbytes 0.15.1
+================
 Recommended development distro: Fedora 38
 
 - Tidies and Maintenance:
