@@ -28,4 +28,4 @@ class VersionTestCase(unittest.TestCase):
 
     def test_value(self):
         """That value is reasonable."""
-        self.assertEqual(justbytes.__version__, "0.15")
+        self.assertEqual(justbytes.__version__, "0.15.1")
