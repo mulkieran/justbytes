@@ -92,7 +92,7 @@ The size module supplies a set of named prefixes for both SI and binary units,
 for all non-fractional prefixes. Fractional prefixes are not defined.
 
 Constructing Ranges Programmatically
------------------------------------
+------------------------------------
 New Range objects can be constructed from Range objects, numeric values, e.g.,
 int or Fraction, or strings which represent such numeric values.
 strings may be used to represent fractional quantities, e.g., "1.2", but
