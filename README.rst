@@ -36,12 +36,12 @@ quantities, are disallowed by this requirement.
 
 Operations
 ----------
-This module does not accomodate multi-dimensionality of address ranges.
+This module does not accommodate multi-dimensionality of address ranges.
 Consequently, multiplying one Range object by another Range object will cause
 an error to be raised, since bytes^2 is not representable by the module.
 For most uses any operation which would yield a multi-dimensional quantity
 is not useful. There are no plans to adapt this package so that it
-can accomodate multi-dimensionality of address ranges.
+can accommodate multi-dimensionality of address ranges.
 
 Numerous computations with address ranges are nonsensical. For example, 2
 raised to a power which is some address range, is a meaningless computation.
@@ -91,8 +91,8 @@ Representing Units
 The size module supplies a set of named prefixes for both SI and binary units,
 for all non-fractional prefixes. Fractional prefixes are not defined.
 
-Constructing Ranges Programatically
------------------------------------
+Constructing Ranges Programmatically
+------------------------------------
 New Range objects can be constructed from Range objects, numeric values, e.g.,
 int or Fraction, or strings which represent such numeric values.
 strings may be used to represent fractional quantities, e.g., "1.2", but
@@ -111,7 +111,7 @@ Memory Consumption and Bandwidth vs. Address Ranges
 Memory consumption, e.g., by a process during execution on a specified
 workload, is a quantity, that like address ranges, is specified in
 bytes. However, memory consumption is simply a measurement of the amount of
-a phsyical quantity consumed.  When bytes are used only to represent memory
+a physical quantity consumed.  When bytes are used only to represent memory
 consumption, computations do not generally require the special handling
 supplied by this library. Generally, measurement of memory consumption can
 be treated like any other physical quantity. The same reasoning applies to
