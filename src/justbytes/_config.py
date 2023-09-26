@@ -65,7 +65,7 @@ class DisplayConfig(justbases.DisplayConfig):
         strip_config=StripConfig(),
     ):
         """
-        Intializer.
+        Initializer.
 
         :param boolean show_approx_str: whether to indicate approximation
         :param BaseConfig base_config: the base config

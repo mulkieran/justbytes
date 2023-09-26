@@ -53,7 +53,7 @@ class ConstructionTestCase(unittest.TestCase):
         self.assertEqual(size.convertTo(B), -524288000)
 
     def test_constructor(self):
-        """Test error checking in constructo."""
+        """Test error checking in constructor."""
         with self.assertRaises(RangeValueError):
             Range("1.1.1", KiB)
         self.assertEqual(Range(Range(0)), Range(0))

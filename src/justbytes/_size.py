@@ -20,7 +20,7 @@
     Contains a few documented methods and a number of __*__ methods
     implementing arithmetic operations. Precise numeric types
     such as int and Fraction may also occur in some arithmetic expressions,
-    but all occurrances of floating point and Decimal numbers in arithmetic
+    but all occurrences of floating point and Decimal numbers in arithmetic
     expressions will cause an exception to be raised.
 """
 
@@ -70,7 +70,7 @@ class Range:
 
         :param unit: the unit
         :type unit: object
-        :returns: None if not convertable, else numeric value
+        :returns: None if not convertible, else numeric value
         :rtype: Fraction or NoneType
         """
         if not isinstance(unit, UNIT_TYPES) and not isinstance(unit, Range):

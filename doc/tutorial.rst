@@ -112,7 +112,7 @@ Sum a list of Range objects using the sum method and the additive identity::
     >>> sum([], AI)
     Range(0)
 
-If the additive identity is not specified, there are two possiblities, both
+If the additive identity is not specified, there are two possibilities, both
 bad:
 
 1. A RangeError exception may be raised::
