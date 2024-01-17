@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     container: fedora:39  # CURRENT DEVELOPMENT ENVIRONMENT
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: >
           dnf install -y
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     container: fedora:34  # LOWEST DEVELOPMENT ENVIRONMENT
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: >
           dnf install -y
