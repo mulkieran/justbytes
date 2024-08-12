@@ -56,6 +56,7 @@ jobs:
           - dependencies: >
               python3-hypothesis
               python3-justbases
+              python3-setuptools
             task: PYTHONPATH=./src make -f Makefile legacy-package
     runs-on: ubuntu-latest
     container: fedora:35  # LOWEST DEVELOPMENT ENVIRONMENT
