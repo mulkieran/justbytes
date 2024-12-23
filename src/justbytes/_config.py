@@ -111,7 +111,7 @@ class ValueConfig:
         ]
     )
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-positional-arguments
         self,
         max_places=2,
         min_value=1,
