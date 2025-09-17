@@ -1,3 +1,39 @@
+justbytes 0.15.3
+================
+Recommended development distro: Fedora 44
+
+- Use exclusively pyproject.toml for project metadata:
+  https://github.com/stratis-storage/justbytes/pull/119
+
+- Remove license classifier deprecated by PEP 639:
+  https://github.com/stratis-storage/justbytes/pull/104
+
+- Require at least Python 3.12:
+  https://github.com/stratis-storage/justbytes/pull/107
+
+- Tidies and Maintenance:
+  https://github.com/stratis-storage/justbytes/pull/116
+  https://github.com/stratis-storage/justbytes/pull/115
+  https://github.com/stratis-storage/justbytes/pull/114
+  https://github.com/stratis-storage/justbytes/pull/113
+  https://github.com/stratis-storage/justbytes/pull/112
+  https://github.com/stratis-storage/justbytes/pull/111
+  https://github.com/stratis-storage/justbytes/pull/110
+  https://github.com/stratis-storage/justbytes/pull/109
+  https://github.com/stratis-storage/justbytes/pull/108
+  https://github.com/stratis-storage/justbytes/pull/106
+  https://github.com/stratis-storage/justbytes/pull/105
+  https://github.com/stratis-storage/justbytes/pull/103
+  https://github.com/stratis-storage/justbytes/pull/101
+  https://github.com/stratis-storage/justbytes/pull/100
+  https://github.com/stratis-storage/justbytes/pull/99
+  https://github.com/stratis-storage/justbytes/pull/98
+  https://github.com/stratis-storage/justbytes/pull/97
+  https://github.com/stratis-storage/justbytes/pull/96
+  https://github.com/stratis-storage/justbytes/pull/95
+  https://github.com/stratis-storage/justbytes/pull/94
+
+
 justbytes 0.15.2
 ================
 Recommended development distro: Fedora 38
