@@ -185,7 +185,7 @@ class RoundingTestCase(unittest.TestCase):
         """
         (lower, upper) = bounds
         assume(lower is None or upper is None or lower <= upper)
-        rounded = size.roundTo(unit, rounding, bounds)
+        rounded = size.roundTo(unit, rounding, bounds)  # pylint: disable=unreachable
         self.assertTrue(lower is None or lower <= rounded)
         self.assertTrue(upper is None or upper >= rounded)
 
