@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tests for Range initialization. """
+"""Tests for Range initialization."""
 
 # isort: STDLIB
 import unittest

@@ -15,11 +15,11 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Constants used by the justbytes package.
+"""Constants used by the justbytes package.
 
-    Categories of constants:
-     * Rounding methods
-     * Size units, e.g., Ki, Mi
+Categories of constants:
+ * Rounding methods
+ * Size units, e.g., Ki, Mi
 """
 
 # isort: STDLIB

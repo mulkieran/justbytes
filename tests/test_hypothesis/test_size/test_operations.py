@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tests for operations on Range objects. """
+"""Tests for operations on Range objects."""
 
 # isort: STDLIB
 import copy

@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for utility functions. """
+"""Test for utility functions."""
 
 # isort: STDLIB
 import unittest

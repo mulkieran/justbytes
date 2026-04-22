@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Configuration of the justbytes package. """
+"""Configuration of the justbytes package."""
 
 # pylint: disable=invalid-name
 

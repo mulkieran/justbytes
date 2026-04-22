@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Utilities for testing. """
+"""Utilities for testing."""
 # isort: THIRDPARTY
 from hypothesis import strategies
 

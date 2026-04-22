@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tests for named methods of Range objects. """
+"""Tests for named methods of Range objects."""
 
 # isort: STDLIB
 import unittest

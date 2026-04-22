@@ -15,67 +15,67 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" The public interface of the justbytes package.
+"""The public interface of the justbytes package.
 
-    Contents:
+Contents:
 
-    * Unit constants in SI and binary units
-       - Universal:
-          * B
+* Unit constants in SI and binary units
+   - Universal:
+      * B
 
-       - SI:
-          * KB
-          * MB
-          * GB
-          * TB
-          * PB
-          * EB
-          * ZB
-          * YB
+   - SI:
+      * KB
+      * MB
+      * GB
+      * TB
+      * PB
+      * EB
+      * ZB
+      * YB
 
-       - Binary:
-          * KiB
-          * MiB
-          * GiB
-          * TiB
-          * PiB
-          * EiB
-          * ZiB
-          * YiB
+   - Binary:
+      * KiB
+      * MiB
+      * GiB
+      * TiB
+      * PiB
+      * EiB
+      * ZiB
+      * YiB
 
-       - UNITS: :func:`._constants.UNITS`
+   - UNITS: :func:`._constants.UNITS`
 
-    * Rounding constants, with meaning as for the Python decimal module:
-       - ROUND_DOWN
-       - ROUND_HALF_DOWN
-       - ROUND_HALF_UP
-       - ROUND_UP
+* Rounding constants, with meaning as for the Python decimal module:
+   - ROUND_DOWN
+   - ROUND_HALF_DOWN
+   - ROUND_HALF_UP
+   - ROUND_UP
 
-       - ROUNDING_METHODS
+   - ROUNDING_METHODS
 
-    * Configuration classes:
-       - StrConfig: :class:`._config.StrConfig`
+* Configuration classes:
+   - StrConfig: :class:`._config.StrConfig`
 
-    * Exception classes:
-       - RangeError: :class:`._errors.RangeError`
-       - RangeValueError: :class:`._errors.RangeValueError`
+* Exception classes:
+   - RangeError: :class:`._errors.RangeError`
+   - RangeValueError: :class:`._errors.RangeValueError`
 
-    * Range classes:
-       - Range: :class:`._size.Range`
-       - AI: :class:`._sizes.AI`
+* Range classes:
+   - Range: :class:`._size.Range`
+   - AI: :class:`._sizes.AI`
 
-    All parts of the public interface of justbytes must be imported directly
-    from the top-level justbytes module, as::
+All parts of the public interface of justbytes must be imported directly
+from the top-level justbytes module, as::
 
-        from justbytes import Range
-        from justbytes import KiB
-        from justbytes import RangeError
+    from justbytes import Range
+    from justbytes import KiB
+    from justbytes import RangeError
 
-        s = Range(24, KiB)
-        try:
-            s + 32
-        except RangeError as e:
-            raise e
+    s = Range(24, KiB)
+    try:
+        s + 32
+    except RangeError as e:
+        raise e
 """
 # pylint: disable=invalid-name
 # pylint: disable=wrong-import-position

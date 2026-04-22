@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Special purpose generators. """
+"""Special purpose generators."""
 
 
 def takeuntil(pred, seq):

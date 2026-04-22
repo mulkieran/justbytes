@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for version information. """
+"""Test for version information."""
 # isort: STDLIB
 import unittest
 

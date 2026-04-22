@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Tests for behavior of Range objects. """
+"""Tests for behavior of Range objects."""
 
 # isort: STDLIB
 import unittest
