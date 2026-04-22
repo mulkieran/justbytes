@@ -1,1 +1,1 @@
-""" Tests on the _size module. """
+"""Tests on the _size module."""

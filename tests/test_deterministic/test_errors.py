@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for error classes. """
+"""Test for error classes."""
 # isort: STDLIB
 import unittest
 

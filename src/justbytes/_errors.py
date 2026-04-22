@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Exception types used by the justbytes class. """
+"""Exception types used by the justbytes class."""
 
 # isort: STDLIB
 import abc

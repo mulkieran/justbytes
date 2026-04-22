@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for constants classes. """
+"""Test for constants classes."""
 # isort: STDLIB
 import unittest
 

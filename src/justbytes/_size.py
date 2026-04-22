@@ -15,13 +15,13 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Range class, for creating instances of Range objects.
+"""Range class, for creating instances of Range objects.
 
-    Contains a few documented methods and a number of __*__ methods
-    implementing arithmetic operations. Precise numeric types
-    such as int and Fraction may also occur in some arithmetic expressions,
-    but all occurrences of floating point and Decimal numbers in arithmetic
-    expressions will cause an exception to be raised.
+Contains a few documented methods and a number of __*__ methods
+implementing arithmetic operations. Precise numeric types
+such as int and Fraction may also occur in some arithmetic expressions,
+but all occurrences of floating point and Decimal numbers in arithmetic
+expressions will cause an exception to be raised.
 """
 
 # isort: STDLIB

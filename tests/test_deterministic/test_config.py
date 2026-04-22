@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Test for configuration classes. """
+"""Test for configuration classes."""
 # isort: STDLIB
 import unittest
 

@@ -15,7 +15,7 @@
 #
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
-""" Class for methods that do not properly belong in the Range class. """
+"""Class for methods that do not properly belong in the Range class."""
 from ._size import Range
 
 AI = Range(0)  # pragma: no cover
