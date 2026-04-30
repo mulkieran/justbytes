@@ -16,13 +16,11 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """Test for constants classes."""
-# isort: STDLIB
+
 import unittest
 
-# isort: THIRDPARTY
 from hypothesis import given, strategies
 
-# isort: LOCAL
 from justbytes._constants import BinaryUnits, DecimalUnits
 
 

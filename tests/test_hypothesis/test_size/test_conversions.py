@@ -17,13 +17,10 @@
 
 """Tests for operations on Range objects."""
 
-# isort: STDLIB
 import unittest
 
-# isort: THIRDPARTY
 from hypothesis import given, settings, strategies
 
-# isort: LOCAL
 from justbytes import UNITS, Range
 
 
@@ -44,4 +41,4 @@ class ConversionTestCase(unittest.TestCase):
     @settings(max_examples=50)
     def test_repr(self, value):
         """Test that repr looks right."""
-        self.assertEqual(f"{value !r}", f"Range({value.magnitude !r})")
+        self.assertEqual(f"{value!r}", f"Range({value.magnitude!r})")

@@ -17,7 +17,6 @@
 
 """Exception types used by the justbytes class."""
 
-# isort: STDLIB
 import abc
 
 
@@ -42,7 +41,7 @@ class RangeValueError(RangeError):
         :param str param: the parameter
         :param str msg: an explanatory message
         """
-        # pylint: disable=super-init-not-called
+
         self.value = value
         self.param = param
         self.msg = msg
@@ -74,7 +73,7 @@ class RangeNonsensicalBinOpValueError(RangeNonsensicalOpError):
         :param str operator: the operator
         :param object other: the other argument
         """
-        # pylint: disable=super-init-not-called
+
         self._operator = operator
         self._other = other
 
@@ -94,7 +93,7 @@ class RangeNonsensicalBinOpError(RangeNonsensicalOpError):
         :param str operator: the operator
         :param object other: the other argument
         """
-        # pylint: disable=super-init-not-called
+
         self._operator = operator
         self._other = other
 

@@ -17,13 +17,10 @@
 
 """Test for utility functions."""
 
-# isort: STDLIB
 import unittest
 
-# isort: THIRDPARTY
 from hypothesis import given, settings, strategies
 
-# isort: LOCAL
 from justbytes._generators import next_or_last, takeuntil
 
 

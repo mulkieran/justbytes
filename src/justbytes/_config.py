@@ -19,7 +19,6 @@
 
 # pylint: disable=invalid-name
 
-# isort: FIRSTPARTY
 import justbases
 
 from ._constants import PRECISE_NUMERIC_TYPES, UNITS, RoundingMethods
@@ -32,8 +31,6 @@ class BaseConfig(justbases.BaseConfig):
 
     Override defaults of justbases.BaseConfig.
     """
-
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, use_prefix=False, use_subscript=False):
         """
@@ -54,8 +51,6 @@ class DisplayConfig(justbases.DisplayConfig):
     """
     DisplayConfig overrides justbases.DisplayConfig's defaults.
     """
-
-    # pylint: disable=too-few-public-methods
 
     def __init__(
         self,
@@ -97,8 +92,6 @@ class ValueConfig:
     but 0.05 GiB is still displayed as 51.2 MiB.
     """
 
-    # pylint: disable=too-few-public-methods
-
     _FMT_STR = ", ".join(
         [
             "base=%(base)s",
@@ -111,7 +104,7 @@ class ValueConfig:
         ]
     )
 
-    def __init__(  # pylint: disable=too-many-positional-arguments
+    def __init__(  # noqa: PLR0913
         self,
         max_places=2,
         min_value=1,
@@ -134,7 +127,7 @@ class ValueConfig:
         :param base: numeric base
         :param rounding_method: one of RoundingMethods.METHODS()
         """
-        # pylint: disable=too-many-arguments
+
         if max_places is not None and max_places < 0:
             raise RangeValueError(max_places, "max_places", "must be an int at least 0")
 
@@ -148,7 +141,7 @@ class ValueConfig:
                 unit, "unit", f"must be one of {', '.join(str(x) for x in UNITS())}"
             )
 
-        if base < 2:
+        if base < 2:  # noqa: PLR2004
             raise RangeValueError(base, "base", "must be at least 2")
 
         self.max_places = max_places
@@ -176,8 +169,6 @@ class ValueConfig:
 
 class StringConfig:
     """Configuration for :class:`Range` class."""
-
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, value_config, display_config, display_impl):
         """

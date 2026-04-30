@@ -16,10 +16,9 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """Test for version information."""
-# isort: STDLIB
+
 import unittest
 
-# isort: LOCAL
 import justbytes
 
 

@@ -17,11 +17,9 @@
 
 """Tests for operations on Range objects."""
 
-# isort: STDLIB
 import copy
 import unittest
 
-# isort: LOCAL
 from justbytes import Range
 
 

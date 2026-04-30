@@ -17,11 +17,9 @@
 
 """Tests for Range initialization."""
 
-# isort: STDLIB
 import unittest
 from decimal import Decimal
 
-# isort: LOCAL
 from justbytes import B, Range
 from justbytes._errors import RangeValueError
 
