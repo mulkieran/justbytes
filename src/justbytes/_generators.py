@@ -46,6 +46,6 @@ def next_or_last(pred, seq, default=None):
         if pred(elem):
             return elem
     try:
-        return elem  # pylint: disable=undefined-loop-variable
+        return elem
     except NameError:
         return default

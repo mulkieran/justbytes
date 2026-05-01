@@ -1,8 +1,6 @@
 .PHONY: lint
 lint:
-	pylint setup.py
-	pylint src/justbytes
-	pylint tests --disable=unnecessary-dunder-call
+	ruff check
 
 .PHONY: test
 test:
@@ -16,13 +14,13 @@ coverage:
 
 .PHONY: fmt
 fmt:
-	isort setup.py src tests --skip src/justbytes/__init__.py
-	black .
+	ruff check --fix --select I
+	ruff format
 
 .PHONY: fmt-travis
 fmt-travis:
-	isort --diff --check-only setup.py src tests --skip src/justbytes/__init__.py
-	black . --check
+	ruff check --select I
+	ruff format --check
 
 PYREVERSE_OPTS = --output=pdf
 .PHONY: view

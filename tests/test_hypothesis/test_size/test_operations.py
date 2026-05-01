@@ -17,20 +17,15 @@
 
 """Tests for operations on Range objects."""
 
-# isort: STDLIB
 import copy
 import unittest
 from decimal import Decimal
 from fractions import Fraction
 
-# isort: THIRDPARTY
 from hypothesis import given, settings
 
-# isort: LOCAL
 from justbytes import Range
-
-from tests.test_hypothesis.test_size.utils import NUMBERS_STRATEGY  # isort:skip
-from tests.test_hypothesis.test_size.utils import SIZE_STRATEGY  # isort:skip
+from tests.test_hypothesis.test_size.utils import NUMBERS_STRATEGY, SIZE_STRATEGY
 
 
 class AdditionTestCase(unittest.TestCase):
@@ -228,7 +223,6 @@ class ArithmeticPropertiesTestCase(unittest.TestCase):
         NUMBERS_STRATEGY.filter(lambda n: not isinstance(n, Decimal)),
     )
     @settings(max_examples=10)
-    # pylint: disable=invalid-name
     def test_distributivity1(self, s, n, m):
         """
         Assert distributivity across numbers.
@@ -237,7 +231,6 @@ class ArithmeticPropertiesTestCase(unittest.TestCase):
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY, NUMBERS_STRATEGY)
     @settings(max_examples=10)
-    # pylint: disable=invalid-name
     def test_distributivity2(self, p, q, n):
         """
         Assert distributivity across sizes.
@@ -246,7 +239,6 @@ class ArithmeticPropertiesTestCase(unittest.TestCase):
 
     @given(SIZE_STRATEGY, SIZE_STRATEGY, SIZE_STRATEGY)
     @settings(max_examples=10)
-    # pylint: disable=invalid-name
     def test_associativity(self, p, q, r):
         """
         Assert associativity across sizes.

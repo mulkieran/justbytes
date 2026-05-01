@@ -17,11 +17,9 @@
 
 """Tests for behavior of Range objects."""
 
-# isort: STDLIB
 import unittest
 from fractions import Fraction
 
-# isort: LOCAL
 from justbytes import (
     KB,
     B,

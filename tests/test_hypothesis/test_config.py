@@ -16,21 +16,17 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """Test for configuration classes."""
-# isort: STDLIB
+
 import unittest
 
-# isort: THIRDPARTY
 from hypothesis import given, settings, strategies
 
-# isort: LOCAL
 from justbytes._config import Config, DisplayConfig, ValueConfig
 from justbytes._constants import UNITS
 
 
 class RangeTestCase(unittest.TestCase):
     """Test Range configuration."""
-
-    # pylint: disable=too-few-public-methods
 
     def setUp(self):
         self.display_config = Config.STRING_CONFIG.DISPLAY_CONFIG

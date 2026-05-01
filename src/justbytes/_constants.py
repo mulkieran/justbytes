@@ -22,11 +22,9 @@ Categories of constants:
  * Size units, e.g., Ki, Mi
 """
 
-# isort: STDLIB
 import abc
 from numbers import Rational
 
-# isort: FIRSTPARTY
 import justbases
 
 from ._errors import RangeValueError
@@ -36,8 +34,6 @@ RoundingMethods = justbases.RoundingMethods
 
 class Unit:
     """Class to encapsulate unit information."""
-
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, factor, prefix, abbr):
         self._factor = factor
@@ -49,7 +45,6 @@ class Unit:
 
     __repr__ = __str__
 
-    # pylint: disable=protected-access
     factor = property(lambda s: s._factor, doc="numeric multiple of bytes")
     abbr = property(lambda s: s._abbr, doc="abbreviation for unit, precedes 'B'")
     prefix = property(lambda s: s._prefix, doc="prefix for 'bytes'")
@@ -67,8 +62,6 @@ class Units(metaclass=abc.ABCMeta):
     Generic class for units.
     """
 
-    # pylint: disable=too-few-public-methods
-
     FACTOR = abc.abstractproperty(doc="factor for each unit")
 
     _UNITS = abc.abstractproperty(doc="ordered list of units")
@@ -76,14 +69,14 @@ class Units(metaclass=abc.ABCMeta):
     _MAX_EXPONENT = None
 
     @classmethod
-    def UNITS(cls):  # pylint: disable=invalid-name
+    def UNITS(cls):
         """
         Units of this class.
         """
         return cls._UNITS[:]
 
     @classmethod
-    def unit_for_exp(cls, exponent):  # pylint: disable=invalid-name
+    def unit_for_exp(cls, exponent):
         """
         Get the unit for the given exponent.
 
@@ -112,9 +105,6 @@ class Units(metaclass=abc.ABCMeta):
 class DecimalUnits(Units):
     """Class to store decimal unit constants."""
 
-    # pylint: disable=invalid-name
-    # pylint: disable=too-few-public-methods
-
     FACTOR = 10**3
 
     KB = Unit(FACTOR**1, "kilo", "k")
@@ -132,8 +122,6 @@ class DecimalUnits(Units):
 class BinaryUnits(Units):
     """Class to store binary unit constants."""
 
-    # pylint: disable=too-few-public-methods
-
     FACTOR = 2**10
 
     KiB = Unit(FACTOR**1, "kibi", "Ki")
@@ -148,7 +136,7 @@ class BinaryUnits(Units):
     _UNITS = [KiB, MiB, GiB, TiB, PiB, EiB, ZiB, YiB]
 
 
-def UNITS():  # pylint: disable=invalid-name
+def UNITS():
     """All unit constants."""
     return [B] + BinaryUnits.UNITS() + DecimalUnits.UNITS()
 

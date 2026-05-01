@@ -17,14 +17,11 @@
 
 """Tests for Range initialization."""
 
-# isort: STDLIB
 import unittest
 from fractions import Fraction
 
-# isort: THIRDPARTY
 from hypothesis import given, settings, strategies
 
-# isort: LOCAL
 from justbytes import UNITS, Range
 
 

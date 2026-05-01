@@ -16,10 +16,9 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """Test for error classes."""
-# isort: STDLIB
+
 import unittest
 
-# isort: LOCAL
 from justbytes._errors import (
     RangeFractionalResultError,
     RangeNonsensicalBinOpError,

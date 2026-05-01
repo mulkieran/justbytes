@@ -17,15 +17,12 @@
 
 """Tests for named methods of Range objects."""
 
-# isort: STDLIB
 import string
 import unittest
 from fractions import Fraction
 
-# isort: THIRDPARTY
 from hypothesis import assume, example, given, settings, strategies
 
-# isort: LOCAL
 from justbytes import (
     ROUND_DOWN,
     ROUND_HALF_DOWN,
@@ -44,8 +41,7 @@ from justbytes import (
     ValueConfig,
 )
 from justbytes._constants import UNITS, BinaryUnits, DecimalUnits
-
-from tests.test_hypothesis.test_size.utils import SIZE_STRATEGY  # isort:skip
+from tests.test_hypothesis.test_size.utils import SIZE_STRATEGY
 
 
 class ConversionTestCase(unittest.TestCase):
@@ -124,7 +120,7 @@ class DisplayConfigTestCase(unittest.TestCase):
             )
         )
 
-        if config.base_config.use_prefix and base == 16:
+        if config.base_config.use_prefix and base == 16:  # noqa: PLR2004
             self.assertNotEqual(result.find("0x"), -1)
 
 
@@ -185,7 +181,7 @@ class RoundingTestCase(unittest.TestCase):
         """
         (lower, upper) = bounds
         assume(lower is None or upper is None or lower <= upper)
-        rounded = size.roundTo(unit, rounding, bounds)  # pylint: disable=unreachable
+        rounded = size.roundTo(unit, rounding, bounds)
         self.assertTrue(lower is None or lower <= rounded)
         self.assertTrue(upper is None or upper >= rounded)
 
@@ -198,9 +194,9 @@ class RoundingTestCase(unittest.TestCase):
         strategies.sampled_from(ROUNDING_METHODS()),
     )
     @example(Range(32), Range(0), ROUND_DOWN)
-    def test_results(self, size, unit, rounding):
+    def test_results(self, size, unit, rounding):  # noqa: PLR0912
         """Test roundTo results."""
-        # pylint: disable=too-many-branches
+
         rounded = size.roundTo(unit, rounding)
 
         if (isinstance(unit, Range) and unit.magnitude == 0) or (
@@ -239,13 +235,11 @@ class RoundingTestCase(unittest.TestCase):
             self.assertEqual(rounded, ceiling)
         elif remainder < half:
             self.assertEqual(rounded, floor)
+        elif rounding is ROUND_HALF_UP:
+            self.assertEqual(rounded, ceiling)
+        elif rounding is ROUND_HALF_DOWN:
+            self.assertEqual(rounded, floor)
+        elif size > Range(0):
+            self.assertEqual(rounded, floor)
         else:
-            if rounding is ROUND_HALF_UP:
-                self.assertEqual(rounded, ceiling)
-            elif rounding is ROUND_HALF_DOWN:
-                self.assertEqual(rounded, floor)
-            else:
-                if size > Range(0):
-                    self.assertEqual(rounded, floor)
-                else:
-                    self.assertEqual(rounded, ceiling)
+            self.assertEqual(rounded, ceiling)

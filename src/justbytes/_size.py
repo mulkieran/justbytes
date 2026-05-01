@@ -24,10 +24,8 @@ but all occurrences of floating point and Decimal numbers in arithmetic
 expressions will cause an exception to be raised.
 """
 
-# isort: STDLIB
 from fractions import Fraction
 
-# isort: FIRSTPARTY
 import justbases
 
 from ._config import Config
@@ -107,7 +105,7 @@ class Range:
                 raise RangeValueError(
                     units, "units", "meaningless when Range value is passed"
                 )
-            magnitude = value.magnitude  # pylint: disable=no-member
+            magnitude = value.magnitude
         else:
             raise RangeValueError(value, "value")
 
@@ -123,7 +121,7 @@ class Range:
         """
         return self._magnitude
 
-    def getStringInfo(self, config):  # pylint: disable=invalid-name
+    def getStringInfo(self, config):
         """
         Return a representation of the size.
 
@@ -135,7 +133,7 @@ class Range:
         (result, relation) = self._as_single_number(magnitude, config)
         return (result, relation, units)
 
-    def getString(self, config):  # pylint: disable=invalid-name
+    def getString(self, config):
         """
         Return a string representation of the size.
 
@@ -155,10 +153,10 @@ class Range:
         """
         Use actual Fraction magnitude in result.
         """
-        return f"Range({self._magnitude !r})"
+        return f"Range({self._magnitude!r})"
 
     def __deepcopy__(self, memo):
-        # pylint: disable=unused-argument
+
         return Range(self._magnitude)
 
     def __nonzero__(self):
@@ -275,7 +273,6 @@ class Range:
             raise RangeNonsensicalBinOpError("<", other)
         return self._magnitude < other.magnitude
 
-    # pylint: disable=raising-format-tuple
     def __mod__(self, other):
         # other * div + mod = self
         # Therefore, T(mod) = Range
@@ -368,7 +365,7 @@ class Range:
 
     __rdiv__ = __rtruediv__
 
-    def convertTo(self, spec=None):  # pylint: disable=invalid-name
+    def convertTo(self, spec=None):
         """
         Return the size in the units indicated by the specifier.
 
@@ -390,7 +387,7 @@ class Range:
 
         return self._magnitude / factor
 
-    def componentsList(self, binary_units=True):  # pylint: disable=invalid-name
+    def componentsList(self, binary_units=True):
         """
         Yield a representation of this size for every unit,
         decomposed into a Fraction value and a unit specifier
@@ -437,10 +434,7 @@ class Range:
             )
         return candidates[-1]
 
-    def roundTo(
-        self, unit, rounding, bounds=(None, None)
-    ):  # pylint: disable=invalid-name
-        # pylint: disable=line-too-long
+    def roundTo(self, unit, rounding, bounds=(None, None)):
         """
         Rounds to unit specified as a named constant or a Range.
 

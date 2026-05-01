@@ -17,10 +17,8 @@
 
 """Tests for named methods of Range objects."""
 
-# isort: STDLIB
 import unittest
 
-# isort: LOCAL
 from justbytes import ROUND_HALF_UP, B, Config, Range, StringConfig, ValueConfig
 from justbytes._errors import RangeValueError
 

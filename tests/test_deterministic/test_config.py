@@ -16,18 +16,15 @@
 # Red Hat Author(s): Anne Mulhern <amulhern@redhat.com>
 
 """Test for configuration classes."""
-# isort: STDLIB
+
 import unittest
 
-# isort: LOCAL
 from justbytes._config import Config, ValueConfig
 from justbytes._errors import RangeValueError
 
 
 class ConfigTestCase(unittest.TestCase):
     """Exercise methods of output configuration classes."""
-
-    # pylint: disable=too-few-public-methods
 
     def test_value_config_object(self):
         """Miscellaneous tests for string configuration."""
