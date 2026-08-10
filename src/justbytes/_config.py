@@ -104,7 +104,7 @@ class ValueConfig:
         ]
     )
 
-    def __init__(  # noqa: PLR0913
+    def __init__(  # noqa: PLR0913,PLR0917
         self,
         max_places=2,
         min_value=1,
