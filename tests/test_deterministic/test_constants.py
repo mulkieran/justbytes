@@ -36,7 +36,7 @@ class ConstantsTestCase(unittest.TestCase):
         self.assertIsNotNone(DecimalUnits.KB.prefix)
 
     def test_units_method(self):
-        """Test that all units constansts are in UNITS()."""
+        """Test that all units constants are in UNITS()."""
         self.assertTrue(set(DecimalUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(set(BinaryUnits.UNITS()).issubset(set(UNITS())))
         self.assertTrue(B in UNITS())
