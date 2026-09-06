@@ -1,3 +1,23 @@
+justbytes 0.15.3
+================
+
+- Remove license classifer deprecated by PEP 639:
+  https://github.com/stratis-storage/justbytes/pull/104
+
+- Tidies and Maintenance:
+  https://github.com/stratis-storage/justbytes/pull/106
+  https://github.com/stratis-storage/justbytes/pull/105
+  https://github.com/stratis-storage/justbytes/pull/103
+  https://github.com/stratis-storage/justbytes/pull/101
+  https://github.com/stratis-storage/justbytes/pull/100
+  https://github.com/stratis-storage/justbytes/pull/99
+  https://github.com/stratis-storage/justbytes/pull/98
+  https://github.com/stratis-storage/justbytes/pull/97
+  https://github.com/stratis-storage/justbytes/pull/96
+  https://github.com/stratis-storage/justbytes/pull/95
+  https://github.com/stratis-storage/justbytes/pull/94
+
+
 justbytes 0.15.2
 ================
 Recommended development distro: Fedora 38
