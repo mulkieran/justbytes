@@ -37,11 +37,11 @@ class UtilityMethodsTestCase(unittest.TestCase):
 
         # **
         with self.assertRaises(RangeNonsensicalBinOpError):
-            size ** Range(2)
+            size ** Range(2)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangePowerResultError):
-            size**2
+            size**2  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2 ** Range(0)
+            2 ** Range(0)  # pyright: ignore[reportUnusedExpression]
 
     def test_binary_operators_boolean(self):
         """Test binary operators with a boolean result."""
@@ -49,30 +49,30 @@ class UtilityMethodsTestCase(unittest.TestCase):
         # <
         self.assertTrue(Range(0, MiB) < Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) < 1
+            Range(0) < 1  # noqa: B015  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 < Range(32, TiB)
+            1 < Range(32, TiB)  # noqa: B015  # pyright: ignore[reportUnusedExpression]
 
         # <=
         self.assertTrue(Range(0, MiB) <= Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) <= 1
+            Range(0) <= 1  # noqa: B015  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 <= Range(32, TiB)
+            1 <= Range(32, TiB)  # noqa: B015  # pyright: ignore[reportUnusedExpression]
 
         # >
         self.assertTrue(Range(32, MiB) > Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(32) > 1
+            Range(32) > 1  # noqa: B015  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 > Range(0, TiB)
+            1 > Range(0, TiB)  # noqa: B015  # pyright: ignore[reportUnusedExpression]
 
         # >=
         self.assertTrue(Range(32, MiB) >= Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(32) >= 1
+            Range(32) >= 1  # noqa: B015  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 >= Range(0, TiB)
+            1 >= Range(0, TiB)  # noqa: B015  # pyright: ignore[reportUnusedExpression]
 
         # !=
         self.assertTrue(Range(32, MiB) != Range(32, GiB))
@@ -104,9 +104,9 @@ class AdditionTestCase(unittest.TestCase):
         """Any non-size other raises an exception."""
 
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2 + Range(0)
+            2 + Range(0)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) + 2
+            Range(0) + 2  # pyright: ignore[reportUnusedExpression]
 
 
 class DivmodTestCase(unittest.TestCase):
@@ -134,15 +134,15 @@ class FloordivTestCase(unittest.TestCase):
         """Test that exceptions are thrown."""
 
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2048 // Range(12, B)
+            2048 // Range(12, B)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) // "str"
+            Range(12) // "str"  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpValueError):
-            Range(12) // Range(0)
+            Range(12) // Range(0)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpValueError):
-            Range(12) // 0
+            Range(12) // 0  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) // Decimal("NaN")
+            Range(12) // Decimal("NaN")  # pyright: ignore[reportUnusedExpression]
 
 
 class ModTestCase(unittest.TestCase):
@@ -152,15 +152,15 @@ class ModTestCase(unittest.TestCase):
         """Test that exceptions are thrown."""
 
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2048 % Range(12, B)
+            2048 % Range(12, B)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) % "str"
+            Range(12) % "str"  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpValueError):
-            Range(12) % Range(0)
+            Range(12) % Range(0)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpValueError):
-            Range(12) % 0
+            Range(12) % 0  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) % Decimal("NaN")
+            Range(12) % Decimal("NaN")  # pyright: ignore[reportUnusedExpression]
 
 
 class MultiplicationTestCase(unittest.TestCase):
@@ -170,11 +170,11 @@ class MultiplicationTestCase(unittest.TestCase):
         """Range others are unrepresentable."""
 
         with self.assertRaises(RangePowerResultError):
-            Range(0) * Range(0)
+            Range(0) * Range(0)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) * Decimal("NaN")
+            Range(0) * Decimal("NaN")  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) * "str"
+            Range(0) * "str"  # pyright: ignore[reportUnusedExpression]
 
 
 class RdivmodTestCase(unittest.TestCase):
@@ -254,9 +254,9 @@ class SubtractionTestCase(unittest.TestCase):
         """Any non-size other raises an exception."""
 
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2 - Range(0)
+            2 - Range(0)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) - 2
+            Range(0) - 2  # pyright: ignore[reportUnusedExpression]
 
 
 class TruedivTestCase(unittest.TestCase):
@@ -266,12 +266,12 @@ class TruedivTestCase(unittest.TestCase):
         """Test that exceptions are thrown."""
 
         with self.assertRaises(RangeNonsensicalBinOpError):
-            2048 / Range(12, B)
+            2048 / Range(12, B)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) / "str"
+            Range(12) / "str"  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpValueError):
-            Range(12) / Range(0)
+            Range(12) / Range(0)  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpValueError):
-            Range(12) / 0
+            Range(12) / 0  # pyright: ignore[reportUnusedExpression]
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(12) / Decimal("NaN")
+            Range(12) / Decimal("NaN")  # pyright: ignore[reportUnusedExpression]

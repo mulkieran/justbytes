@@ -17,6 +17,10 @@
 
 """Special purpose generators."""
 
+from typing import Callable, Iterable, TypeVar
+
+T = TypeVar("T")
+
 
 def takeuntil(pred, seq):
     """
@@ -31,7 +35,9 @@ def takeuntil(pred, seq):
             break
 
 
-def next_or_last(pred, seq, default=None):
+def next_or_last(
+    pred: Callable[[T], bool], seq: Iterable[T], default: T | None = None
+) -> T | None:
     """
     Return the first element that matches the predicate or the last element in
     the seq.

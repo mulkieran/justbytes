@@ -25,11 +25,20 @@ expressions will cause an exception to be raised.
 """
 
 from fractions import Fraction
+from numbers import Rational
+from typing import Generator
 
 import justbases
 
-from ._config import Config
-from ._constants import PRECISE_NUMERIC_TYPES, UNIT_TYPES, B, BinaryUnits, DecimalUnits
+from ._config import Config, ValueConfig
+from ._constants import (
+    PRECISE_NUMERIC_TYPES,
+    UNIT_TYPES,
+    B,
+    BinaryUnits,
+    DecimalUnits,
+    Unit,
+)
 from ._errors import (
     RangeFractionalResultError,
     RangeNonsensicalBinOpError,
@@ -46,7 +55,9 @@ class Range:
     _BYTES_SYMBOL = "B"
 
     @classmethod
-    def _as_single_number(cls, value, config):
+    def _as_single_number(
+        cls, value: Rational, config: ValueConfig
+    ) -> tuple[justbases.Radix, int]:
         """
         Returns a rational value as a single number according to the
         specified configuration.
@@ -387,7 +398,9 @@ class Range:
 
         return self._magnitude / factor
 
-    def componentsList(self, binary_units=True):
+    def componentsList(
+        self, binary_units: bool = True
+    ) -> Generator[tuple[Fraction, Unit], None, None]:
         """
         Yield a representation of this size for every unit,
         decomposed into a Fraction value and a unit specifier

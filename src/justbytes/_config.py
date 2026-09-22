@@ -19,6 +19,8 @@
 
 # pylint: disable=invalid-name
 
+from numbers import Rational
+
 import justbases
 
 from ._constants import PRECISE_NUMERIC_TYPES, UNITS, RoundingMethods
@@ -55,9 +57,9 @@ class DisplayConfig(justbases.DisplayConfig):
     def __init__(
         self,
         show_approx_str=True,
-        base_config=BaseConfig(),
-        digits_config=DigitsConfig(),
-        strip_config=StripConfig(),
+        base_config=BaseConfig(),  # noqa: B008  # FIXME
+        digits_config=DigitsConfig(),  # noqa: B008  # FIXME
+        strip_config=StripConfig(),  # noqa: B008  # FIXME
     ):
         """
         Initializer.
@@ -106,8 +108,8 @@ class ValueConfig:
 
     def __init__(  # noqa: PLR0913,PLR0917
         self,
-        max_places=2,
-        min_value=1,
+        max_places: int | None = 2,
+        min_value: int | Rational = 1,
         binary_units=True,
         exact_value=False,
         unit=None,
@@ -196,7 +198,7 @@ class Config:
 
     STRING_CONFIG = StringConfig(ValueConfig(), DisplayConfig(), justbases.String)
 
-    STRICT = False
+    STRICT: bool = False
 
     @classmethod
     def set_display_impl(cls, impl):  # pragma: no cover

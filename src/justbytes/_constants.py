@@ -22,7 +22,6 @@ Categories of constants:
  * Size units, e.g., Ki, Mi
 """
 
-import abc
 from numbers import Rational
 
 import justbases
@@ -57,16 +56,25 @@ B = Unit(1, "", "")
 """ The universal unit, bytes. """
 
 
-class Units(metaclass=abc.ABCMeta):
+class Units:
     """
     Generic class for units.
+
+    Subclasses must define FACTOR (int) and _UNITS (list).
     """
 
-    FACTOR = abc.abstractproperty(doc="factor for each unit")
-
-    _UNITS = abc.abstractproperty(doc="ordered list of units")
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        required_attrs = ["FACTOR", "_UNITS"]
+        for attr in required_attrs:
+            if not hasattr(cls, attr):
+                raise TypeError(
+                    f"Can't instantiate abstract class {cls.__name__} "
+                    f"without class attribute {attr}"
+                )
 
     _MAX_EXPONENT = None
+    _UNITS = []
 
     @classmethod
     def UNITS(cls):

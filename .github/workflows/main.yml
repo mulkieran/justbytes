@@ -17,11 +17,12 @@ jobs:
           - dependencies: ruff
             task: make -f Makefile fmt-travis
           - dependencies: >
+              libatomic
               python3-hypothesis
               python3-justbases
               python3-setuptools
               ruff
-            task: make -f Makefile lint
+            task: PATH=${PATH}:/github/home/.local/bin make -f Makefile lint
           - dependencies: >
               python3-hypothesis
               python3-justbases
@@ -45,7 +46,10 @@ jobs:
         run: >
           dnf install -y
           make
+          pip
           ${{ matrix.dependencies }}
+      - name: Install pyright
+        run: pip install --user pyright
       - name: ${{ matrix.task }}
         run: ${{ matrix.task }}
 
