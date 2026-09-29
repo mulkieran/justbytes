@@ -49,30 +49,30 @@ class UtilityMethodsTestCase(unittest.TestCase):
         # <
         self.assertTrue(Range(0, MiB) < Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) < 1
+            Range(0) < 1  # noqa: B015
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 < Range(32, TiB)
+            1 < Range(32, TiB)  # noqa: B015
 
         # <=
         self.assertTrue(Range(0, MiB) <= Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(0) <= 1
+            Range(0) <= 1  # noqa: B015
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 <= Range(32, TiB)
+            1 <= Range(32, TiB)  # noqa: B015
 
         # >
         self.assertTrue(Range(32, MiB) > Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(32) > 1
+            Range(32) > 1  # noqa: B015
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 > Range(0, TiB)
+            1 > Range(0, TiB)  # noqa: B015
 
         # >=
         self.assertTrue(Range(32, MiB) >= Range(32))
         with self.assertRaises(RangeNonsensicalBinOpError):
-            Range(32) >= 1
+            Range(32) >= 1  # noqa: B015
         with self.assertRaises(RangeNonsensicalBinOpError):
-            1 >= Range(0, TiB)
+            1 >= Range(0, TiB)  # noqa: B015
 
         # !=
         self.assertTrue(Range(32, MiB) != Range(32, GiB))

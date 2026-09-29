@@ -81,32 +81,33 @@ from the top-level justbytes module, as::
 # pylint: disable=wrong-import-position
 
 # CONFIGURATION
-from ._config import (
-    BaseConfig,
-    Config,
-    DigitsConfig,
-    DisplayConfig,
-    StringConfig,
-    StripConfig,
-    ValueConfig,
-)
+from ._config import BaseConfig as BaseConfig
+from ._config import Config as Config
+from ._config import DigitsConfig as DigitsConfig
+from ._config import DisplayConfig as DisplayConfig
+from ._config import StringConfig as StringConfig
+from ._config import StripConfig as StripConfig
+from ._config import ValueConfig as ValueConfig
 
 # ROUNDING CONSTANTS
 # UNIT CONSTANTS
-from ._constants import ROUNDING_METHODS, UNITS, B
+from ._constants import ROUNDING_METHODS as ROUNDING_METHODS
+from ._constants import UNITS as UNITS
+from ._constants import B as B
 from ._constants import BinaryUnits as _BinaryUnits
 from ._constants import DecimalUnits as _DecimalUnits
 from ._constants import RoundingMethods as _RoundingMethods
 
 # EXCEPTIONS
-from ._errors import RangeError, RangeValueError
+from ._errors import RangeError as RangeError
+from ._errors import RangeValueError as RangeValueError
 
 # SIZE
-from ._size import Range
-from ._sizes import AI
+from ._size import Range as Range
+from ._sizes import AI as AI
 
 # VERSION
-from .version import __version__
+from .version import __version__ as __version__
 
 KB = _DecimalUnits.KB
 MB = _DecimalUnits.MB
